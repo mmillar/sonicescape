@@ -69,6 +69,7 @@ function twentytwelve_setup() {
 	register_nav_menu( 'photos_menu', __( 'Photos Menu', 'twentytwelve' ) );
 	register_nav_menu( 'videos_menu', __( 'Videos Menu', 'twentytwelve' ) );
 	register_nav_menu( 'bonus_menu', __( 'Bonus Menu', 'twentytwelve' ) );
+	register_nav_menu( 'footer_menu', __( 'Footer Menu', 'twentytwelve' ) );
 
 	/*
 	 * This theme supports custom background color and image,

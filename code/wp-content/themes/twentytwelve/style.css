@@ -619,6 +619,22 @@ a:hover {
 	color: #21759b;
 }
 
+/* Sub Navigation Menu */
+.main-footer {
+	text-align: center;
+}
+.main-footer li {
+	font-size: 12px;
+	font-size: 0.857142857rem;
+	line-height: 1.42857143;
+}
+.main-footer a {
+	color: #5e5e5e;
+}
+.main-footer a:hover {
+	color: #21759b;
+}
+
 /* Banner */
 section[role="banner"] {
 	margin-bottom: 48px;
@@ -1565,8 +1581,8 @@ img#wpstats {
 	}
 	.main-navigation .current-menu-item > a,
 	.main-navigation .current-menu-ancestor > a,
-	.main-navigation .current_page_item > a,
-	.main-navigation .current_page_ancestor > a {
+	.main-navigation .current-page-item > a,
+	.main-navigation .current-page-ancestor > a {
 		color: #636363;
 		font-weight: bold;
 	}
@@ -1593,41 +1609,43 @@ img#wpstats {
 	.sub-navigation li {
 		position: relative;
 		padding: 0px 15px;
-	}
-	.sub-navigation li ul {
-		display: none;
-		margin: 0;
-		padding: 0;
-		position: absolute;
-		top: 100%;
-		z-index: 1;
-	}
-	.sub-navigation li ul ul {
-		top: 0;
-		left: 100%;
-	}
-	.sub-navigation ul li:hover > ul {
-		border-left: 0;
-		display: block;
-	}
-	.sub-navigation li ul li a {
-		background: #efefef;
-		border-bottom: 1px solid #ededed;
-		display: block;
-		font-size: 11px;
-		font-size: 0.785714286rem;
-		line-height: 2.181818182;
-		padding: 0px 15px;
-		white-space: normal;
-	}
-	.sub-navigation li ul li a:hover {
-		background: #e3e3e3;
-		color: #444;
-	}
+	}	
 	.sub-navigation .current-menu-item > a,
 	.sub-navigation .current-menu-ancestor > a,
 	.sub-navigation .current_page_item > a,
 	.sub-navigation .current_page_ancestor > a {
+		color: #636363;
+		font-weight: bold;
+	}
+	
+	.main-footer ul {
+		margin: 0;
+		text-indent: 0;
+	}
+	.main-footer li a,
+	.main-footer li {
+		display: inline-block;
+		text-decoration: none;
+	}
+	.main-footer li a {
+		border-bottom: 0;
+		color: #6a6a6a;
+		line-height: 2;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+	.main-footer li a:hover {
+		color: #000;
+	}
+	.main-footer li {
+		float: left;
+		width: 33.3%;
+		text-align: center;
+	}	
+	.main-footer .current-menu-item > a,
+	.main-footer .current-menu-ancestor > a,
+	.main-footer .current_page_item > a,
+	.main-footer .current_page_ancestor > a {
 		color: #636363;
 		font-weight: bold;
 	}
