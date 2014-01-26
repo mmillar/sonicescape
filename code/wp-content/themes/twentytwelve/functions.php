@@ -63,6 +63,12 @@ function twentytwelve_setup() {
 	// This theme uses wp_nav_menu() in one location.
 	register_nav_menu( 'primary_left', __( 'Primary Left Menu', 'twentytwelve' ) );
 	register_nav_menu( 'primary_right', __( 'Primary Right Menu', 'twentytwelve' ) );
+	register_nav_menu( 'about_menu', __( 'About Menu', 'twentytwelve' ) );
+	register_nav_menu( 'shows_menu', __( 'Shows Menu', 'twentytwelve' ) );
+	register_nav_menu( 'projects_menu', __( 'Projects Menu', 'twentytwelve' ) );
+	register_nav_menu( 'photos_menu', __( 'Photos Menu', 'twentytwelve' ) );
+	register_nav_menu( 'videos_menu', __( 'Videos Menu', 'twentytwelve' ) );
+	register_nav_menu( 'bonus_menu', __( 'Bonus Menu', 'twentytwelve' ) );
 
 	/*
 	 * This theme supports custom background color and image,
