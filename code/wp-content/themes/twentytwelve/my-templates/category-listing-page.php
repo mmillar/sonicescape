@@ -13,7 +13,7 @@ query_posts( array ( 'category_name' => get_post_meta(get_the_ID(), "category", 
 		<div id="content" role="main">
 
 			<?php while ( have_posts() ) : the_post(); ?>
-			<?php get_template_part( 'content', 'page' ); ?>
+			<?php get_template_part( 'content' ); ?>
 			<?php comments_template( '', true ); ?>
 			<?php endwhile; // end of the loop. ?>
 
