@@ -10,24 +10,25 @@ $layout = get_post_meta(get_the_ID(), "grid-layout", true);
 $submenu = get_post_meta(get_the_ID(), "sub-menu", true);
 ?>
 
+	<?php while ( have_posts() ) : the_post(); ?>
+
 	<?php if($submenu) { ?>
+
 	<div id="page-navigation" class="sub-navigation">
 		<?php wp_nav_menu( array( 'theme_location' => get_post_meta(get_the_ID(), "sub-menu", true), 'menu_class' => 'nav-menu' ) ); ?>
 	</div>
+
 	<?php } ?>
 
 	<div id="primary" class="site-content" style="width: 100%; max-width: 960px">
 		<div id="content" role="main">
 
-			<?php while ( have_posts() ) : the_post(); ?>
-
 			<?php get_template_part( 'content', $layout ); ?>
 			<?php comments_template( '', true ); ?>
 			
-			<?php endwhile; // end of the loop. ?>
-
 		</div><!-- #content -->
 	</div><!-- #primary -->
 
+	<?php endwhile; // end of the loop. ?>
 
 <?php get_footer(); ?>
