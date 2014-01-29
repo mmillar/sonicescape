@@ -14,7 +14,10 @@
  * @since Twenty Twelve 1.0
  */
 
-get_header(); ?>
+get_header(); 
+
+query_posts(array('category_name' => "news", 'posts_per_page' => 10));
+?>
 
 		<?php 
     echo do_shortcode("[metaslider id=38]"); 

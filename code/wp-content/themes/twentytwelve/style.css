@@ -1530,7 +1530,7 @@ img#wpstats {
 }
 
 /* Minimum width of 600 pixels. */
-@media screen and (min-width: 600px) {
+@media screen {
 	.author-avatar {
 		float: left;
 		margin-top: 8px;
