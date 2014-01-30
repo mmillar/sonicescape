@@ -10,7 +10,7 @@
  */
 ?>
 
-	<article id="post-<?php the_content(); ?>" data-autoplay="0" class="grid-3">
+	<article id="<?php get_post_meta(get_the_ID(), "youtube-id", true); ?>" data-autoplay="0" class="grid-3">
 
 		<?php the_post_thumbnail(array(300,300)); ?>
 		<span class="grid-title">
