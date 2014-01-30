@@ -10,12 +10,11 @@
  */
 ?>
 
-	<article id="post-<?php the_ID(); ?>" class="grid-3">
-		<header class="entry-header">
-			<?php the_post_thumbnail(array(300,300)); ?>
-			<span class="grid-title">
-				<a href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?></a>
-			</span>
-		</header><!-- .entry-header -->
+	<article id="post-<?php the_content(); ?>" data-autoplay="0" class="grid-3">
+
+		<?php the_post_thumbnail(array(300,300)); ?>
+		<span class="grid-title">
+			<a href="" rel="bookmark"><?php the_title(); ?></a>
+		</span>
 
 	</article><!-- #post -->
