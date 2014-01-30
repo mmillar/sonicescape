@@ -25,6 +25,7 @@
 <link rel="profile" href="http://gmpg.org/xfn/11" />
 <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
 <link href='http://fonts.googleapis.com/css?family=Playfair+Display+SC:400,700' rel='stylesheet' type='text/css'><?php // Loads HTML5 JavaScript file to add support for HTML5 elements in older IE versions. ?>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
 <!--[if lt IE 9]>
 <script src="<?php echo get_template_directory_uri(); ?>/js/html5.js" type="text/javascript"></script>
 <![endif]-->
@@ -44,11 +45,11 @@
 	<header id="masthead" class="site-header" role="banner">
 
 		<nav id="site-navigation" class="main-navigation" role="navigation">
-			<?php wp_nav_menu( array( 'theme_location' => 'primary_right', 'menu_class' => 'nav-menu' ) ); ?>
-			<?php wp_nav_menu( array( 'theme_location' => 'primary_left', 'menu_class' => 'nav-menu' ) ); ?>
 			<div id="site-title">
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
 			</div>
+			<?php wp_nav_menu( array( 'theme_location' => 'primary_left', 'menu_class' => 'nav-menu' ) ); ?>
+			<?php wp_nav_menu( array( 'theme_location' => 'primary_right', 'menu_class' => 'nav-menu' ) ); ?>
 		</nav><!-- #site-navigation -->
 
 		<?php if ( get_header_image() ) : ?>
