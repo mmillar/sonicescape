@@ -1940,7 +1940,7 @@ img#wpstats {
 		text-align:center;
 	}
 	#menu-home-page-left li{
-		margin: 0px 15px -15px 15px;
+		margin: 0px 10px -15px 10px;
 	}
 
 	#menu-home-page-right{
@@ -1949,7 +1949,7 @@ img#wpstats {
 		text-align:center;
 	}
 	#menu-home-page-right li{
-		margin: 0px 15px;
+		margin: 0px 10px;
 	}
 
 }
