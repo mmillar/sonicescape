@@ -1158,6 +1158,8 @@ article.grid-4 .grid-title {
 	z-index: 10;
 	width: 92%;
 	padding:10px;
+	background: rgb(54, 25, 25);
+    background: rgba(54, 25, 25, .5);
 }
 article.grid-4 .wp-post-image {
 	position: absolute;
