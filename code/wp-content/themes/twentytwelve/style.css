@@ -1155,7 +1155,9 @@ article.grid-4 .grid-title {
 	left: 0px;
 	font-size: 12pt;
 	line-height: 1.2;
-	z-index: 10;	
+	z-index: 10;
+	width: 92%;
+	padding:10px;
 }
 article.grid-4 .wp-post-image {
 	position: absolute;
@@ -1165,6 +1167,8 @@ article.grid-4 .wp-post-image {
 }
 article.grid-4 .grid-title a {
 	text-decoration: none;
+	color: #eeeeee;
+	font-weight: bold;
 }
 
 /* Link posts */
