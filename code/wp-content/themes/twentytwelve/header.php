@@ -46,7 +46,9 @@
 
 		<nav id="site-navigation" class="main-navigation" role="navigation">
 			<div id="site-title">
-				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
+				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home">
+					<img src="/wp-content/uploads/2014/02/Sonic-Escape-Logo.png">
+				</a>
 			</div>
 			<?php wp_nav_menu( array( 'theme_location' => 'primary_left', 'menu_class' => 'nav-menu' ) ); ?>
 			<?php wp_nav_menu( array( 'theme_location' => 'primary_right', 'menu_class' => 'nav-menu' ) ); ?>

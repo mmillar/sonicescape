@@ -11,3 +11,4 @@ code/*.log
 code/wp-content/cache/
 code/wp-content/backups/
 code/sitemap.xml.gz
+code/wp-content/plugins/awesome-flickr-gallery-plugin/cache/

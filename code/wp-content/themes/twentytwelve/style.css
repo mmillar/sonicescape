@@ -56,7 +56,6 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 	margin: 0;
 	padding: 0;
 	border: 0;
-	font-size: 105%;
 	vertical-align: baseline;
 }
 body {
@@ -305,7 +304,7 @@ input[type="reset"]:active {
 }
 .bypostauthor cite span {
 	color: #fff;
-	background-color: #21759b;
+	background-color: #084c8d;
 	background-image: none;
 	border: 1px solid #1f6f93;
 	border-radius: 2px;
@@ -376,7 +375,7 @@ img.wp-post-image {
 	font-size: 12px;
 	font-size: 0.857142857rem;
 	line-height: 2;
-	color: #757575;
+	color: #b9b9b9;
 }
 img.wp-smiley,
 .rsswidget img {
@@ -460,7 +459,7 @@ img.wp-smiley,
 	overflow: hidden;
 }
 .author-description p {
-	color: #757575;
+	color: #b9b9b9;
 	font-size: 13px;
 	font-size: 0.928571429rem;
 	line-height: 1.846153846;
@@ -494,10 +493,10 @@ body.custom-font-enabled {
 }
 a {
 	outline: none;
-	color: #21759b;
+	color: #084c8d;
 }
 a:hover {
-	color: #0f3647;
+	color: #919191;
 }
 
 /* Assistive text */
@@ -553,7 +552,7 @@ a:hover {
 }
 .site-header h1 a:hover,
 .site-header h2 a:hover {
-	color: #21759b;
+	color: #084c8d;
 }
 .site-header h1 {
 	font-size: 24px;
@@ -567,7 +566,7 @@ a:hover {
 	font-size: 13px;
 	font-size: 0.928571429rem;
 	line-height: 1.846153846;
-	color: #757575;
+	color: #919191;
 }
 .header-image {
 	margin-top: 24px;
@@ -583,15 +582,14 @@ a:hover {
 .main-navigation li {
 	margin-top: 24px;
 	margin-top: 1.714285714rem;
-	font-size: 12px;
-	font-size: 0.857142857rem;
+	font-size: 15px;
 	line-height: 1.42857143;
 }
 .main-navigation a {
-	color: #5e5e5e;
+	color: #919191;
 }
 .main-navigation a:hover {
-	color: #21759b;
+	color: #b9b9b9;
 }
 .main-navigation ul.nav-menu,
 .main-navigation div.nav-menu > ul {
@@ -607,6 +605,7 @@ a:hover {
 	border-top: 1px grey solid;
 	border-bottom: 1px grey solid;
 	text-align: center;
+
 }
 .sub-navigation li {
 	font-size: 12px;
@@ -617,7 +616,7 @@ a:hover {
 	color: #5e5e5e;
 }
 .sub-navigation a:hover {
-	color: #21759b;
+	color: #084c8d;
 }
 
 /* Sub Navigation Menu */
@@ -633,7 +632,7 @@ a:hover {
 	color: #5e5e5e;
 }
 .main-footer a:hover {
-	color: #21759b;
+	color: #084c8d;
 }
 
 /* Banner */
@@ -676,13 +675,13 @@ section[role="banner"] {
 	margin-left: 2.571428571rem;
 }
 .widget-area .widget a {
-	color: #757575;
+	color: #084c8d;
 }
 .widget-area .widget a:hover {
-	color: #21759b;
+	color: #919191;
 }
 .widget-area .widget a:visited {
-	color: #9f9f9f;
+	color: #084c8d;
 }
 .widget-area #s {
 	width: 53.66666666666%; /* define a width to avoid dropping a wider submit button */
@@ -708,7 +707,7 @@ footer[role="contentinfo"] a {
 	color: #686868;
 }
 footer[role="contentinfo"] a:hover {
-	color: #21759b;
+	color: #084c8d;
 }
 
 
@@ -719,8 +718,7 @@ footer[role="contentinfo"] a:hover {
 	clear: both;
 }
 .entry-header {
-	margin-bottom: 24px;
-	margin-bottom: 1.714285714rem;
+	margin-bottom: 20px;
 }
 .entry-header img.wp-post-image {
 	margin-bottom: 24px;
@@ -730,7 +728,7 @@ footer[role="contentinfo"] a:hover {
 	font-size: 20px;
 	font-size: 1.428571429rem;
 	line-height: 1.2;
-	font-weight: normal;
+	font-weight: bold;
 }
 .entry-header .entry-title a {
 	text-decoration: none;
@@ -746,15 +744,15 @@ footer[role="contentinfo"] a:hover {
 	font-size: 13px;
 	font-size: 0.928571429rem;
 	line-height: 1.846153846;
-	color: #757575;
+	color: #b9b9b9;
 }
 .comments-link a,
 .entry-meta a {
-	color: #757575;
+	color: #b9b9b9;
 }
 .comments-link a:hover,
 .entry-meta a:hover {
-	color: #21759b;
+	color: #919191;
 }
 article.sticky .featured-post {
 	border-top: 4px double #ededed;
@@ -770,7 +768,8 @@ article.sticky .featured-post {
 .entry-content,
 .entry-summary,
 .mu_register {
-	line-height: 1.714285714;
+	font-size: 15px;
+	line-height: 22px;
 }
 .entry-content h1,
 .comment-content h1,
@@ -830,11 +829,11 @@ article.sticky .featured-post {
 .comment-content p,
 .mu_register p {
 	margin: 0 0 10px;
-	line-height: 1.714285714;
+	line-height: 22px;
 }
 .entry-content a:visited,
 .comment-content a:visited {
-	color: #9f9f9f;
+	color: #084c8d;
 }
 .entry-content ol,
 .comment-content ol,
@@ -967,7 +966,7 @@ img.aligncenter,
 .entry-content table,
 .comment-content table {
 	border-bottom: 1px solid #ededed;
-	color: #757575;
+	color: #b9b9b9;
 	font-size: 12px;
 	font-size: 0.857142857rem;
 	line-height: 2;
@@ -1001,17 +1000,15 @@ img.aligncenter,
 	line-height: 1.714285714;
 }
 footer.entry-meta {
-	margin-top: 10px;
-	font-size: 13px;
-	font-size: 0.928571429rem;
-	line-height: 1.846153846;
-	color: #757575;
+	margin-top: 15px;
+	color: #b9b9b9;
+	font-size: 12px;
 }
 .single-author .entry-meta .by-author {
 	display: none;
 }
 .mu_register h2 {
-	color: #757575;
+	color: #b9b9b9;
 	font-weight: normal;
 }
 
@@ -1115,13 +1112,13 @@ article.format-image footer a h2 {
 /* Grid Posts */
 article.grid-3 {
 	border: none;
-	width: 310px;
+	width: 300px;
 	float: left;
 	font-size: 13px;
 	font-size: 0.928571429rem;
 	line-height: 1.846153846;
 	font-weight: normal;
-	margin-right: 15px;
+	margin: 0 10px;
 }
 article.grid-3:nth-child(3n+3) { margin-right: 0; }
 article.grid-3 .grid-title {
@@ -1145,7 +1142,7 @@ article.grid-4 {
 	font-size: 0.928571429rem;
 	line-height: 1.846153846;
 	font-weight: normal;
-	margin: 0 12px 12px 0;
+	margin: 0 5px 12px 4px;
 	padding: 0;
 }
 article.grid-4:nth-child(4n+4) { margin-right: 0px; }
@@ -1156,10 +1153,9 @@ article.grid-4 .grid-title {
 	font-size: 12pt;
 	line-height: 1.2;
 	z-index: 10;
-	width: 92%;
-	padding:10px;
+	width: 100%;
 	background: rgb(54, 25, 25);
-    background: rgba(54, 25, 25, .5);
+	background: rgba(54, 25, 25, .5);
 }
 article.grid-4 .wp-post-image {
 	position: absolute;
@@ -1167,10 +1163,13 @@ article.grid-4 .wp-post-image {
 	left: 0px;
 	z-index:1;
 }
+article.grid-4 .grid-title div {
+	padding: 10px;
+}
 article.grid-4 .grid-title a {
 	text-decoration: none;
 	color: #eeeeee;
-	font-weight: bold;
+	font-weight: none;
 }
 
 /* Link posts */
@@ -1213,7 +1212,7 @@ article.format-quote .entry-content blockquote {
 	font-size: 1.071428571rem;
 	line-height: 1.6;
 	font-style: normal;
-	color: #6a6a6a;
+	color: #444;
 	background: #efefef;
 }
 
@@ -1243,7 +1242,7 @@ article.format-quote .entry-content blockquote {
 	color: #757575;
 }
 .format-status .entry-header header a:hover {
-	color: #21759b;
+	color: #084c8d;
 }
 .format-status .entry-header img {
 	float: left;
@@ -1305,7 +1304,7 @@ article.format-quote .entry-content blockquote {
 	color: #5e5e5e;
 }
 .comments-area article header a:hover {
-	color: #21759b;
+	color: #084c8d;
 }
 .comments-area article header cite a {
 	color: #444;
@@ -1354,7 +1353,7 @@ a.comment-edit-link {
 }
 a.comment-reply-link:hover,
 a.comment-edit-link:hover {
-	color: #21759b;
+	color: #084c8d;
 }
 .commentlist .pingback {
 	line-height: 1.714285714;
@@ -1411,7 +1410,7 @@ a.comment-edit-link:hover {
 	font-size: 12px;
 	font-size: 0.857142857rem;
 	line-height: 2;
-	color: #5e5e5e;
+	color: #919191;
 }
 .required {
 	color: red;
@@ -1450,7 +1449,7 @@ a.comment-edit-link:hover {
 	color: #757575;
 }
 .template-front-page .widget-area .widget li a:hover {
-	color: #21759b;
+	color: #084c8d;
 }
 .template-front-page .widget-area .widget_text img {
 	float: left;
@@ -1594,13 +1593,13 @@ img#wpstats {
 	}
 	.main-navigation li a {
 		border-bottom: 0;
-		color: #6a6a6a;
+		color: #919191;
 		line-height: 3.692307692;
 		text-transform: uppercase;
 		white-space: nowrap;
 	}
 	.main-navigation li a:hover {
-		color: #000;
+		color: #b9b9b9;
 	}
 	.main-navigation li {
 		position: relative;
@@ -1636,13 +1635,13 @@ img#wpstats {
 	}
 	.main-navigation li ul li a:hover {
 		background: #e3e3e3;
-		color: #444;
+		color: #919191;
 	}
 	.main-navigation .current-menu-item > a,
 	.main-navigation .current-menu-ancestor > a,
 	.main-navigation .current-page-item > a,
 	.main-navigation .current-page-ancestor > a {
-		color: #041F6A;
+		color: #084c8d;
 		font-weight: bold;
 	}
 	
@@ -1657,13 +1656,14 @@ img#wpstats {
 	}
 	.sub-navigation li a {
 		border-bottom: 0;
-		color: #6a6a6a;
+		color: #919191;
 		line-height: 2;
 		text-transform: uppercase;
 		white-space: nowrap;
+		font-size: 15px;
 	}
 	.sub-navigation li a:hover {
-		color: #000;
+		color: #b9b9b9;
 	}
 	.sub-navigation li {
 		position: relative;
@@ -1673,7 +1673,7 @@ img#wpstats {
 	.sub-navigation .current-menu-ancestor > a,
 	.sub-navigation .current_page_item > a,
 	.sub-navigation .current_page_ancestor > a {
-		color: #041F6A;
+		color: #084c8d;
 		font-weight: bold;
 	}
 	
@@ -1688,13 +1688,13 @@ img#wpstats {
 	}
 	.main-footer li a {
 		border-bottom: 0;
-		color: #6a6a6a;
+		color: #919191;
 		line-height: 2;
 		text-transform: uppercase;
 		white-space: nowrap;
 	}
 	.main-footer li a:hover {
-		color: #000;
+		color: #b9b9b9;
 	}
 	.main-footer li {
 		float: left;
@@ -1705,7 +1705,7 @@ img#wpstats {
 	.main-footer .current-menu-ancestor > a,
 	.main-footer .current_page_item > a,
 	.main-footer .current_page_ancestor > a {
-		color: #636363;
+		color: #084c8d;
 		font-weight: bold;
 	}
 
@@ -1907,21 +1907,22 @@ img#wpstats {
 #menu-home-page-left {
 	float: left;
 	text-align: left;
-	width: 320px;
+	width: 340px;
 }
 
 #menu-home-page-left li {
-	margin: 0 30px 15px 0;
+	margin: 0 20px 15px 0;
 	position: relative;
 }
 
 #menu-home-page-right {
 	float: right;
-	width: 320px;
+	text-align: right;
+	width: 340px;
 }
 
 #menu-home-page-right li {
-	margin: 0 0 0 30px;
+	margin: 0 0 15px 20px;
 	position: relative;
 }
 
@@ -1948,6 +1949,7 @@ img#wpstats {
 	}
 	#menu-home-page-left li{
 		margin: 0px 8px -15px 8px;
+		font-size: 0.6em;
 	}
 
 	#menu-home-page-right{
@@ -1957,6 +1959,7 @@ img#wpstats {
 	}
 	#menu-home-page-right li{
 		margin: 0px 8px;
+		font-size: 0.6em;
 	}
 
 	.nav-menu li:nth-of-type(1){
@@ -1974,7 +1977,7 @@ img#wpstats {
 #site-title {
 	position: absolute;
 	font-family: 'Playfair Display SC', serif;
-	font-size: 25pt;
+	font-size: 28pt;
 	text-transform: uppercase;
 	width: 100%;
 	text-align: center;
@@ -1982,9 +1985,17 @@ img#wpstats {
 
 #site-title a {
 	text-decoration: none;
-	font-weight: bold;
 }
 
 article.grid-3 {
 	cursor: pointer;
+}
+
+.afg-row div.afg-cell {
+	padding-right: 10px;
+	text-align: center;
+}
+
+.afg-row div.afg-title {
+	margin: 0;
 }
