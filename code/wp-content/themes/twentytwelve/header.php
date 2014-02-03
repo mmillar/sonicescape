@@ -29,6 +29,29 @@
 <!--[if lt IE 9]>
 <script src="<?php echo get_template_directory_uri(); ?>/js/html5.js" type="text/javascript"></script>
 <![endif]-->
+<!-- AddThis Smart Layers BEGIN -->
+<!-- Go to http://www.addthis.com/get/smart-layers to customize -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-52eefdeb656efc59"></script>
+<script type="text/javascript">
+  addthis.layers({
+    'theme' : 'transparent',
+    'share' : {
+      'position' : 'right',
+      'numPreferredServices' : 5
+    }, 
+    'follow' : {
+      'services' : [
+        {'service': 'facebook', 'id': 'soniceescapemusic'},
+        {'service': 'twitter', 'id': 'sonicescape'},
+        {'service': 'youtube', 'id': 'sonicescapemusic'},
+        {'service': 'flickr', 'id': 'sonicescape'}
+      ]
+    },  
+    'whatsnext' : {},  
+    'recommended' : {} 
+  });
+</script>
+<!-- AddThis Smart Layers END -->
 <?php wp_head(); ?>
 </head>
 

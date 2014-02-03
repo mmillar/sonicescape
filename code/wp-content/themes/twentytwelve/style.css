@@ -1938,6 +1938,10 @@ img#wpstats {
 		width: 50%;
 		text-align:left;
 	}
+	.widget-area{
+		float:left;
+		width: 100%;
+	}
 }
 
 @media (max-width: 700px){
@@ -1949,7 +1953,7 @@ img#wpstats {
 	}
 	#menu-home-page-left li{
 		margin: 0px 8px -15px 8px;
-		font-size: 0.6em;
+		font-size: 0.8em;
 	}
 
 	#menu-home-page-right{
@@ -1959,7 +1963,7 @@ img#wpstats {
 	}
 	#menu-home-page-right li{
 		margin: 0px 8px;
-		font-size: 0.6em;
+		font-size: 0.8em;
 	}
 
 	.nav-menu li:nth-of-type(1){
