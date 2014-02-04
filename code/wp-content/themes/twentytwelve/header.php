@@ -35,20 +35,15 @@
 <script type="text/javascript">
   addthis.layers({
     'theme' : 'transparent',
-    'share' : {
-      'position' : 'right',
-      'numPreferredServices' : 5
-    }, 
     'follow' : {
       'services' : [
-        {'service': 'facebook', 'id': 'soniceescapemusic'},
+        {'service': 'facebook', 'id': 'sonicescapemusic'},
         {'service': 'twitter', 'id': 'sonicescape'},
         {'service': 'youtube', 'id': 'sonicescapemusic'},
         {'service': 'flickr', 'id': 'sonicescape'}
       ]
     },  
-    'whatsnext' : {},  
-    'recommended' : {} 
+    'whatsnext' : {}  
   });
 </script>
 <!-- AddThis Smart Layers END -->
