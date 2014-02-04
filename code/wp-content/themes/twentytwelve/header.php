@@ -29,29 +29,6 @@
 <!--[if lt IE 9]>
 <script src="<?php echo get_template_directory_uri(); ?>/js/html5.js" type="text/javascript"></script>
 <![endif]-->
-<!-- AddThis Smart Layers BEGIN -->
-<!-- Go to http://www.addthis.com/get/smart-layers to customize -->
-<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-52eefdeb656efc59"></script>
-<script type="text/javascript">
-  addthis.layers({
-    'theme' : 'transparent',
-    'share' : {
-      'position' : 'right',
-      'numPreferredServices' : 5
-    }, 
-    'follow' : {
-      'services' : [
-        {'service': 'facebook', 'id': 'soniceescapemusic'},
-        {'service': 'twitter', 'id': 'sonicescape'},
-        {'service': 'youtube', 'id': 'sonicescapemusic'},
-        {'service': 'flickr', 'id': 'sonicescape'}
-      ]
-    },  
-    'whatsnext' : {},  
-    'recommended' : {} 
-  });
-</script>
-<!-- AddThis Smart Layers END -->
 <?php wp_head(); ?>
 </head>
 
@@ -65,6 +42,17 @@
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
 <div id="page" class="hfeed site">
+  <div id="share_buttons">
+    <!-- AddThis Follow BEGIN -->
+    <div class="addthis_toolbox addthis_32x32_style addthis_default_style">
+    <a class="addthis_button_facebook_follow" addthis:userid="sonicescapemusic"></a>
+    <a class="addthis_button_twitter_follow" addthis:userid="sonicescape"></a>
+    <a class="addthis_button_youtube_follow" addthis:userid="sonicescapemusic"></a>
+    <a class="addthis_button_flickr_follow" addthis:userid="sonicescape"></a>
+    </div>
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-52eefdeb656efc59"></script>
+    <!-- AddThis Follow END -->
+  </div>
 	<header id="masthead" class="site-header" role="banner">
 
 		<nav id="site-navigation" class="main-navigation" role="navigation">

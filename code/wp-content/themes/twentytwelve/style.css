@@ -2003,3 +2003,9 @@ article.grid-3 {
 .afg-row div.afg-title {
 	margin: 0;
 }
+
+#share_buttons {
+	position: absolute;
+	top: 2px;
+	right: 0px;
+}
