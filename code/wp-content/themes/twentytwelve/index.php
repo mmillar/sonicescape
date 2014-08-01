@@ -28,6 +28,9 @@ query_posts(array('category_name' => "news", 'posts_per_page' => 10));
 		<?php if ( have_posts() ) : ?>
 
 			<?php /* Start the Loop */ ?>
+
+			<article class="post-748 post type-post status-publish format-standard hentry category-news"><div class="entry-content"><p><i>Sonic Escape</i> is a flute-violin-cello trio of Juilliard graduates that uses every part of the performer - fingers, mind, voice &amp; story - to reshape the live music experience.  The virtuoso members have traveled the world in roles as diverse as soloing at Carnegie Hall, fiddle-dancing in <i>Riverdance</i>, jamming with Beale Street blues bands and playing rock clubs across NYC.  Whether <i>Sonic Escape</i> is performing one of their ground-breaking original works, a folk arrangement or a classical masterpiece, they share with audiences as though it's the last note they'll ever play for the best friend they'll ever make!<br></p></div></article>
+
 			<?php while ( have_posts() ) : the_post(); ?>
 				<?php get_template_part( 'content', get_post_format() ); ?>
 			<?php endwhile; ?>
