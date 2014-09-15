@@ -12,7 +12,7 @@ while($j<count($contacts)){
 		if($j==0) echo("sendContact".$i."();\n");?>
 function sendContact<?php echo($i); ?>(){
     $("#results_<?php echo($i); ?>").html("<font color='blue'>Processing....</font>"); 
-    $("#results_<?php echo($i); ?>").load("./mailer/send_actual_email.php?contact_index=<?php echo($i); 	
+    $("#results_<?php echo($i); ?>").load("./mailer/download_list.php?contact_index=<?php echo($i); 	
 		$j++;
 	}
 	$i++;

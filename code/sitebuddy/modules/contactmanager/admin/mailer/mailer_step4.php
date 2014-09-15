@@ -13,7 +13,7 @@ function gotoStepAndAlert(pagenum,alert_txt){
 //-->
 </SCRIPT>
 
-<form id="mailer_form" method="post" action="contact_mailer.php">
+<form id="mailer_form" method="post" action="mailer/download_list.php">
 
 	<div>
 		<h3>Step 4 - Verify the Recipient List</h3>
