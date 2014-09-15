@@ -1,46 +1,50 @@
-=== Easy Media Gallery ===
+=== Easy Media Gallery - The Best Gallery & Photo Album Plugin ===
 Contributors: GhozyLab
 Donate link: http://ghozylab.com/donate
-Tags: gallery, best gallery plugin, wordpress gallery plugin, photo album, album, photo albums, image albums, image slideshow plugin, photo gallery, widget, gallery album, responsive gallery, grid gallery, wordpress portfolio plugin, plugin, post, links, page, admin, posts, images, seo image, twitter, image album, image, google, portfolio, html5 mp4 player, html5 mp3 player, wp gallery plugin, photo slider, image slider, best portfolio plugin
+Tags: gallery, photo gallery, wordpress gallery plugin, photo album, photo albums, images, best gallery, portfolio gallery, lightbox, nextgen, wordpress portfolio plugin, best gallery plugin, plugin gallery, wp gallery, gallery plugin, galerie, galerij, bilder, galleria, responsive gallery, grid gallery, wp gallery plugin, photo slider, image slider, responsive gallery, photo, shortcode, photos, picture, pictures, html5 video, html5 audio, album, widget, sidebar, fancy gallery, plugin for gallery, html5 player, pagination gallery, pagination portfolio, plugin, post, links, page, admin, posts, thumbnail, easy media gallery, seo image, twitter, image album, image, google, portfolio, best portfolio
 Requires at least: 3.3
-Tested up to: 3.8
-Stable tag: 1.2.29
+Tested up to: 3.9.1
+Stable tag: 1.2.51
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The best Wordpress gallery plugin enables you to create an portfolio or photo gallery. Over 140,000 sites are already using Easy Media Gallery.
-
+The best Wordpress gallery plugin enables you to create photo gallery or portfolio. Over 257,300+ sites are already using Easy Media Gallery.
 
 == Description ==
 
-Easy Media Gallery is a wordpress plugin designed to display various media support including grid gallery, gallery sets, galleries, photo albums, multiple photo albums, portfolio, photo gallery or image gallery, image slider, google maps and google street view, video, audio and link with very ease, fancy and elegant.
+### [Best Gallery Plugin - Photo Albums - Grid Gallery Plugin](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-and-photo-albums-demo/)
+Easy Media Gallery is a wordpress plugin designed to display various media support including grid gallery, galleries, photo album, multiple photo albums, portfolio, photo gallery or image gallery, image slider, google maps and google street view, youtube video, vimeo video, mp4 video, audio mp3 and link with very ease, fancy and elegant.
 
 > #### **Live Demos**
 
-> * [DEMO – Photo Albums](http://ghozylab.com/best-photo-albums-wordpress-plugin/)
-> * [DEMO – Grid Gallery](http://ghozylab.com/best-wordpress-grid-gallery-and-grid-portfolio-plugin/)
-> * [DEMO – Filterable Media](http://ghozylab.com/wordpress-filterable-gallery-and-filterable-media-plugin/)
-> * [DEMO – Gallery with Pagination](http://ghozylab.com/wordpress-grid-gallery-with-pagination-plugin/)
-> * [DEMO – Image / Media Slider](http://ghozylab.com/wordpress-image-slider-and-media-slider-plugin/)
+> * [DEMO : Photo Albums](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-and-photo-albums-demo/)
+> * [DEMO : Photo Gallery / Grid Gallery](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-grid-galleries-plugin/)
+> * [DEMO : Image Slider](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-image-slider-plugin/)
+> * [DEMO : Image Slider Fotorama](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-image-slider-plugin-fotorama/)
+> * [DEMO : Carousel](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-carousel-image-plugin/)
+> * [DEMO : Gallery with Pagination](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-plugin-gallery-using-pagination/)
+> * [DEMO : Video Gallery](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-video-gallery-plugin/)
+> * [DEMO : Audio Gallery](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-audio-gallery/)
+> * [DEMO : Filterable Media](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-portfolio-plugin/)
 
 = Full media support =
 <p>Easy Media Gallery plugin satisfy all your needs letting you create different types of wordpress portfolio, photo albums or wordpress media gallery. Each item can be:</p> 
 
 * An image
-* Grid Gallery (<em>[Pro Version](http://ghozylab.com/best-wordpress-grid-gallery-and-grid-portfolio-plugin/)</em>)
-* Grid Gallery with fancy pagination (<em>[Pro Version](http://ghozylab.com/wordpress-grid-gallery-with-pagination-plugin/)</em>)
-* Filterable Media (<em>[Pro Version](http://ghozylab.com/wordpress-filterable-gallery-and-filterable-media-plugin/)</em>)
-* An image gallery/Photo Albums/Multiple Photo Albums (<em>[Pro Version](http://ghozylab.com/best-photo-albums-wordpress-plugin/)</em>)
-* Media/Image Slider (<em>[Pro Version](http://ghozylab.com/wordpress-image-slider-and-media-slider-plugin/)</em>)
+* Photo Albums (<em>[Pro Version](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-and-photo-albums-demo/)</em>)
+* Grid Gallery (<em>[Pro Version](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-grid-galleries-plugin/)</em>)
+* Grid Gallery with fancy pagination (<em>[Pro Version](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-plugin-gallery-using-pagination/)</em>)
+* Filterable Media (<em>[Pro Version](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-portfolio-plugin/)</em>)
+* Media/Image Slider (<em>[Pro Version](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-image-slider-plugin/)</em>)
 * A video, Auto-retrieve YouTube and Vimeo Thumbnail (<em>Pro Version [learn more here](http://www.youtube.com/watch?v=uAGWUcs5ofE)</em>)
-* An mp3 player (<em>HTML5 player for Pro version and Flash player for Lite version</em>), embed from Reverbnation or Soundcloud (<em>[Pro Version](http://ghozylab.com/sample-1/)</em>)
-* Google Maps / Google Street View (<em>[Pro Version](http://ghozylab.com/sample-1/)</em>)
-* A link (<em>[Pro Version](http://ghozylab.com/sample-1/)</em>)
+* An mp3 player (<em>HTML5 player for Pro version and Flash player for Lite version</em>), embed from Reverbnation or Soundcloud (<em>[Pro Version](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-audio-gallery/)</em>)
+* Google Maps / Google Street View (<em>[Pro Version](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-portfolio-plugin/)</em>)
+* A link to specific URL (<em>[Pro Version](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-portfolio-plugin/)</em>) - see LINK tab
 * S.E.O. for Images (<em>Pro Version</em>)
-* Display image from Facebook Album, Flickr and Instagram (<em>Coming Soon</em>)
+* Facebook, Instagram, Flickr Album (<em>Coming Soon</em>)
 
 = Features =
-Easy Media Gallery supports a wide range of media formats. Simply link to any image, flash video, hosted video or Youtube/Vimeo, mp3 audio or popular website, and the media will be automatically loaded into the overlay. Easy Media Gallery can be used to embed videos from :
+Easy Media Gallery supports a wide range of media formats. Simply link to any image, video, hosted video or Youtube/Vimeo, mp3 audio or popular website, and the media will be automatically loaded into the overlay. Easy Media Gallery can be used to embed videos from :
 
 * YouTube / YouTube Playlist
 * Vimeo
@@ -51,6 +55,12 @@ Easy Media Gallery supports a wide range of media formats. Simply link to any im
 * Livestream
 * Facebook
 * Showecho
+* YouKu
+* Break
+* Flickr
+* Megavideo
+* Rutube
+* Ustream
 * MP4 (<em>MP4 HTML5 player for Pro version and Flash player for Lite version</em>), MOV, SWF, M4V, M4A, FLV
 
 It is a very customizable wordpress gallery and portfolio plugin that allow you to set display whatever you want like adjust colors, positions, grid, media sizes, hover effect and much more with one easy control panel. That easy control panel for experts it would save your time, and for you who do not have more knowledge about website styling, of course this plugin will allow you to manage your website, gallery and portfolio much more easily. 
@@ -62,7 +72,7 @@ It is a very customizable wordpress gallery and portfolio plugin that allow you 
 
 
 > #### **Upgrade to Easy Media Gallery Pro**
-> Take your media to the next level with [Easy Media Gallery Pro](http://ghozylab.com/pricing/), which gives you additional features such as:
+> Take your media to the next level with [Easy Media Gallery Pro](http://ghozylab.com/plugins/easy-media-gallery-pro/pricing/), which gives you additional features such as:
 
 > * Create unlimited number of media
 > * No coding, the plugin takes care of everything
@@ -70,7 +80,8 @@ It is a very customizable wordpress gallery and portfolio plugin that allow you 
 > * Works with all modern browsers, degrades gracefully for others
 > * Fully CSS3 compliant with text shadowing, box shadowing, gradients, etc
 > * Color picker for unlimited color combinations
-> * See your media on different theme and more.
+> * See your media on different theme and more
+> * More than 7 lightboxes available
 > * Powerfull control panel and Shortcode Manager make getting started super easy
 > * 24/7 Technical Support
 
@@ -131,10 +142,10 @@ deny from all
 1. You can open the following URL in your browser, make sure to change <strong>XXX</strong> with your own domain name and see what you get there? If you get Error message it means there is a php error caused by one of your plugin or theme. You can contact us [here](http://ghozylab.com/submit-support-request/) and provide your site URL, we will help you to solve it.
 
 <strong>Lite Version</strong>
-`http://www.XXX.com/wp-content/plugins/easy-media-gallery/includes/dynamic-style.php`
+`http://XXX/wp-content/plugins/easy-media-gallery/includes/dynamic-style.php`
 
 <strong>PRO Version</strong>
-`http://www.XXX.com/wp-content/plugins/easy-media-gallery-pro/includes/dynamic-style.php`
+`http://XXX/wp-content/plugins/easy-media-gallery-pro/includes/dynamic-style.php`
 
 = How to show media in sidebar widget =
 
@@ -155,7 +166,7 @@ or you can display it where you want and as you want outside your post/page usin
 <strong>Keep in mind:</strong>
 We have created a shortcode manager that allow you to put media wherever you like with ease. Please learn more at:
 
-* [Basic Tutorials](http://ghozylab.com/create-media)
+* [Basic Tutorials](http://ghozylab.com/plugins/frequently-asked-questions/)
 * [Youtube Channel](http://www.youtube.com/GhozyLab)
 
 
@@ -186,7 +197,7 @@ To make the plugin easy for everyone, the documentation comes with detailed vide
 * If you really love Easy Media Gallery, any donation would be appreciated! It helps to continue the development and support of the plugin.
 But seriously, I just want to drink coffee for free, so help a developer out. You can use this link [Donate to Easy Media Gallery][easymedia donate].
 
-[easymedia donate]: http://ghozylab.com/donate
+[easymedia donate]: http://ghozylab.com/plugins/donate
             "Donate to Easy Media Gallery"
 
 
@@ -203,6 +214,63 @@ But seriously, I just want to drink coffee for free, so help a developer out. Yo
 
 == Changelog ==
 
+= 1.2.51 =
+* Fixed : Quick Edit on post page issue
+
+= 1.2.50 =
+* Fixed : Uninstall Script
+* Added : New option
+
+= 1.2.49 =
+* Added : New option
+* Fixed : Control Panel reset option
+* Fixed : Undefined index issue
+
+= 1.2.47 =
+* Updated : Submenu title
+* Added : New option
+
+= 1.2.45 =
+* Added : New option
+
+= 1.2.43 =
+* Added : New option
+* Fixed : CP Wrong Variable
+* Updated : Pricing & compare tables
+
+= 1.2.41 =
+* Added : New option
+* Fixed : JS Conflict
+* Updated : Pricing & compare tables
+
+= 1.2.39 =
+* Fixed : Small bugs and improvements
+* Updated : Purchase & Demo Link
+
+= 1.2.37 =
+* Fixed : Small bugs and improvements
+
+= 1.2.35 =
+* Fixed : Small bugs and improvements
+* Removed : Disturbing upgrade notifications
+
+= 1.2.33 =
+* Fixed : Small bugs and improvements ( Settings Page )
+
+= 1.2.31 =
+* Updated : Wordpress 3.9 compatibility
+* Added : New shortcode button
+* Added : 5 Video supports
+* Fixed : SSL issue
+* Fixed : Small bugs and improvements
+* Many other PHP and CSS clean and optimization
+
+= 1.2.30 =
+* Added : New Wordpress 3.5 and above media uploader
+* Fixed : PHP Small bugs and CSS improvements
+* Many other PHP, Javascript and CSS clean and optimization
+* Added : New Language
+
 = 1.2.29 =
 * Fixed : New Patch for Security bugs reported by Nikolai Tschacher
 * Fixed : change Ajax relative path with wp_make_link_relative
@@ -215,7 +283,7 @@ But seriously, I just want to drink coffee for free, so help a developer out. Yo
 * Many other PHP, Javascript and CSS clean and optimization
 
 = 1.2.23 =
-* added : New Feature in pricing table
+* Added : New Feature in pricing table
 * Update : New Price for DEV Version
 
 = 1.2.21 =
@@ -367,5 +435,5 @@ But seriously, I just want to drink coffee for free, so help a developer out. Yo
 
 == Upgrade Notice ==
 
-= 1.2.29 =
-IMPORTANT! Security bugs fix, update NOW!
+= 1.2.51 =
+IMPORTANT! Uninstall script to save your DATA, Security bugs fix, PLEASE UPDATE NOW!

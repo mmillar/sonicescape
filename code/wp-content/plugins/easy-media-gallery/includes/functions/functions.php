@@ -70,7 +70,8 @@ add_action( 'wp_enqueue_scripts', 'easymedia_frontend_js' );
 |--------------------------------------------------------------------------
 */
 define( 'EMG_IS_AJAX', easy_get_option( 'easymedia_disen_ajax' ) );
-
+$emgmemory = (int) ini_get('memory_limit');
+$emgmemory = empty($emgmemory) ? __('N/A') : $emgmemory . __(' MB');
 
 /* These files build out the plugin specific options and associated functions. */
 require_once (EASYMEDG_PLUGIN_DIR . 'includes/options.php'); 
@@ -97,13 +98,37 @@ include_once( EASYMEDG_PLUGIN_DIR . 'includes/easywidget.php' );
 
 /*
 |--------------------------------------------------------------------------
+| AJAX RESET SETTINGS
+|--------------------------------------------------------------------------
+*/
+function emg_cp_reset() {
+	
+	check_ajax_referer( 'easymedia-lite-nonce', 'security' );
+	
+	if ( !isset( $_POST['cmd'] ) ) {
+		echo '0';
+		die;
+		}
+		
+		else {
+			if ( $_POST['cmd'] == 'reset' ){
+				echo '1';
+				easymedia_restore_to_default($_POST['cmd']);			
+				die;
+				}
+	}
+}
+add_action( 'wp_ajax_emg_cp_reset', 'emg_cp_reset' );
+
+/*
+|--------------------------------------------------------------------------
 | AJAX LIST MEDIA (TINYMCE)
 |--------------------------------------------------------------------------
 */
 function emg_load_media_list() {
 	
 	if ( !isset( $_POST['taxo'] ) ) {
-		echo '<p>Ajax request failed, please refresh your browser window.</p>';
+		echo '<p>Ajax request failed, please try again.</p>';
 		die;
 		}
 		else {
@@ -256,8 +281,8 @@ function easymediagallery_add_footer_credits( $text ) {
 	$t = '';
 	if ( get_post_type() === 'easymediagallery' ) {
 		$t .= "<div id=\"credits\" style=\"line-height: 22px;\">";
-		$t .= "<p>Easy Media Gallery plugin Lite is created by <a href=\"http://www.ghozylab.com/\" target=\"_blank\">GhozyLab, Inc</a>.</p>";
-		$t .= "<p>If you have some support issue, don't hesitate to <a href=\"http://www.ghozylab.com/contactus\" target=\"_blank\">write here</a>. The GhozyLab team will be happy to support you on any issue.</p>";
+		$t .= "<p>Easy Media Gallery plugin Lite is created by <a href=\"http://ghozylab.com/plugins/\" target=\"_blank\">GhozyLab, Inc</a>.</p>";
+		$t .= "<p>If you have some support issue, don't hesitate to <a href=\"http://ghozylab.com/plugins/submit-support-request/\" target=\"_blank\">contact us here</a>. The GhozyLab team will be happy to support you on any issue.</p>";
 		$t .= "</div>";
 	}else{
 		$t = $text;
@@ -403,6 +428,92 @@ function easymedia_imgresize_ajax() {
 }
 add_action( 'wp_ajax_easymedia_imgresize_ajax', 'easymedia_imgresize_ajax' );
 
+/*
+|--------------------------------------------------------------------------
+| REMOVE PERMALINK
+|--------------------------------------------------------------------------
+*/
+function emg_hide_permalink() {
+global $post_type;
+if( $post_type == 'easymediagallery' ) {
+echo '<style type="text/css">#edit-slug-box{display: none;}</style>';
+}
+}
+add_action('admin_head', 'emg_hide_permalink'); 
+
+/*--------------------------------------------------------------------------------*/
+/*  REMOVE THE PARENT FIELD FOR THE CUSTOM TEXONOMY
+/*--------------------------------------------------------------------------------*/
+function emg_remove_cat_parent(){
+    global $current_screen;
+    switch ( $current_screen->id ) {
+        case 'edit-emediagallery':
+            
+			?>
+			<script type="text/javascript">
+            jQuery(document).ready( function($) {
+                jQuery('#parent').parents('.form-field').remove();
+				jQuery('#tag-slug, #tag-description').parents('.form-field').hide();
+            });
+            </script>
+            <?php
+			
+            break;
+    }
+}
+add_action('admin_footer-edit-tags.php', 'emg_remove_cat_parent');
+
+/*-------------------------------------------------------------------------------*/
+/*  Get WP Info
+/*-------------------------------------------------------------------------------*/
+function easmedia_get_wpinfo() {
+	
+// Get Site URL	
+$getwpinfo = array();
+$getwpinfo[0] = "- Site URL : " .get_site_url();
+
+// Get Multisite status
+if ( is_multisite() ) { $getwpinfo[1] = '- WP Multisite : YES'; } else { $getwpinfo[1] = '- WP Multisite : NO'; }
+
+// Get PHP deny from all status	
+$url = plugins_url( 'dynamic-style.php' , dirname(__FILE__) );
+$headers = get_headers($url);
+
+if (strpos($headers[0],'Forbidden') !== false) {
+    $getwpinfo[2] = '- PHP Direct Access : Forbidden';
+} else {
+	$getwpinfo[2] = '- PHP Direct Access : YES';
+	}
+	
+global $wp_version, $emgmemory;		
+echo "- WP Version : ".$wp_version."\n";
+echo  "- EMG-Lite Version : ".EASYMEDIA_VERSION."\n";	
+echo $getwpinfo[0]."\n";
+echo $getwpinfo[1]."\n";	
+echo $getwpinfo[2]."\n";
+echo "- Memory Limit : ".$emgmemory."\n";
+$theme_name = wp_get_theme();
+echo "- Active Theme : ".$theme_name->get('Name')."\n";
+echo "- Active Plugins : \n";
+
+// Get Active Plugin
+if ( is_multisite() ) { 
+	$the_plugs = get_site_option('active_sitewide_plugins');
+	foreach($the_plugs as $key => $value) {
+		$string = explode('/',$key);
+		$string[0] = str_replace( "-"," ",$string[0] );
+		echo " &nbsp;&nbsp;&nbsp;&nbsp;".ucwords( $string[0] )."\n";
+	}
+} else {
+	$the_plugs = get_option('active_plugins');
+	foreach($the_plugs as $key => $value) {
+		$string = explode('/',$value);
+		$string[0] = str_replace( "-"," ",$string[0] );
+        echo " &nbsp;&nbsp;&nbsp;&nbsp;".ucwords( $string[0] )."\n";
+		}
+	}
+}
+
 /*-------------------------------------------------------------------------------*/
 /*  Get Plugin Version (@return string Plugin version)
 /*-------------------------------------------------------------------------------*/
@@ -523,20 +634,20 @@ add_action('wp_dashboard_setup', 'emg_register_dashboard_widgets' );
 function emg_dashboard_widget() {
 ?>
     <div class="emg_dashboard_widget">
-<p class="sub">If you ever have any questions at all, please post them on our <a target="_blank" href="http://ghozylab.com/contactus/">Submit Support Request</a> form. Our dedicated support team will gladly assist you with your inquiries directly via the ticket or email. Lastly, if you really love Easy Media Gallery, please recommend our plugin to your friends.</p>	
+<p class="sub">If you ever have any questions at all, please post them on our <a target="_blank" href="http://ghozylab.com/plugins/submit-support-request/">Submit Support Request</a> form. Our dedicated support team will gladly assist you with your inquiries directly via the ticket or email. Lastly, if you really love Easy Media Gallery, please recommend our plugin to your friends.</p>	
 <div style="position:relative;">
 <ul class='easymedia-social' id='easymedia-cssanime'>
 <li class='easymedia-facebook'>
-<a onclick="window.open('http://www.facebook.com/sharer.php?s=100&amp;p[title]=Check out the Best Wordpress Portfolio and Gallery plugin&amp;p[summary]=Easy Media Gallery for WordPress that is powerful and so easy to create portfolio or media gallery&amp;p[url]=http://ghozylab.com/&amp;p[images][0]=<?php echo plugins_url( 'images/easymediabox.png' , dirname(__FILE__) ) ?>', 'sharer', 'toolbar=0,status=0,width=548,height=325');" href="javascript: void(0)" title="Share"><strong>Facebook</strong></a>
+<a onclick="window.open('http://www.facebook.com/sharer.php?s=100&amp;p[title]=Check out the Best Wordpress Portfolio and Gallery plugin&amp;p[summary]=Easy Media Gallery for WordPress that is powerful and so easy to create portfolio or media gallery&amp;p[url]=http://ghozylab.com/plugins/&amp;p[images][0]=<?php echo plugins_url( 'images/easymediabox.png' , dirname(__FILE__) ) ?>', 'sharer', 'toolbar=0,status=0,width=548,height=325');" href="javascript: void(0)" title="Share"><strong>Facebook</strong></a>
 </li>
 <li class='easymedia-twitter'>
-<a onclick="window.open('https://twitter.com/share?text=Check out the Best Wordpress Portfolio and Gallery Plugin &url=http://ghozylab.com/', 'sharer', 'toolbar=0,status=0,width=548,height=325');" title="Twitter" class="circle"><strong>Twitter</strong></a>
+<a onclick="window.open('https://twitter.com/share?text=Check out the Best Wordpress Portfolio and Gallery Plugin &url=http://ghozylab.com/plugins/', 'sharer', 'toolbar=0,status=0,width=548,height=325');" title="Twitter" class="circle"><strong>Twitter</strong></a>
 </li>
 <li class='easymedia-googleplus'>
-<a onclick="window.open('https://plus.google.com/share?url=http://ghozylab.com/','','width=415,height=450');"><strong>Google+</strong></a>
+<a onclick="window.open('https://plus.google.com/share?url=http://ghozylab.com/plugins/','','width=415,height=450');"><strong>Google+</strong></a>
 </li>
 <li class='easymedia-pinterest'>
-<a onclick="window.open('http://pinterest.com/pin/create/button/?url=http://ghozylab.com/;media=<?php echo plugins_url( 'images/easymediabox.png' , dirname(__FILE__) ) ?>;description=Easy Media Gallery for WordPress that is powerful and so easy to create portfolio or media gallery','','width=600,height=300');"><strong>Pinterest</strong></a>
+<a onclick="window.open('http://pinterest.com/pin/create/button/?url=http://ghozylab.com/plugins/;media=<?php echo plugins_url( 'images/easymediabox.png' , dirname(__FILE__) ) ?>;description=Easy Media Gallery for WordPress that is powerful and so easy to create portfolio or media gallery','','width=600,height=300');"><strong>Pinterest</strong></a>
 </li>
 </ul>
 </div></div>
@@ -551,7 +662,7 @@ function emg_share() {
 <div style="position:relative; margin-top:6px;">
 <ul class='easymedia-social' id='easymedia-cssanime'>
 <li class='easymedia-facebook'>
-<a onclick="window.open('http://www.facebook.com/sharer.php?s=100&amp;p[title]=Check out the Best Wordpress Portfolio and Gallery plugin&amp;p[summary]=Easy Media Gallery for WordPress that is powerful and so easy to create portfolio or media gallery&amp;p[url]=http://ghozylab.com/best-wordpress-grid-gallery-and-grid-portfolio-plugin/&amp;p[images][0]=<?php echo plugins_url( 'images/easymediabox.png' , dirname(__FILE__) ) ?>', 'sharer', 'toolbar=0,status=0,width=548,height=325');" href="javascript: void(0)" title="Share"><strong>Facebook</strong></a>
+<a onclick="window.open('http://www.facebook.com/sharer.php?s=100&amp;p[title]=Check out the Best Wordpress Portfolio and Gallery plugin&amp;p[summary]=Easy Media Gallery for WordPress that is powerful and so easy to create portfolio or media gallery&amp;p[url]=http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-grid-galleries-plugin/&amp;p[images][0]=<?php echo plugins_url( 'images/easymediabox.png' , dirname(__FILE__) ) ?>', 'sharer', 'toolbar=0,status=0,width=548,height=325');" href="javascript: void(0)" title="Share"><strong>Facebook</strong></a>
 </li>
 <li class='easymedia-twitter'>
 <a onclick="window.open('https://twitter.com/share?text=Check out the Best Wordpress Portfolio and Gallery Plugin &url=http://ghozylab.com/', 'sharer', 'toolbar=0,status=0,width=548,height=325');" title="Twitter" class="circle"><strong>Twitter</strong></a>
@@ -568,25 +679,132 @@ function emg_share() {
     <?php
 	}
 
+/*
+|--------------------------------------------------------------------------
+| AJAX HIDE NOTIFY
+|--------------------------------------------------------------------------
+*/
+function emg_hide_noty() {
+	
+	check_ajax_referer( 'easymedia-lite-nonce-button', 'hidesecurity' );
+	
+	if ( !isset( $_POST['clickcmd'] ) ) {
+		echo '0';
+		die;
+		}
+		
+		else {
+			if ( $_POST['clickcmd'] == 'hide' ){
+				echo '1';
+				$emg_upd_options = get_option('easy_media_opt');
+				$emg_upd_options['easymedia_disen_admnotify']['id'] = '0';
+				update_option('easy_media_opt', $emg_upd_options);					
+				die;
+				}
+	}
+}
+add_action( 'wp_ajax_emg_hide_noty', 'emg_hide_noty' );
+
+
 /*-------------------------------------------------------------------------------*/
 /*   Admin Notifications
 /*-------------------------------------------------------------------------------*/
+function emg_admin_bar_menu(){
+            global $wp_admin_bar;
 
+            /* Add the main siteadmin menu item */
+                $wp_admin_bar->add_menu( array(
+                    'id'     => 'emg-upgrade-bar',
+                    'href' => 'http://ghozylab.com/plugins/easy-media-gallery-pro/pricing/?utm_source=lite&utm_medium=topbar&utm_campaign=order',
+                    'parent' => 'top-secondary',
+					'title' => __('<img src="'.plugins_url( 'images/easymedia-cp-icon.png' , dirname(__FILE__) ).'" style="vertical-align:middle;margin-right:5px" alt="Upgrade Now!" title="Upgrade Now!" />Upgrade Easy Media Gallery to PRO Version', 'easmedia' ),
+                    'meta'   => array('class' => 'emg-upgrade-to-pro', 'target' => '_blank' ),
+                ) );
+}
+if ( easy_get_option( 'easymedia_disen_admnotify' ) == '1' ) {
+add_action( 'admin_bar_menu', 'emg_admin_bar_menu', 1000);
+}
+
+/* @since 1.2.35
 if ( easy_get_option( 'easymedia_disen_admnotify' ) == '1' ) {
 function emg_upgradepro_message() {
-	
-	global $pagenow;
-	if ( $pagenow == 'plugin-install.php' || $pagenow == 'plugins.php' || 'easymediagallery' == get_post_type() ||  $pagenow == 'upload.php' || $pagenow == 'media-new.php' ) {	
-	
-	
-            $message = '<div id="emg-discount-upgrade-notice">';
-			$message .= '<p><strong>Upgrade to Easy Media Gallery Pro Version - </strong> <a style="color:#fff !important;" target="_blank" href="http://ghozylab.com/order" class="tsc_buttons2 red">UPGRADE NOW &nbsp;for only $'.EASYMEDIA_PRICE.'</a> <strong>or you can </strong>  <a style="color:#fff !important;" href="edit.php?post_type=easymediagallery&page=comparison" class="tsc_buttons2 red">Learn More</a>';
-            $message .= '</p></div>';
-            echo $message;
+	if ( isset( $_GET['page'] ) && $_GET['page'] != 'emg_settings' || isset( $_GET['page'] ) && $_GET['page'] != 'docs' || isset( $_GET['page'] ) && $_GET['page'] != 'comparison' || isset( $_GET['page'] ) && $_GET['page'] != 'easymedia-order' || get_post_type() != 'easymediagallery' ) {
+
+		echo'<div id="emgadminnotice" class="updated"><div class="easymedia_message"><img class="easymedia_icon" title="" src="' . plugins_url( 'images/message_icon.png', dirname(__FILE__) ) . '" alt=""/><div class="easymedia_text">It\'s time to upgrade your <strong>Easy Media Gallery Lite</strong> to <strong>PRO</strong> version!<br /><span>Extend standard plugin functionality with a tons of awesome features!</span></div><a class="button easymedia_button" href="edit.php?post_type=easymediagallery&page=comparison">Learn More</a><a class="button easymedia_button" target="_blank" href="http://ghozylab.com/best-photo-albums-wordpress-plugin/">DEMO</a><a class="button easymedia_button" target="_blank" href="http://ghozylab.com/order/?utm_source=easymediagallerylite&utm_medium=popuptop&utm_campaign=order">UPGRADE $'.EASYMEDIA_PRICE.'</a></div></div>';
 	}
 }
-add_action( 'admin_notices', 'emg_upgradepro_message' );
+add_action( 'admin_notices', 'emg_upgradepro_message', 1 );
 }
+*/
+
+/*-------------------------------------------------------------------------------*/
+/*   Admin Notifications ( Setting Area )
+/*-------------------------------------------------------------------------------*/
+
+if ( easy_get_option( 'easymedia_disen_admnotify' ) == '1' ) {
+		add_action( 'admin_enqueue_scripts', 'easmedia_put_notify_script' );
+		add_action('admin_head', 'easmedia_put_notify_head');
+}
+
+function easmedia_put_notify_script() {
+		if ( isset( $_GET['page'] ) && $_GET['page'] == 'emg_settings' || isset( $_GET['page'] ) && $_GET['page'] == 'docs' || isset( $_GET['page'] ) && $_GET['page'] == 'comparison' || isset( $_GET['page'] ) && $_GET['page'] == 'easymedia-order' || get_post_type() == 'easymediagallery' ) {			
+		wp_enqueue_script( 'easymedia-notify-js', plugins_url( 'js/jquery/noty/jquery.noty.packaged.min.js' , dirname(__FILE__) ) );
+		}
+	}
+
+function easmedia_put_notify_head() {
+		if ( isset( $_GET['page'] ) && $_GET['page'] == 'emg_settings' ) {	
+	?>
+    <script type="text/javascript">
+	/*<![CDATA[*/
+	/* Easy Media Gallery */
+function generate(e){
+	var emgNews = new Array(); /* Random Heading temporary disabled */
+      emgNews[0] = "#1 Best Selling Gallery Plugin for WordPress<br />19,800+ PRO users from around the World can not be wrong...";
+      emgNews[1] = "Easy to use, looks nice and has a very good feel";
+      emgNews[2] = "Powerfull control panel and Shortcode Manager make getting started super easy";
+      emgNews[3] = "Easy Media Gallery PRO can be used to embed more than 12 video. Not only from Youtube and Vimeo";
+      emgNews[4] = "Powerfull control panel and Shortcode Manager make getting started super easy";	  
+	  var showH = Math.floor(Math.random()*emgNews.length);
+
+	var t=noty({text:'Upgrade your <strong>EASY MEDIA GALLERY LITE</strong> to <strong>PRO VERSION</strong> and extend standard plugin functionality with a tons of awesome features!',type:"warning",animation:{open:{height:"toggle"},close:{height:"toggle"},easing:"swing",speed:700},dismissQueue:true,modal:true,layout:"bottom",killer: true,
+theme:"defaultTheme",
+template:'<div class="noty_message"><div id="emg_noty_container"><div id="emg_noty_images"><img id="emg_hero" src="<?php echo plugins_url('images/emg_hero.png' , dirname(__FILE__) ); ?>" width="100%" height="auto"/></div><div id="emg_noty_content"><h2>'+emgNews[0]+'</h2><span class="noty_text"></span></div></div><div class="noty_close"></div></div>',buttons:[{
+	addClass:"emgnotyclosepermanent",text:"Disable notifications",onClick:function(e){
+		e.close()}},
+	{addClass:"tsc_buttons2 green",text:"UPGRADE NOW",onClick:function(e){e.close();noty({layout:"top",modal:true,text:'<span style="display:none;" id="emgordernote">Please click order button below and you will be redirected to order page shortly.</span><br /><a id="emgordrnow" style="display:none; margin: 15px 0 15px 0; "class="tsc_buttons2 green" href="http://ghozylab.com/plugins/ordernow.php?order=proplus&utm_source=lite&utm_medium=popup&utm_campaign=order" target="_blank">ORDER NOW</a><img id="emgorderspin" src="<?php echo plugins_url('images/ajax-loader.gif' , dirname(__FILE__) ); ?>" width="32" height="32"/><br /><p>Great! Please wait a moment...</p>',type:"success"});setTimeout(function(){jQuery("#emgorderspin").hide();jQuery("#emgordernote").fadeIn("slow");jQuery("#emgordrnow").fadeIn("slow");jQuery(".noty_text p").hide()},5e3)}},{addClass:"tsc_buttons2 blue",text:"DEMO",onClick:function(e){window.location.href="http://ghozylab.com/plugins/easy-media-gallery-pro/demo/";e.close()}},{addClass:"tsc_buttons2 orange",text:"Learn More",onClick:function(e){window.location.href="edit.php?post_type=easymediagallery&page=comparison";e.close()}},{addClass:"tsc_buttons2 red",text:"Close",onClick:function(e){e.close()}}],callback:{onShow:function(){jQuery("#ux_buy_pro").hide();jQuery("#emgadminnotice").hide()}}})}function generateAll(){generate("alert")}jQuery(document).ready(function(){
+<?php if ( isset( $_GET['page'] ) && $_GET['page'] == 'comparison' ) { ?>
+setTimeout(function() { jQuery.noty.closeAll(); }, 100); <?php } ?>	generateAll();jQuery('.emgnotyclosepermanent').click(function(){var clickcmd = 'hide';
+emg_hide_noty(clickcmd);});	function emg_hide_noty(clickcmd) {var data = {action: 'emg_hide_noty',hidesecurity: '<?php echo wp_create_nonce( "easymedia-lite-nonce-button"); ?>',clickcmd: clickcmd,};jQuery.post(ajaxurl, data, function(response) {if (response == 0) {alert('Ajax request failed, please refresh your browser window.');return false;}});}})	
+/*]]>*/</script>	
+    
+<?php
+	}
+}
+/*-------------------------------------------------------------------------------*/
+/*   Clean up our custom post/page
+/*-------------------------------------------------------------------------------*/
+function easmedia_cleanup_page() {
+		if ( isset( $_GET['page'] ) && $_GET['page'] == 'emg_settings' || isset( $_GET['page'] ) && $_GET['page'] == 'docs' || isset( $_GET['page'] ) && $_GET['page'] == 'comparison' || isset( $_GET['page'] ) && $_GET['page'] == 'easymedia-order' || get_post_type() == 'easymediagallery' ) {	
+?>
+    <script type="text/javascript">
+	/*<![CDATA[*/
+	/* Easy Media Gallery */	
+	jQuery(document).ready(function(){jQuery("#ux_buy_pro").hide();});
+/*]]>*/</script>
+<?php
+	}
+}
+if ( easy_get_option( 'easymedia_disen_admnotify' ) == '0' ) {
+		add_action('admin_head', 'easmedia_cleanup_page');
+}
+
+function emg_cleanup_adminbar() {
+	if ( isset( $_GET['page'] ) && $_GET['page'] == 'emg_settings' || isset( $_GET['page'] ) && $_GET['page'] == 'docs' || isset( $_GET['page'] ) && $_GET['page'] == 'comparison' || isset( $_GET['page'] ) && $_GET['page'] == 'easymedia-order' || get_post_type() == 'easymediagallery' ) {
+	global $wp_admin_bar;$wp_admin_bar->remove_node('gallery_bank_links');}
+}
+add_action( 'wp_before_admin_bar_render', 'emg_cleanup_adminbar' );
+
 
 /*-------------------------------------------------------------------------------*/
 /*   Comparison Page
@@ -655,9 +873,9 @@ function easmedia_easymedia_docs() {
     </div>
   </div> 
  </div>     
- 		<div class="metabox-holder">
+ 		<!--<div class="metabox-holder">
 			<div class="postbox">
-				<h3><?php _e( 'Troubleshooting (issue for version 1.1.7 and below)', 'easmedia' ); ?></h3>
+				<h3><?php //_e( 'Troubleshooting (issue for version 1.1.7 and below)', 'easmedia' ); ?></h3>
         <div id="easymedia_docs2" style="padding-left:10px !important;">
         <ul style="list-style: square; position:relative; margin-left:15px;">
         <li><a href="http://wordpress.org/extend/plugins/easy-media-gallery/faq/" target="_blank" >Images not showing up</a></li>
@@ -665,7 +883,7 @@ function easmedia_easymedia_docs() {
         </ul>
     </div>
     </div>    
- </div>
+ </div>-->
   </div> 
 	<?php 
 }
@@ -711,11 +929,13 @@ function easymedia_comparison() {
         <li class="row_style_4"><span>Audio Media</span></li>
         <li class="row_style_2"><span>HTML5 Video/Audio (mp4, webm, ogv)</span></li>   
         <li class="row_style_4"><span>Auto Fetch Youtube/Vimeo Thumbnail</span><span class="newftr"></span></li>    
-        <li class="row_style_2"><span>Photo Albums</span><a target="_blank" href="http://ghozylab.com/best-photo-albums-wordpress-plugin/" style="text-decoration:underline !important;"> Click for Sample</a></li>                 
-        <li class="row_style_4"><span>Image Slider</span><a target="_blank" href="http://ghozylab.com/wordpress-image-slider-and-media-slider-plugin/" style="text-decoration:underline !important;"> Click for Sample</a>&nbsp;&nbsp;<span class="newftr"></span></li>
-        <li class="row_style_2"><span>Grid Gallery</span><a target="_blank" href="http://ghozylab.com/best-wordpress-grid-gallery-and-grid-portfolio-plugin/" style="text-decoration:underline !important;"> Click for Sample</a></li>  
-         <li class="row_style_4"><span>Filterable Media</span><a target="_blank" href="http://ghozylab.com/wordpress-filterable-gallery-and-filterable-media-plugin/" style="text-decoration:underline !important;"> Click for Sample</a></li>                     
-        <li class="row_style_2"><span>Pagination</span><a target="_blank" href="http://ghozylab.com/wordpress-grid-gallery-with-pagination-plugin/" style="text-decoration:underline !important;"> Click for Sample</a>&nbsp;&nbsp;<span class="newftr"></span></li>        
+        <li class="row_style_2"><span>Photo Albums</span><a target="_blank" href="http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-and-photo-albums-demo/" style="text-decoration:underline !important;"> Click for Sample</a>&nbsp;&nbsp;<span class="newftr"></span></li>                 
+        <li class="row_style_4"><span>Image Slider</span><a target="_blank" href="http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-image-slider-plugin/" style="text-decoration:underline !important;"> Click for Sample</a>&nbsp;&nbsp;<span class="newftr"></span></li>
+        <li class="row_style_2"><span>Grid Gallery</span><a target="_blank" href="http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-grid-galleries-plugin/" style="text-decoration:underline !important;"> Click for Sample</a></li>  
+         <li class="row_style_4"><span>Filterable Media</span><a target="_blank" href="http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-portfolio-plugin/" style="text-decoration:underline !important;"> Click for Sample</a></li>                     
+        <li class="row_style_2"><span>Pagination</span><a target="_blank" href="http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-plugin-gallery-using-pagination/" style="text-decoration:underline !important;"> Click for Sample</a>&nbsp;&nbsp;<span class="newftr"></span></li>
+        <li class="row_style_4"><span>Carousel</span><a target="_blank" href="http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-carousel-image-plugin/" style="text-decoration:underline !important;"> Click for Sample</a>&nbsp;&nbsp;<span class="newftr"></span></li>
+        <li class="row_style_2"><span>Backup & Restore Settings</span></li>        
         <li class="row_style_4"><span>Link Media</span></li>
         <li class="row_style_2"><span>Google Maps / Street View</span></li>
         <li class="row_style_4"><span>Custom CSS</span></li>
@@ -728,8 +948,8 @@ function easymedia_comparison() {
         <li class="row_style_2"><span>Place media wherever you want</span></li>
         <li class="row_style_4"><span>Media Style</span><a target="_blank" href="http://ghozylab.com/" style="text-decoration:underline !important;"> Click for Sample</a></li>
         <li class="row_style_2"><span>Pattern Overlay</span></li>
-        <li class="row_style_4"><span>Powerfull Control Panel </span> <a href="<?php echo plugins_url( 'images/pro-version-control-panel.png' , dirname(__FILE__) ) ?>   " style="text-decoration:underline !important;">Click for Screenshot</a></li>
-        <li class="row_style_2"><span>Advanced Shortcode </span><a href="<?php echo plugins_url( 'images/pro-version-shortcode-manager.png' , dirname(__FILE__) ) ?>" style="text-decoration:underline !important;">Click for Screenshot</a></li>
+        <li class="row_style_4"><span>Powerfull Control Panel </span> <a href="<?php echo plugins_url( 'images/pro-version-control-panel.png' , dirname(__FILE__) ) ?>   " style="text-decoration:underline !important;">Screenshot</a></li>
+        <li class="row_style_2"><span>Advanced Shortcode </span><a href="<?php echo plugins_url( 'images/pro-version-shortcode-manager.png' , dirname(__FILE__) ) ?>" style="text-decoration:underline !important;">Screenshot</a></li>
         <li class="row_style_4"><span>Facebook, Twitter &amp; Pinterest share buttons</span></li>
          <li class="row_style_2"><span>AJAX page/post load Support</span></li>
         <li class="row_style_2"><span>WP Multisite</span></li>
@@ -741,7 +961,7 @@ function easymedia_comparison() {
     <div class="column_1">
       <ul>
         <li class="header_row_1 align_center">
-          <h2 class="col1">Lite Version</h2>
+          <h2 class="col1">Lite</h2>
         </li>
         <li class="header_row_2 align_center">
           <h1 class="col1">Free</h1>
@@ -757,6 +977,8 @@ function easymedia_comparison() {
         <li class="row_style_3 align_center"><span class="pricing_no"></span></li>        
         <li class="row_style_1 align_center"><span class="pricing_no"></span></li>        
         <li class="row_style_3 align_center"><span class="pricing_no"></span></li>
+        <li class="row_style_1 align_center"><span class="pricing_no"></span></li>
+        <li class="row_style_3 align_center"><span class="pricing_no"></span></li>          
         <li class="row_style_1 align_center"><span class="pricing_no"></span></li>      
         <li class="row_style_3 align_center"><span class="pricing_no"></span></li>
         <li class="row_style_1 align_center"><span class="pricing_no"></span></li>        
@@ -780,15 +1002,16 @@ function easymedia_comparison() {
         <li class="footer_row"></li>
       </ul>
     </div>
+    
     <div class="column_2">
       <ul>
         <li class="header_row_1 align_center">
-          <h2 class="col2">Pro Version</h2>
+          <h2 class="col2">Pro</h2>
         </li>
         <li class="header_row_2 align_center">
-          <h1 class="col2">$<span><?php echo EASYMEDIA_PRICE; ?></span></h1>
+          <h1 class="col2">$<span><?php echo EASYMEDIA_PRO_PRICE; ?></span></h1>
         </li>
-        <li class="row_style_4 align_center">3 Sites</li>
+        <li class="row_style_4 align_center"><span style="font-weight: bold; color:#F77448; font-size:14px;">1 Site</span></li>
         <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
         <li class="row_style_4 align_center"><span class="pricing_yes"></span></li>
         <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>        
@@ -798,7 +1021,9 @@ function easymedia_comparison() {
         <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
         <li class="row_style_4 align_center"><span class="pricing_yes"></span></li> 
         <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
-        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li>                             
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li>  
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li>
         <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
         <li class="row_style_4 align_center"><span class="pricing_yes"></span></li>
         <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
@@ -816,21 +1041,107 @@ function easymedia_comparison() {
         <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
 		<li class="row_style_4 align_center"><span class="pricing_yes"></span></li>        
         <li class="row_style_2 align_center"><span class="pricing_no"></span></li>
-        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li>
-        <li class="row_style_2 align_center"><span>1 year</span></li>
-        <li class="footer_row"><a target="_blank" href="http://ghozylab.com/order" class="tsc_buttons2 red">Upgrade Now</a></li>
+        <li class="row_style_4 align_center"><span>1 Month</span></li>
+        <li class="row_style_2 align_center"><span>1 Year</span></li>
+        <li class="footer_row"><a target="_blank" href="http://ghozylab.com/plugins/ordernow.php?order=pro&utm_source=lite&utm_medium=comparisonpage&utm_campaign=order" class="tsc_buttons2 red">Upgrade Now</a></li>
       </ul>
-    </div>
+    </div>    
     
-     <div class="column_3">
+    <div class="column_2">
       <ul>
         <li class="header_row_1 align_center">
-          <h2 class="col2">Developer Version</h2>
+          <h2 class="col2">Pro+</h2>
+        </li>
+        <li class="header_row_2 align_center">
+          <h1 class="col2">$<span><?php echo EASYMEDIA_PRICE; ?></span></h1>
+        </li>
+        <li class="row_style_4 align_center"><span style="font-weight: bold; color:#F77448; font-size:14px;">3 Sites</span></li>
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>        
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li> 
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li> 
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li> 
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_4 align_center"><span>up to 8 columns</span></li>
+        <li class="row_style_2 align_center"><span>title, subtitle &amp; unlimited content</span></li>
+        <li class="row_style_4 align_center"><span>left, right, center</span></li>
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_2 align_center"><span>light, dark &amp; transparent</span></li>
+        <li class="row_style_4 align_center"><span>15 patterns</span></li>
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+		<li class="row_style_4 align_center"><span class="pricing_yes"></span></li>        
+        <li class="row_style_2 align_center"><span class="pricing_no"></span></li>
+        <li class="row_style_4 align_center"><span>1 year</span></li>
+        <li class="row_style_2 align_center"><span>1 year</span></li>
+        <li class="footer_row"><a target="_blank" href="http://ghozylab.com/plugins/ordernow.php?order=proplus&utm_source=lite&utm_medium=comparisonpage&utm_campaign=order" class="tsc_buttons2 red">Upgrade Now</a></li>
+      </ul>
+    </div>
+    <div class="column_2">
+      <ul>
+        <li class="header_row_1 align_center">
+          <h2 class="col2">Pro++</h2>
+        </li>
+        <li class="header_row_2 align_center">
+          <h1 class="col2">$<span><?php echo EASYMEDIA_PLUS_PRICE; ?></span></h1>
+        </li>
+        <li class="row_style_4 align_center"><span style="font-weight: bold; color:#F77448; font-size:14px;">5 Sites</span></li>
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>        
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li> 
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li> 
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li>         
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_4 align_center"><span>up to 8 columns</span></li>
+        <li class="row_style_2 align_center"><span>title, subtitle &amp; unlimited content</span></li>
+        <li class="row_style_4 align_center"><span>left, right, center</span></li>
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_2 align_center"><span>light, dark &amp; transparent</span></li>
+        <li class="row_style_4 align_center"><span>15 patterns</span></li>
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_4 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_2 align_center"><span class="pricing_yes"></span></li>
+		<li class="row_style_4 align_center"><span class="pricing_yes"></span></li>        
+        <li class="row_style_2 align_center"><span class="pricing_no"></span></li>
+        <li class="row_style_4 align_center"><span>1 year</span></li>
+        <li class="row_style_2 align_center"><span>1 year</span></li>
+        <li class="footer_row"><a target="_blank" href="http://ghozylab.com/plugins/ordernow.php?order=proplusplus&utm_source=lite&utm_medium=comparisonpage&utm_campaign=order" class="tsc_buttons2 red">Upgrade Now</a></li>
+      </ul>
+    </div>    
+     <div class="column_4">
+      <ul>
+        <li class="header_row_1 align_center">
+          <h2 class="col2">Developer</h2>
         </li>
         <li class="header_row_2 align_center">
           <h1 class="col2">$<span><?php echo EASYMEDIA_DEV_PRICE; ?></span></h1>
         </li>
-        <li class="row_style_3 align_center">Unlimited Sites</li>
+        <li class="row_style_3 align_center"><span style="font-weight: bold; color: #F77448; font-size:14px;">15 Sites</span></li>
         <li class="row_style_1 align_center"><span class="pricing_yes"></span></li>
         <li class="row_style_3 align_center"><span class="pricing_yes"></span></li>
         <li class="row_style_1 align_center"><span class="pricing_yes"></span></li>        
@@ -840,7 +1151,9 @@ function easymedia_comparison() {
         <li class="row_style_1 align_center"><span class="pricing_yes"></span></li>
         <li class="row_style_3 align_center"><span class="pricing_yes"></span></li>  
         <li class="row_style_1 align_center"><span class="pricing_yes"></span></li>
-        <li class="row_style_3 align_center"><span class="pricing_yes"></span></li>                            
+        <li class="row_style_3 align_center"><span class="pricing_yes"></span></li> 
+        <li class="row_style_1 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_3 align_center"><span class="pricing_yes"></span></li>
         <li class="row_style_1 align_center"><span class="pricing_yes"></span></li>
         <li class="row_style_3 align_center"><span class="pricing_yes"></span></li>
         <li class="row_style_1 align_center"><span class="pricing_yes"></span></li>
@@ -858,9 +1171,9 @@ function easymedia_comparison() {
         <li class="row_style_1 align_center"><span class="pricing_yes"></span></li>
 		<li class="row_style_3 align_center"><span class="pricing_yes"></span></li>        
         <li class="row_style_1 align_center"><span class="pricing_yes"></span></li>
-        <li class="row_style_3 align_center"><span class="pricing_yes"></span></li>
+        <li class="row_style_3 align_center"><span>1 year</span></li>
         <li class="row_style_1 align_center"><span>1 year</span></li>
-        <li class="footer_row"><a target="_blank" href="http://ghozylab.com/order" class="tsc_buttons2 red">Upgrade Now</a></li>
+        <li class="footer_row"><a target="_blank" href="http://ghozylab.com/plugins/ordernow.php?order=dev&utm_source=lite&utm_medium=comparisonpage&utm_campaign=order" class="tsc_buttons2 red">Upgrade Now</a></li>
       </ul>
     </div>   
     
@@ -870,6 +1183,30 @@ function easymedia_comparison() {
 <!-- DC Pricing Tables:3 End -->
 <div class="tsc_clear"></div> <!-- line break/clear line -->
 <?php
+}
+
+/*-------------------------------------------------------------------------------*/
+/*   Metabox Donation
+/*-------------------------------------------------------------------------------*/
+function easmedia_donate_metabox() {
+$emgdonate = '<p>';
+$emgdonate .= '<span style="color:#666666;margin-left:2px; font-size:12px;">If you love Easy Media Gallery, any donation would be appreciated! It helps to continue the development and support of the plugin.</span><br /><br />
+<a id="easymediadonatebtn" class="thickbox"><img style="cursor:pointer;" src="'.plugins_url( 'images/btn_donate_LG.gif' , dirname(__FILE__) ).'" width="92" height="26" alt="Donate Us" ></a>';
+$emgdonate .= '</p>';
+echo $emgdonate;
+}
+
+add_filter('admin_footer','easmedia_donate_metabox_form');
+function easmedia_donate_metabox_form(){
+$emgdonatefrm = '<div id="easymedia_donate" style="display:none">';	
+$emgdonatefrm .= '<p style="padding:1px;"><span style="color:#666666;margin-left:2px; font-size:12px;">If you love Easy Media Gallery, any donation would be appreciated! It helps to continue the development and support of the plugin.</span></p><form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="BDUYH4QK698CY">
+<input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal — The safer, easier way to pay online.">
+<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+</form>';
+$emgdonatefrm .= '</div>';
+echo $emgdonatefrm;
 }
 
 /*-------------------------------------------------------------------------------*/

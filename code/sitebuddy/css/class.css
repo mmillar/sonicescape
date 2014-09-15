@@ -1,0 +1,15 @@
+body {
+font-family:verdana; 
+font-size:14px;
+background-color: #CCCCCC;
+}
+h1 {
+font-family:verdana;
+font-size: 18px;
+font-weight: bold;
+} 
+form,select,option,td {
+font-family:verdana; 
+font-size:14px;
+}
+

@@ -12,27 +12,25 @@ add_action( 'admin_init', 'register_easy_setting' );
 
 
 function spg_add_admin() {
-	 if ( strpos( $_REQUEST['_wp_http_referer'], 'post_type=easymediagallery&page=emg_settings' ) !== FALSE && isset( $_REQUEST['_wpnonce'] ) && check_admin_referer( 'easy_options_group-options' ) ) { // Thanks to Nikolai Tschacher for this security patch
+	 if (  isset($_POST['_wp_http_referer']) && strpos( $_REQUEST['_wp_http_referer'], 'post_type=easymediagallery&page=emg_settings' ) !== FALSE && isset( $_REQUEST['_wpnonce'] ) && check_admin_referer( 'easy_options_group-options' ) ) { // Thanks to Nikolai Tschacher for this security patch
 global $emgplugname, $theshort, $theopt;
 	if ( is_admin() && ( isset( $_GET['page'] ) == 'emg_settings' ) && ( isset( $_GET['post_type'] ) == 'easymediagallery' ) ){		
 		if ( isset( $_REQUEST['action'] ) && 'save' == $_REQUEST['action'] ) {
 			$curtosv = get_option( 'easy_media_opt' );
-			foreach ( $theopt as $theval ) {
-				$curtosv[ $theval['id'] ] = $_REQUEST[ $theval['id'] ];
-				update_option( 'easy_media_opt', $curtosv ); }
-				header("Location: edit.php?post_type=easymediagallery&page=emg_settings&saved=true");
-				die;
+		foreach ( $theopt as $theval ) {
+			if ( isset( $theval['id'] ) ) {
+				if ( isset( $_REQUEST[ $theval['id'] ] ) ) {
+					$curtosv[ $theval['id'] ] = $_REQUEST[ $theval['id'] ];
+					}
+					else {
+						$curtosv[ $theval['id'] ] = '';
+						}
 				}
-								
-			else if ( isset( $_REQUEST['action'] ) && 'reset' == $_REQUEST['action'] ) {
- 
- // RESTORE DEFAULT SETTINGS
- easymedia_restore_to_default($_REQUEST['action']);
-// END
-
-header("Location: edit.php?post_type=easymediagallery&page=emg_settings&reset=true");
+				update_option( 'easy_media_opt', $curtosv );
+			}	
+	header("Location: edit.php?post_type=easymediagallery&page=emg_settings&saved=true");
 die;
-		}
+				}
 	}
 }
  
@@ -53,7 +51,7 @@ die;
 | REGISTER & ENQUEUE SCRIPTS/STYLES ONLY for a Specific Post Type 
 |--------------------------------------------------------------------------
 */			
-if ( is_admin() && ( isset( $_GET['page'] ) == 'emg_settings' ) && ( isset( $_GET['post_type'] ) == 'easymediagallery' ) ){
+if ( is_admin() && ( isset( $_GET['page'] ) == 'emg_settings' ) && $_GET['page'] == 'emg_settings' ){ //@since 1.2.33
 	
 	add_action( "admin_head", 'easymedia_admin_head_script' );
 	add_action( 'admin_enqueue_scripts', 'easymedia_cp_script' );
@@ -86,6 +84,34 @@ if ( is_admin() && ( isset( $_GET['page'] ) == 'emg_settings' ) && ( isset( $_GE
 /* Easy Media Gallery */
 (function($) {
 		jQuery(document).ready(function() {
+			
+// -------- RESET SETTINGS (AJAX)		
+	jQuery('a.emgresetnow').click(function() {
+		var answer = confirm('Are you sure? This will restore these settings to default.');
+			if (answer){ 	
+				var cmd = 'reset';
+				emg_cp_reset(cmd);
+		}
+			else {}
+	});	
+	
+			function emg_cp_reset(cmd) {
+				var data = {
+				action: 'emg_cp_reset',
+				security: '<?php echo wp_create_nonce( "easymedia-lite-nonce"); ?>',				
+				cmd: cmd,
+				};
+			
+				jQuery.post(ajaxurl, data, function(response) {
+					if (response == 1) {
+						window.location.href = 'edit.php?post_type=easymediagallery&page=emg_settings&reset=true';
+						}						
+					else {
+						alert('Ajax request failed, please refresh your browser window.');
+						}
+					});
+			}						
+						
 			// Replace checkboxes with switch
 			jQuery("input[type=checkbox].switch").each(function() {
 				// Insert switch
@@ -291,9 +317,10 @@ if ( isset( $_REQUEST['reset'] ) ) { echo '<script type="text/javascript">
 <div id="spg_container">
     <div id="header">
       <div class="logo">
-        <h2><?php echo $emgplugname . "  LITE (v " . easymedia_get_plugin_version() . ")"; ?></h2>
+      <div class="emg-icon-option-left"></div>
+        <div class="emg-cp-title"><h2><?php echo $emgplugname . "  LITE (v " . easymedia_get_plugin_version() . ")"; ?></h2></div>
       </div>
-      <div class="icon-option"> </div>
+      <div class="emg-icon-option-right"> </div>
       <div style="clear: both;"></div>
     </div>
 
@@ -370,6 +397,18 @@ case 'textarea':
 <div class="sps_input sps_textarea">
 	<label for="<?php echo $theval['id']; ?>"><?php echo $theval['name']; ?></label>
  	<textarea style="vertical-align:top !important;" name="<?php echo $theval['id']; ?>" type="<?php echo $theval['type']; ?>" cols="" rows=""><?php if ( easy_get_option( $theval['id'] ) != "") { echo stripslashes(easy_get_option( $theval['id'] ) ); } else { echo $theval['std']; } ?></textarea>
+ <small><?php echo $theval['desc']; ?></small><div class="clearfix"></div>
+ 
+ </div>
+  
+<?php
+break;
+case 'textareainfo':
+?>
+
+<div class="sps_input sps_textarea">
+	<label for="<?php echo $theval['id']; ?>"><?php echo $theval['name']; ?></label>
+ 	<textarea id="emgwpinfo" style="vertical-align:top !important;" name="<?php echo $theval['id']; ?>" type="<?php echo $theval['type']; ?>" cols="" rows="" readonly><?php echo easmedia_get_wpinfo(); ?></textarea>
  <small><?php echo $theval['desc']; ?></small><div class="clearfix"></div>
  
  </div>
@@ -470,18 +509,14 @@ $i++;
 ?>
  
 <input type="hidden" name="action" value="save" />
-<p><a target="_blank" href="http://ghozylab.com/order" class="tsc_buttons2 red">Upgrade to Pro Version  &nbsp;for only $<?php echo EASYMEDIA_PRICE; ?></a> <span style="color:#666666;margin-left:2px; font-size:11px;">&nbsp; Need More Features? Upgrade to Pro Version!</span></p>
+<p><a target="_blank" href="http://ghozylab.com/plugins/ordernow.php?order=proplus&utm_source=lite&utm_medium=settingspage&utm_campaign=order" class="tsc_buttons2 red">Upgrade to Pro Version  &nbsp;for only $<?php echo EASYMEDIA_PRICE; ?></a> <span style="color:#666666;margin-left:2px; font-size:11px;">&nbsp; Need More Features? Upgrade to Pro Version!</span></p>
  </div> </div>
  </form>
  </div>
  
-<form method="post">
 <p class="submit">
-<input class="button button-secondary" name="reset" type="submit" value="Reset Options" onclick="return confirm('Are you sure? This will restore these settings to default.');"/>
-<input type="hidden" name="action" value="reset" />
+<a onClick="return false;" class="emgresetnow button-secondary" title="Reset Options" href="#">Reset Options</a>
 <span style="color:#666666;margin-left:2px; font-size:11px;"> Use this button to restore these settings to default.</span></p>
-</form>
- 
  </div>
 
 
@@ -501,8 +536,12 @@ add_action('admin_menu', 'spg_add_admin');
 */	
 function easmedia_validate_options($input) {
 	 // strip html from textboxes
-	$input['text'] =  wp_filter_nohtml_kses($input['text']);
-	$input['textarea'] =  wp_filter_nohtml_kses($input['textarea']);
+	 if ( isset( $input['text'] ) ) {
+		 $input['text'] =  wp_filter_nohtml_kses($input['text']);
+		 }
+	if ( isset( $input['textarea'] ) ) {
+		$input['textarea'] =  wp_filter_nohtml_kses($input['textarea']);
+		}
 	return $input;
 }
 

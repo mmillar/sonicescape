@@ -1,0 +1,212 @@
+/* SiteBuddy General CSS */
+body{
+	background-color: #FAF8EB;
+	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	font-size: 1.0em;
+}
+
+h2{
+	font-size: 1.6em;
+	margin: 10px 0px;
+	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #000066;
+}
+
+#top_logo{
+	padding: 5px 0px;
+}
+
+#error_post{
+	color: red;
+	font-weight: bold;
+}
+
+.removeIcon {
+	width: 25px;
+	height: 23px;
+	background: url(../images/sb_remove.gif) no-repeat;
+	cursor: pointer;
+}
+
+.deleteIcon {
+	width: 23px;
+	height: 23px;
+	background: url(../images/sb_delete.gif) no-repeat;
+	cursor: pointer;
+}
+
+.editIcon {
+	width: 25px;
+	height: 23px;
+	background: url(../images/sb_edit.gif) no-repeat;
+	cursor: pointer;
+}
+
+.visibleIcon {
+	width: 25px;
+	height: 23px;
+	background: url(../images/sb_visible.gif) no-repeat;
+	cursor: pointer;
+}
+
+.visibleIconFade {
+	width: 25px;
+	height: 23px;
+	background: url(../images/sb_visible_fade.gif) no-repeat;
+	cursor: pointer;
+}
+
+/* XML Editor Admin CSS */
+#xml_version_pane{
+	position: absolute;
+	width: 250px;
+	height: 600px;
+	background-color: white;
+	margin: 0px 5px;
+	float:left;
+}
+
+#xml_version_pane .ver_item{
+	height: 30px;
+	padding: 5px 0px;
+	border-bottom: 1px solid #DDD;
+}
+
+#xml_version_pane .left_item{
+	float:left;
+	clear:both;
+	width:75%;
+}
+
+#xml_version_pane .right_item{
+	float:right;
+	width:15%;
+}
+
+.section_title{
+	position: relative;
+	border: #4444FF solid 1px;
+	background-color: #ddddFF;
+	color: #000099;
+	height: 25px;
+	padding: 0px 2px;
+}
+
+#xml_version_pane .version_listing{
+	padding: 2px;
+}
+
+#xml_editor_pane{
+	position: absolute;
+	left: 270px;
+	width: 600px;
+	height: 600px;
+	background-color: white;
+	margin: 0px 5px;
+}
+
+/* User Admin CSS */
+#section_title{
+	position: absolute;
+	font-size: 1.5em;
+	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	top: 16px;
+	left: 280px;
+	color: #000;
+	font-weight: bold;
+}
+
+#user_profile .input_area{
+	display: inline-block;
+	width: 640px;
+	padding: 5px 0px;
+	font-size: 1.2em;
+	font-weight: bold;
+	color: #666;
+}
+
+#user_profile .input_area .text_input{
+	display: inline-block;
+	width: 50%;
+	float: right;
+}
+
+#user_profile .submit_btn{
+	width: 50%;
+}
+
+/* Data Manager CSS */
+#data_profile .input_area{
+	display: inline-block;
+	width: 640px;
+	padding: 5px 0px;
+	font-size: 1.2em;
+	font-weight: bold;
+	color: #666;
+}
+
+#data_profile .input_area .text_input{
+	display: inline-block;
+	width: 50%;
+	float: right;
+}
+
+#data_profile .submit_btn{
+	width: 50%;
+}
+
+.listTable caption {
+	padding: 0 0 5px 0;
+	font: italic 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	text-align: right;
+}
+
+.listTable th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: left;
+	padding: 6px 6px 6px 12px;
+	background: #CAE8EA url(images/bg_header.jpg) no-repeat;
+}
+
+.listTable th.nobg {
+	border-top: 0;
+	border-left: 0;
+	border-right: 1px solid #C1DAD7;
+	background: none;
+}
+
+.listTable td {
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	background: #fff;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+}
+
+
+.listTable td.alt {
+	background: #F5FAFA;
+	color: #797268;
+}
+
+.listTable th.spec {
+	border-left: 1px solid #C1DAD7;
+	border-top: 0;
+	background: #fff url(images/bullet1.gif) no-repeat;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+.listTable th.specalt {
+	border-left: 1px solid #C1DAD7;
+	border-top: 0;
+	background: #f5fafa url(images/bullet2.gif) no-repeat;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #797268;
+}
+

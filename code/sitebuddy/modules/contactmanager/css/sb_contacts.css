@@ -1,0 +1,100 @@
+/* tables */
+* {	margin: 0; padding: 0; }
+
+table.tablesorter {
+	font-family:arial;
+	background-color: #CDCDCD;
+	margin:10px 0pt 15px;
+	font-size: 8pt;
+	width: 100%;
+	text-align: left;
+}
+table.tablesorter thead tr th, table.tablesorter tfoot tr th {
+	background-color: #e6EEEE;
+	border: 1px solid #FFF;
+	font-size: 8pt;
+	padding: 4px;
+}
+table.tablesorter thead tr .header {
+	background-image: url(bg.gif);
+	background-repeat: no-repeat;
+	background-position: center right;
+	cursor: pointer;
+}
+table.tablesorter tbody td {
+	color: #3D3D3D;
+	padding: 4px;
+	vertical-align: top;
+}
+table.tablesorter tbody tr.odd td {
+	background-color:#F0F0F6;
+}
+table.tablesorter thead tr .headerSortUp {
+	background-image: url(asc.gif);
+}
+table.tablesorter thead tr .headerSortDown {
+	background-image: url(desc.gif);
+}
+table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
+background-color: #8dbdd8;
+}
+
+#contact_search{
+	left: 0;
+	width: 450px;
+	padding: 5px;
+	background-color: #EEEEFF;
+	float: left;
+}
+
+.contact_filter{
+	float: left;
+	padding: 8px;
+	margin-left: 6px;
+	background-color: #DDD;
+}
+
+#contact_fields{
+	position: absolute;
+	left: 0px;
+	width: 48%;
+	padding: 5px;
+	background-color: #EEFFEE;
+}
+
+#contact_tags{
+	position: absolute;
+	left: 50%;
+	width: 48%;
+	padding: 5px;
+	background-color: #EEEEFF;
+}
+
+#info {
+	display: block;
+	margin: 10px 0px;
+	padding: 10px;
+	border: 1px solid #666;
+	background-color: #FFF;
+}
+
+#add_container{
+	margin: 10px 0px;
+}
+
+#field-list {
+	margin: 10px 0px;
+	list-style: none;
+}
+
+#field-list li {
+	display: block;
+	padding: 10px 10px; 
+	margin-bottom: 3px;
+	background-color: #efefef;
+}
+
+#field-list li img.handle {
+	margin-right: 20px;
+	cursor: move;
+}

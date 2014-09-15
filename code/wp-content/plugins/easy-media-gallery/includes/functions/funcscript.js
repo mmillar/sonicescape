@@ -1,5 +1,18 @@
 // -------- CONTROL PANEL SHOW/HIDE
     jQuery(document).ready(function(){
+		
+		jQuery("#emgwpinfo").focus(function() {
+			var $this = jQuery(this);
+			$this.select();
+			
+			// Work around Chrome's little problem
+			$this.mouseup(function() {
+				// Prevent further mouseup intervention
+				$this.unbind("mouseup");
+				return false;
+				});
+			});		
+		
 		jQuery('.sps_options').slideUp();
 		
 		jQuery('.sps_section h3').click(function(){		
@@ -33,42 +46,87 @@
 						} 
 				});
 	
-// -------- COPY IMAGE URL 	
-   jQuery(".addmed a").on("click", function() {
-       var msgclk = jQuery(this).attr( 'rel' );
+// -------- GET IMAGE/AUDIO URL 	
+ 
+    jQuery(".addmed a").bind("click", function(event) {
+		var msgclka = jQuery(this).attr( 'rel' );
+		var msgclk = msgclka.split("-");
 
-window.send_to_editor = function(html) {
-
-if (msgclk == 'image'){
-	
-	imgurl = jQuery('img',html).attr('src');
-	jQuery('#upload_image').val(imgurl);
-	
-	if (imgurl.length > 0 ) {
-		tb_remove();
-		IsValidImageUrl(imgurl);
-		jQuery('#notifynovalidimg').html("Loading...");
-		return false;
-		};}
-	
-	else if(msgclk == 'audio'){
-			 
-	 if ( html.indexOf("[audio mp3=") > -1 ) {
-		 var realaudiourl = html.match(/\"(.*?)\"/);
-		 fileurl = realaudiourl[1];
-	 } else {
-		fileurl = jQuery(html).attr('href'); 
-	 }
-		jQuery('#upload_audio').val(fileurl);
-		
-	if (fileurl.length > 0 ) {
-		tb_remove();
-		IsValidAuUrl(fileurl);
-		return false;
-		};}
-
-}
-    });	
+		if ( msgclk[1] == 'l35' ) {
+			window.send_to_editor = function(html) {
+				if (msgclk[0] == 'image'){
+					imgurl = jQuery('img',html).attr('src');
+					jQuery('#upload_image').val(imgurl);
+					
+					if (imgurl.length > 0 ) {
+						tb_remove();
+						IsValidImageUrl(imgurl);
+						jQuery('#notifynovalidimg').html("Loading...");
+						return false;
+						};
+					}
+					
+					else if(msgclk[0] == 'audio'){
+						if ( html.indexOf("[audio mp3=") > -1 ) {
+							var realaudiourl = html.match(/\"(.*?)\"/);
+							fileurl = realaudiourl[1];
+							}
+							else {
+								fileurl = jQuery(html).attr('href');
+								}
+								jQuery('#upload_audio').val(fileurl);
+								
+								if (fileurl.length > 0 ) {
+									tb_remove();
+									IsValidAuUrl(fileurl);
+									return false;
+									};
+								}
+						}			
+			}
+			else if ( msgclk[1] == 'g35' ) {
+				var emgUploadFrame=false;
+				event.preventDefault();
+				if (emgUploadFrame) {
+					emgUploadFrame.open();
+					return;
+					}
+					emgUploadFrame = wp.media.frames.my_upload_frame = wp.media({
+						frame: "select",
+						title: "Insert Media",
+						library: {
+							type: msgclk[0]
+							},
+						button: {
+							text: "Insert into media",
+							},
+						multiple: false
+						});
+						
+					emgUploadFrame.on("select", function () {
+						var selection = emgUploadFrame.state().get("selection");
+						selection.map(function (attachment) {
+							attachment = attachment.toJSON();
+							if (attachment.id) {
+								var newLogoID = attachment.id;
+								
+								if ( msgclk[0] == 'image' ) {
+									var FinalMediaURL = attachment.sizes.full.url;
+									jQuery("#upload_image").val(FinalMediaURL);
+									IsValidImageUrl(FinalMediaURL);
+									jQuery('#notifynovalidimg').html("Loading...");
+									}
+									else if ( msgclk[0] == 'audio' ) {
+										var FinalMediaURL = attachment.url;
+										jQuery('#upload_audio').val(FinalMediaURL);
+										IsValidAuUrl(FinalMediaURL);										
+										}							
+								}
+							});
+						});
+						emgUploadFrame.open();
+					}
+			});	
 	
 // -------- RESIZE DONATE DIALOX BOX	
 	jQuery('#easymediadonatebtn').on("click", function () {

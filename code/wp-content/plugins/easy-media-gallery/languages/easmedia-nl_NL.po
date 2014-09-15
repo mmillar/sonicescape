@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Easy Media Gallery v1.2.29\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-12-24 02:50:54+0000\n"
+"PO-Revision-Date: 2014-01-30 05:17:05+0000\n"
 "Last-Translator: GhozyLab <lang@ghozylab.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 "X-Textdomain-Support: yes"
 
 #: easy-media-gallery.php:143
-#: includes/emg-settings.php:41
+#: includes/emg-settings.php:42
 #@ easmedia
 msgid "Settings"
 msgstr "Instellingen"
@@ -89,36 +89,36 @@ msgstr ""
 msgid "Easy Media"
 msgstr ""
 
-#: easy-media-gallery.php:240
+#: easy-media-gallery.php:241
 #@ easmedia
 msgctxt "column name"
 msgid "Title"
 msgstr ""
 
-#: easy-media-gallery.php:241
+#: easy-media-gallery.php:242
 #@ easmedia
 msgid "Thumbnails"
 msgstr ""
 
-#: easy-media-gallery.php:242
+#: easy-media-gallery.php:243
 #@ easmedia
 msgid "Type"
 msgstr ""
 
-#: easy-media-gallery.php:243
+#: easy-media-gallery.php:244
 #: includes/taxonomy.php:18
 #@ easmedia
 #@ default
 msgid "Categories"
 msgstr "Categorieën"
 
-#: easy-media-gallery.php:244
+#: easy-media-gallery.php:245
 #@ easmedia
 msgid "ID"
 msgstr ""
 
-#: easy-media-gallery.php:266
-#: easy-media-gallery.php:295
+#: easy-media-gallery.php:267
+#: easy-media-gallery.php:296
 #@ easmedia
 msgid "None"
 msgstr ""
@@ -159,23 +159,23 @@ msgstr ""
 msgid "No items found, why not %screate one%s?\t"
 msgstr ""
 
-#: includes/functions/functions.php:595
-#: includes/functions/functions.php:604
+#: includes/functions/functions.php:596
+#: includes/functions/functions.php:605
 #@ easmedia
 msgid "Documentation"
 msgstr "Documentatie"
 
-#: includes/functions/functions.php:605
+#: includes/functions/functions.php:606
 #@ easmedia
 msgid "This plugin comes with instructional training videos that walk you through every aspect of setting up your new media gallery. We recommend following these videos to setup your media gallery. This user manual is only intended to be a reference guide."
 msgstr ""
 
-#: includes/functions/functions.php:660
+#: includes/functions/functions.php:661
 #@ easmedia
 msgid "Troubleshooting (issue for version 1.1.7 and below)"
 msgstr ""
 
-#: includes/functions/functions.php:699
+#: includes/functions/functions.php:700
 #@ easmedia
 msgid "Comparison"
 msgstr "Vergelijking"
@@ -275,7 +275,7 @@ msgstr ""
 msgid "Enter a media title."
 msgstr ""
 
-#: includes/emg-settings.php:40
+#: includes/emg-settings.php:41
 #@ easmedia
 msgid "Easy Media Gallery Settings"
 msgstr ""
@@ -338,22 +338,22 @@ msgstr ""
 msgid "Emediagallery"
 msgstr ""
 
-#: includes/functions/functions.php:610
+#: includes/functions/functions.php:611
 #@ easmedia
 msgid "Subscribe and Get Free Updates"
-msgstr ""
+msgstr "Abonneer en ontvang gratis updates"
 
-#: includes/functions/functions.php:621
+#: includes/functions/functions.php:622
 #@ easmedia
 msgid "Share Easy Media Gallery"
 msgstr ""
 
-#: includes/functions/functions.php:631
+#: includes/functions/functions.php:632
 #@ easmedia
 msgid "Video Tutorials"
 msgstr ""
 
-#: includes/functions/functions.php:677
+#: includes/functions/functions.php:678
 #@ easmedia
 msgid "UPGRADE to PRO"
 msgstr "UPGRADE naar PRO"

@@ -4,13 +4,13 @@
 /*-----------------------------------------------------------------------------------*/
 /*  Featured Image Meta
 /*-----------------------------------------------------------------------------------*/
-function customposttype_image_box() {
+function emg_customposttype_image_box() {
 	remove_meta_box( 'postimagediv', 'easymediagallery', 'side' );
 	remove_meta_box( 'emediagallerydiv', 'easymediagallery', 'side' );
 	add_meta_box( 'categorydiv', __( 'Media Categories' ), 'easymediagallery_categories_meta_box', 'easymediagallery', 'normal', 'high' );
-	//add_meta_box( 'donatediv', __( 'Donate Us' ), 'easmedia_donate_metabox', 'easymediagallery', 'side', 'default' );
+	add_meta_box( 'donatediv', __( 'Donate Us' ), 'easmedia_donate_metabox', 'easymediagallery', 'side', 'default' );
 }
-add_action( 'do_meta_boxes', 'customposttype_image_box' );
+add_action( 'do_meta_boxes', 'emg_customposttype_image_box' );
 
 /*-----------------------------------------------------------------------------------*/
 /*	get rid of WordPress SEO metabox - http://wordpress.stackexchange.com/a/91184/2015
@@ -31,6 +31,9 @@ if ( strstr( $_SERVER['REQUEST_URI'], 'wp-admin/post-new.php' ) || strstr( $_SER
 			function emg_load_wp_enqueue() {
 				
 				if ( get_post_type( get_the_ID() ) == 'easymediagallery' ) {
+					
+					if ( EMG_WP_VER == "g35" ) {wp_enqueue_media();}					
+					
 					wp_enqueue_script( 'jquery-multi-sel' );
 					wp_enqueue_style( 'jquery-multiselect-css' );
 					wp_enqueue_style( 'jquery-ui-themes-redmond' );
@@ -51,12 +54,29 @@ if ( strstr( $_SERVER['REQUEST_URI'], 'wp-admin/post-new.php' ) || strstr( $_SER
 	if ( get_post_type( get_the_ID() ) == 'easymediagallery' ) { 
 	?>
     
+            <style type="text/css" media="screen">
+		   @media only screen and (min-width: 1150px) {
+			   #side-sortables.fixed { position: fixed; top: 55px; right: 20px; width: 280px; }
+			   }	
+				</style>   
+    
         <script type="text/javascript">
 			/*<![CDATA[*/
 			/* Easy Media Gallery */  
 			
 jQuery(document).ready(function($) {
 	
+	var snpprevPosition = jQuery('#side-sortables').offset();
+	
+	jQuery(window).scroll(function(){
+		if(jQuery(window).scrollTop() > snpprevPosition.top) {
+			jQuery('#side-sortables').addClass('fixed');
+			    } 
+			 else {
+				 jQuery('#side-sortables').removeClass('fixed');
+			    }    
+		    });	
+
 		jQuery("#easmedia_metabox_media_video").change(function() {
 			vdo_url = jQuery("#easmedia_metabox_media_video").val();
 				if (vdo_url.match('http://new\.livestream\.com')) {
@@ -262,6 +282,18 @@ function easmedia_add_meta_box( $meta_box )
  */
 function easmedia_create_meta_box( $post, $meta_box )
 {
+						if ( EMG_WP_VER == "l35" ) {
+						$uploaderclass = 'thickbox button add_media';
+						$emghref = "media-upload.php?type=image&TB_iframe=1";
+						$isdatacnt = ' data-editor="content" ';
+						$emgepver = EMG_WP_VER;	
+						
+						} else {
+							$uploaderclass = 'button';
+							$emghref = "#";
+							$isdatacnt = '';
+							$emgepver = EMG_WP_VER;
+							}
 	
     if ( !is_array( $meta_box ) ) return false;
     
@@ -297,10 +329,6 @@ function easmedia_create_meta_box( $post, $meta_box )
 			
 			case 'images': 
 			
-global $wp_version;			
-if ( version_compare($wp_version, "3.5", "<" ) ) {	
-$uploaderclass = 'thickbox button add_media';} else {$uploaderclass = 'button insert-media add_media';}			
-			
 $dsplynone = 'display:none;';		
 if ( get_post_meta( $post->ID, 'easmedia_metabox_img', true ) ) {
 $attid = wp_get_attachment_image_src( emg_get_attachment_id_from_src( get_post_meta( $post->ID, 'easmedia_metabox_img', true ) ), 'full' );
@@ -316,20 +344,15 @@ $curimgpth = explode(",", $curimgpth);
 	 $curimgpth[2] = '';
 	}	
 
-echo '<div id="medsingimgtut" style="text-decoration:underline;font-weight:bold;cursor:Pointer; color:#1A91F2 !important; margin-bottom:8px;">Video Tutorial</div><td id="imgupld"><input id="upload_image" type="text" name="easmedia_meta['. $field['id'] .']" value="'. ($meta ? $meta : $field['std']) .'" style="margin-bottom:5px;"/><div style="color:red;" id="notifynovalidimg"></div><div class="addmed"><a rel="image" class="' . $uploaderclass . '" title="Add Media" data-editor="content" href="media-upload.php?type=image&TB_iframe=1"><span class="emg-media-buttons-icon"></span>Add Media</a></div>
-<a onClick="return false;" style="'. $dsplynone .';" class="deleteimage button" title="Delete Image" href="#"><span class="emg-media-buttons-icon-del"></span>Delete Image</a>
-
-<div style="'. $dsplynone .' width:'.$curimgpth[1].'px; height:'.$curimgpth[2].'px" id="imgpreviewbox" class="imgpreviewboxc">
+echo '<div id="medsingimgtut" style="text-decoration:underline;font-weight:bold;cursor:Pointer; color:#1A91F2 !important; margin-bottom:8px;">Video Tutorial</div><td id="imgupld"><input id="upload_image" type="text" name="easmedia_meta['. $field['id'] .']" value="'. ($meta ? $meta : $field['std']) .'" style="margin-bottom:5px;"/><div style="color:red;" id="notifynovalidimg"></div>
+<div class="addmed"><a rel="image-'.$emgepver.'" class="' . $uploaderclass . '" title="Add Media" '.$isdatacnt.' href="'.$emghref.'"><span class="emg-media-buttons-icon"></span>Add Media</a></div>
+<a onClick="return false;" style="'. $dsplynone .';" class="deleteimage button" title="Delete Image" href="#"><span class="emg-media-buttons-icon-del"></span>Delete Image</a><div style="'. $dsplynone .' width:'.$curimgpth[1].'px; height:'.$curimgpth[2].'px" id="imgpreviewbox" class="imgpreviewboxc">
 <img id="imgthumbnailprv" src="' . $curimgpth[0] . '"/></div>
 </td>';
 			    break;
 
-			case 'audio': 
-			
-global $wp_version;			
-if ( version_compare($wp_version, "3.5", "<" ) ) {	
-$uploaderclass = 'thickbox button add_media';} else {$uploaderclass = 'button insert-media add_media';}			
-
+			case 'audio':
+		
 $adsplynone = 'display:none;';
 $curaudiopth = get_post_meta($post->ID, 'easmedia_metabox_media_audio', true);
 ( $curaudiopth != '' ) ? $adsplynone = '' : $adsplynone = 'display:none;';	
@@ -343,7 +366,7 @@ if ( $curaudiopth != '' ) { echo '
     </script>	
 '; }
 
-echo '<div id="medaudiotut" style="text-decoration:underline;font-weight:bold;cursor:Pointer; color:#1A91F2 !important; margin-bottom:8px;">Video Tutorial</div><td id="audioupld"><input id="upload_audio" type="text" name="easmedia_meta['. $field['id'] .']" value="'. ($meta ? $meta : $field['std']) .'" style="margin-bottom:5px;"/><div style="color:red;" id="notifynovalidaudio"></div><div class="addmed"><a rel="audio" class="' . $uploaderclass . '" title="Add Media" data-editor="content" href="media-upload.php?type=image&TB_iframe=1"><span class="emg-media-buttons-icon"></span>Add Media</a></div>
+echo '<div id="medaudiotut" style="text-decoration:underline;font-weight:bold;cursor:Pointer; color:#1A91F2 !important; margin-bottom:8px;">Video Tutorial</div><td id="audioupld"><input id="upload_audio" type="text" name="easmedia_meta['. $field['id'] .']" value="'. ($meta ? $meta : $field['std']) .'" style="margin-bottom:5px;"/><div style="color:red;" id="notifynovalidaudio"></div><div class="addmed"><a rel="audio-'.$emgepver.'" class="' . $uploaderclass . '" title="Add Media" '.$isdatacnt.' href="'.$emghref.'"><span class="emg-media-buttons-icon"></span>Add Media</a></div>
 <a onClick="return false;" style="'. $adsplynone .';" class="deleteaudio button" title="Delete Audio" href="#"><span class="emg-media-buttons-icon-del"></span>Delete Audio</a>
 
 <div style="'. $adsplynone .';" id="audioprev" class="vidpreviewboxc">
@@ -524,8 +547,10 @@ function easmedia_metabox_media_scripts() {
 function easmedia_metabox_media_styles() {
 	wp_enqueue_style( 'thickbox' );
 }
+if ( EMG_WP_VER == "l35" && get_post_type( get_the_ID() ) == 'easymediagallery' ) {
 add_action( 'admin_enqueue_scripts', 'easmedia_metabox_media_scripts' );
 add_action( 'admin_print_styles', 'easmedia_metabox_media_styles' );
+}
 
 
 	// SELECT MEDIA METABOX
@@ -534,7 +559,7 @@ function easmedia_metabox_work(){
 	    $meta_box = array(
 		'id' => 'easmedia_metaboxmediatypeselect',
 		'title' =>  __( 'Media Options', 'easmedia' ),
-		'description' => __( '<div class="emginfobox">Upgrade to PRO and you can select Image Gallery, Grid Gallery, Photo Albums, Filterable Media, HTML5 Video/Audio, Google Maps/Street View, embed from Soundcloud or Reverbnation and also Link to specific URL. You can learn more and see version comparison <a href="edit.php?post_type=easymediagallery&page=comparison">here</a> or go to Pro Version DEMO <a href="http://ghozylab.com/best-wordpress-grid-gallery-and-grid-portfolio-plugin/" target="_blank">here</a></div><br>Select videos, images, gallery or audio files.', 'easmedia' ),
+		'description' => __( '<div class="emginfobox"><span class="emg_blink">Upgrade to PRO</span> and you can select <a href="http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-grid-galleries-plugin/" target="_blank">Grid Gallery</a>, <a href="http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-and-photo-albums-demo/" target="_blank">Photo Albums</a>, <a href="http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-portfolio-plugin/" target="_blank">Filterable Media</a>, HTML5 Video/Audio, Google Maps/Street View, embed from Soundcloud or Reverbnation and also Link to specific URL. You can learn more and see version comparison <a href="edit.php?post_type=easymediagallery&page=comparison">here</a> or go to Pro Version DEMO <a href="http://ghozylab.com/plugins/easy-media-gallery-pro/demo/" target="_blank">here</a></div><br>Select videos, images, gallery or audio files.', 'easmedia' ),
 		'page' => 'easymediagallery',
 		'context' => 'normal',
 		'priority' => 'default',

@@ -5,19 +5,12 @@ jQuery(document).ready(function() {
 		jQuery(this).closest('tr').find('.cff-tooltip').slideToggle();
 	});
 
-	//Check Access Token length
-	jQuery("#cff_access_token").change(function() {
-
-		var cff_token_string = jQuery('#cff_access_token').val(),
-			cff_token_check = cff_token_string.indexOf('|');
-
-  		if ( (cff_token_check == -1) && (cff_token_string.length < 50) && (cff_token_string.length !== 0) ) {
-  			jQuery('.cff-profile-error.cff-access-token').fadeIn();
-  		} else {
-  			jQuery('.cff-profile-error.cff-access-token').fadeOut();
-  		}
-
+	//Toggle Access Token field
+	if( jQuery('#cff_show_access_token').is(':checked') ) jQuery('.cff-access-token-hidden').show();
+	jQuery('#cff_show_access_token').change(function(){
+		jQuery('.cff-access-token-hidden').fadeToggle();
 	});
+
 
 	//Is this a page, group or profile?
 	var cff_page_type = jQuery('.cff-page-type select').val(),
@@ -59,38 +52,12 @@ jQuery(document).ready(function() {
 	    jQuery('#cff-header-icon-example').removeClass().addClass('fa fa-' + $self.val() );
 	});
 
-	//Icon style
-	var iconStyles = 'color: #' + jQuery('#cff-header-icon-color').val() + '; font-size: ' + jQuery('#cff-header-icon-size').val() + 'px;';
-	jQuery('#cff-header-icon-example').attr('style', iconStyles);
-
-	jQuery('#cff-header-icon-size, #cff-header-icon-color').change(function() {
-	    var iconStyles = 'color: #' + jQuery('#cff-header-icon-color').val() + '; font-size: ' + jQuery('#cff-header-icon-size').val() + 'px;';
-	    jQuery('#cff-header-icon-example').attr('style', iconStyles);
-	});
-
 
 	//Test Facebook API connection button
 	jQuery('#cff-api-test').click(function(e){
 		e.preventDefault();
-		var cff_page_id = jQuery('#cff_page_id').val(),
-			cff_access_token = jQuery('#cff_access_token').val(),
-			response = 'https://graph.facebook.com/' + cff_page_id + '/posts' + '?access_token=' + cff_access_token;
-
-		//Show the loader
-		jQuery('.cff-loader').show();
-
-		//Load the response into the text box
-		jQuery('#cff-api-test-result textarea').css('display', 'block').load(response, function( response, status, xhr ) {
-			//Check for an error
-			if ( status == "error" ) {
-				var msg = "Error: ";
-				jQuery( "#cff-api-test-result textarea" ).html( msg + xhr.status + " " + xhr.statusText + ". Could not connect to Facebook API." ).removeClass().addClass('cff-error');
-			} else {
-				jQuery('#cff-api-test-result textarea').removeClass().addClass('cff-success');
-			}
-			//Hide the loader
-			jQuery('.cff-loader').hide();
-		});
+		//Show the JSON
+		jQuery('#cff-api-test-result textarea').css('display', 'block');
 	});
 
 
@@ -121,6 +88,7 @@ jQuery(document).ready(function() {
 		}
 	});
 
-	
+    //Add the color picker
+	if( jQuery('.cff-colorpicker').length > 0 ) jQuery('.cff-colorpicker').wpColorPicker();
 
 });
