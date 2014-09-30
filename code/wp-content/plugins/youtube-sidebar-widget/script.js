@@ -3,7 +3,7 @@
  */
 (function(){
 	jQuery(function($){
-		$("#youtube-sidebar-widget li div.play_arrow, #youtube-sidebar-widget li a, .ysw-youtube, article.grid-3 img, article.grid-3 span").click(function(){
+		$("#youtube-sidebar-widget li div.play_arrow, #youtube-sidebar-widget li a, .ysw-youtube").click(function(){
 			if($(this).is(".ysw-youtube")) {
 				var el = $(this);
 			} else {

@@ -24,7 +24,7 @@ function fbcomments_init(){
 		'countmsg' => 'comments',
 		'title' => 'Comments',
 		'titleclass' => '',
-		'width' => '450',
+		'width' => '100%',
 		'countstyle' => '',
 		'linklove' => 'off',
 		'scheme' => 'light',
@@ -108,20 +108,19 @@ $domain = str_replace('www.', '', $domain);
 		<form method="post" action="options.php" id="options">
 			<?php settings_fields('fbcomments_options'); ?>
 			<?php $options = get_option('fbcomments'); 
-if (!isset($options['fbml'])) {$options['fbml'] = "";}
-if (!isset($options['fbns'])) {$options['fbns'] = "";}
-if (!isset($options['opengraph'])) {$options['opengraph'] = "";}
-if (!isset($options['html5'])) {$options['html5'] = "";}
-if (!isset($options['linklove'])) {$options['linklove'] = "";}
-if (!isset($options['posts'])) {$options['posts'] = "";}
-if (!isset($options['pages'])) {$options['pages'] = "";}
-if (!isset($options['homepage'])) {$options['homepage'] = "";}
-if (!isset($options['count'])) {$options['count'] = "";}
-if (!isset($options['jquery'])) {$options['jquery'] = "";}
-?>
-
-<?php if ($options['appID']=="") { ?>
-<div class="error">
+				if (!isset($options['fbml'])) {$options['fbml'] = "";}
+				if (!isset($options['fbns'])) {$options['fbns'] = "";}
+				if (!isset($options['opengraph'])) {$options['opengraph'] = "";}
+				if (!isset($options['html5'])) {$options['html5'] = "";}
+				if (!isset($options['linklove'])) {$options['linklove'] = "";}
+				if (!isset($options['posts'])) {$options['posts'] = "";}
+				if (!isset($options['pages'])) {$options['pages'] = "";}
+				if (!isset($options['homepage'])) {$options['homepage'] = "";}
+				if (!isset($options['count'])) {$options['count'] = "";}
+				if (!isset($options['jquery'])) {$options['jquery'] = "";}
+			?>
+			<?php if ($options['appID']=="") { ?>
+			<div class="error">
 			<h3 class="title">You Need to Set Up your Facebook App ID!</h3>
 			<table class="form-table">
 				<tr valign="top"><th scope="row"><a href="https://developers.facebook.com/apps" style="text-decoration:none" target="_blank">Create an App to handle your comments</a></th>
@@ -283,7 +282,7 @@ if (!isset($options['jquery'])) {$options['jquery'] = "";}
 					<td><input id="num" type="text" name="fbcomments[num]" value="<?php echo $options['num']; ?>" /> <small>default is <strong>5</strong></small></td>
 				</tr>
 				<tr valign="top"><th scope="row"><label for="width">Width</label></th>
-					<td><input id="width" type="text" name="fbcomments[width]" value="<?php echo $options['width']; ?>" /> <small>default is <strong>580</strong></small></td>
+					<td><input id="width" type="text" name="fbcomments[width]" value="<?php echo $options['width']; ?>" /> <small>default is <strong>100%</strong>. Keep at this to ensure the comment box is responsive</small></td>
 				</tr>
 				<tr valign="top"><th scope="row"><label for="title">Title</label></th>
 					<td><input id="title" type="text" name="fbcomments[title]" value="<?php echo $options['title']; ?>" /> with a CSS class of <input type="text" name="fbcomments[titleclass]" value="<?php echo $options['titleclass']; ?>" /></td>

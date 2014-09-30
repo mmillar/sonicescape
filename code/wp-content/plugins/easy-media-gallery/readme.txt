@@ -1,18 +1,21 @@
-=== Easy Media Gallery - The Best Gallery & Photo Album Plugin ===
-Contributors: GhozyLab
+ === Easy Media Gallery - The Best Gallery & Photo Album Plugin ===
+Contributors: ghozylab
 Donate link: http://ghozylab.com/donate
-Tags: gallery, photo gallery, wordpress gallery plugin, photo album, photo albums, images, best gallery, portfolio gallery, lightbox, nextgen, wordpress portfolio plugin, best gallery plugin, plugin gallery, wp gallery, gallery plugin, galerie, galerij, bilder, galleria, responsive gallery, grid gallery, wp gallery plugin, photo slider, image slider, responsive gallery, photo, shortcode, photos, picture, pictures, html5 video, html5 audio, album, widget, sidebar, fancy gallery, plugin for gallery, html5 player, pagination gallery, pagination portfolio, plugin, post, links, page, admin, posts, thumbnail, easy media gallery, seo image, twitter, image album, image, google, portfolio, best portfolio
+Tags: gallery, photo album, photo gallery, album, photo albums, seo, wordpress gallery plugin, responsive image gallery, wordpress seo, AJAX, fotoalbum, jquery gallery, wp slider, jquery slider, comments, images, best gallery, portfolio gallery, lightbox, nextgen, nextgen gallery, jquery slideshow, responsive slideshow, image slideshow, image rotate, wordpress portfolio plugin, best gallery plugin, plugin gallery, wp gallery, slideshow, jquery, responsive slider, gallery plugin, galerie, galerij, bilder, galleria, responsive gallery, grid gallery, wp gallery plugin, photo slider, image slider, responsive gallery, photo, shortcode, photos, picture, pictures, html5 video, html5 audio, widget, sidebar, fancy gallery, plugin for gallery, html5 player, pagination gallery, pagination portfolio, plugin, post, links, page, admin, posts, thumbnail, easy media gallery, seo image, twitter, image album, image, google, portfolio, best portfolio
 Requires at least: 3.3
-Tested up to: 3.9.1
-Stable tag: 1.2.51
+Tested up to: 4.0
+Stable tag: 1.2.67
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The best Wordpress gallery plugin enables you to create photo gallery or portfolio. Over 257,300+ sites are already using Easy Media Gallery.
+The best image gallery plugin enables you to create photo album or portfolio. Over 291,225+ sites are already using Easy Media Gallery.
 
 == Description ==
 
 ### [Best Gallery Plugin - Photo Albums - Grid Gallery Plugin](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-and-photo-albums-demo/)
+
+<p>http://www.youtube.com/watch?v=oH39zc8zMOg</p>
+
 Easy Media Gallery is a wordpress plugin designed to display various media support including grid gallery, galleries, photo album, multiple photo albums, portfolio, photo gallery or image gallery, image slider, google maps and google street view, youtube video, vimeo video, mp4 video, audio mp3 and link with very ease, fancy and elegant.
 
 > #### **Live Demos**
@@ -26,9 +29,10 @@ Easy Media Gallery is a wordpress plugin designed to display various media suppo
 > * [DEMO : Video Gallery](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-video-gallery-plugin/)
 > * [DEMO : Audio Gallery](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-audio-gallery/)
 > * [DEMO : Filterable Media](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-portfolio-plugin/)
+> * [DEMO : 10+ Lightboxes](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-lightboxes/)
 
 = Full media support =
-<p>Easy Media Gallery plugin satisfy all your needs letting you create different types of wordpress portfolio, photo albums or wordpress media gallery. Each item can be:</p> 
+<p>Easy Media Gallery plugin satisfy all your needs letting you create different types of wordpress portfolio, photo album and also from a simple picture to an image slider, a video and audio player. All in one solution. Easy Media Gallery represents a perfect solution for any type of media. Each item can be:</p> 
 
 * An image
 * Photo Albums (<em>[Pro Version](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-and-photo-albums-demo/)</em>)
@@ -40,8 +44,7 @@ Easy Media Gallery is a wordpress plugin designed to display various media suppo
 * An mp3 player (<em>HTML5 player for Pro version and Flash player for Lite version</em>), embed from Reverbnation or Soundcloud (<em>[Pro Version](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-audio-gallery/)</em>)
 * Google Maps / Google Street View (<em>[Pro Version](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-portfolio-plugin/)</em>)
 * A link to specific URL (<em>[Pro Version](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-portfolio-plugin/)</em>) - see LINK tab
-* S.E.O. for Images (<em>Pro Version</em>)
-* Facebook, Instagram, Flickr Album (<em>Coming Soon</em>)
+* 10+ Lightboxes (<em>[Pro Version]( http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-lightboxes/)</em>)
 
 = Features =
 Easy Media Gallery supports a wide range of media formats. Simply link to any image, video, hosted video or Youtube/Vimeo, mp3 audio or popular website, and the media will be automatically loaded into the overlay. Easy Media Gallery can be used to embed videos from :
@@ -69,6 +72,7 @@ It is a very customizable wordpress gallery and portfolio plugin that allow you 
 <p>http://www.youtube.com/watch?v=dXFBNY5t6E8</p>
 
 * You can learn more by watching the video from [YouTube Channel](http://www.youtube.com/GhozyLab).
+* You can see all awesome features here [Best Gallery and Portfolio plugin features](http://ghozylab.com/plugins/easy-media-gallery-pro/plugin-features/).
 
 
 > #### **Upgrade to Easy Media Gallery Pro**
@@ -81,12 +85,17 @@ It is a very customizable wordpress gallery and portfolio plugin that allow you 
 > * Fully CSS3 compliant with text shadowing, box shadowing, gradients, etc
 > * Color picker for unlimited color combinations
 > * See your media on different theme and more
-> * More than 7 lightboxes available
+> * More than 10 lightboxes
+> * Backup & Restore Settings
 > * Powerfull control panel and Shortcode Manager make getting started super easy
 > * 24/7 Technical Support
 
-= PRO VERSION Example =
-<p>http://www.youtube.com/watch?v=TQ1MMxhsyD8</p>
+
+= Recommended Plugins =
+The following are other recommended plugins by the author:
+
+* [Easy Lightbox Popup](http://wordpress.org/plugins/easy-notify-lite/) -  The Best Notify and Subscription Form Plugin to display notify popup, announcement and subscribe form with very ease, fancy and elegant.
+* [Zedity](https://wordpress.org/plugins/zedity/) -  A revolutionary new editor to create your content easily, quickly and with unprecedented possibilities! Already available in multiple languages.
 
 
 == Installation ==
@@ -114,6 +123,10 @@ The simplest way to install is to click on 'Plugins' then 'Add' and type 'Easy M
 
 
 == Frequently Asked Questions ==
+
+= How to Get Rid UPGRADE Notification =
+
+Just go to Easy Media > Settings > Miscellaneous > and TURN OFF <strong>Upgrade Notification</strong> option
 
 = Images not showing up =
 
@@ -203,16 +216,50 @@ But seriously, I just want to drink coffee for free, so help a developer out. Yo
 
 == Screenshots ==
 
-1. Easy Media Gallery Control Panel
-2. Easy Media Gallery Media Builder (Gallery)
-3. Easy Media Gallery Media List
-4. Easy Media Gallery Admin Panel
-5. Easy Media Gallery Shortcode Manager
-6. Easy Media Gallery Metabox (Audio)
-7. Embed music from Soundcloud
-8. Embed music from Reverbnation
+1. Photo Albums with Filter
+2. Grid Gallery with Filter
+3. Gallery with Pagination
+4. Awesome Image Slider
+5. Carousel
+6. Embed music from Soundcloud
+7. Embed music from Reverbnation
+8. HTML5 video player
+9. Google Maps and Google Street View
 
 == Changelog ==
+
+= 1.2.67 =
+* Added : New option ( show hide magnify icon ) 
+
+= 1.2.65 =
+* Added :  Shadow Color option
+* Added :  Thumbnail Icon Color option
+* Updated : Pricing table list
+
+= 1.2.63 =
+* Fixed : WP Admin Bar Placement ( only appear in our custom post type )
+
+= 1.2.61 =
+* Fixed : Wordpress 4.0 compatibility
+* Updated : Pricing Table
+
+= 1.2.60 =
+* Fixed : Color Picker issue on Wordpress 4.0 RC
+
+= 1.2.59 =
+* Clean up unused code
+* Updated : Pro Screenshot
+
+= 1.2.57 =
+* Fixed : Youtube subscribe issue
+
+= 1.2.55 =
+* Update : Documentation page
+
+= 1.2.53 =
+* Fixed : Options prefix
+* Added : New option
+* Fixed : utm_campaign link
 
 = 1.2.51 =
 * Fixed : Quick Edit on post page issue
@@ -435,5 +482,5 @@ But seriously, I just want to drink coffee for free, so help a developer out. Yo
 
 == Upgrade Notice ==
 
-= 1.2.51 =
-IMPORTANT! Uninstall script to save your DATA, Security bugs fix, PLEASE UPDATE NOW!
+= 1.2.67 =
+IMPORTANT! Added NEW Options PLEASE UPDATE NOW!

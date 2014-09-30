@@ -8,7 +8,11 @@ function emg_customposttype_image_box() {
 	remove_meta_box( 'postimagediv', 'easymediagallery', 'side' );
 	remove_meta_box( 'emediagallerydiv', 'easymediagallery', 'side' );
 	add_meta_box( 'categorydiv', __( 'Media Categories' ), 'easymediagallery_categories_meta_box', 'easymediagallery', 'normal', 'high' );
-	add_meta_box( 'donatediv', __( 'Donate Us' ), 'easmedia_donate_metabox', 'easymediagallery', 'side', 'default' );
+	
+	if ( easy_get_option( 'easymedia_disen_admnotify' ) == '1' ) {
+			add_meta_box( 'emgbuydiv', __( 'Upgrade to Pro Version' ), 'emg_upgrade_metabox', 'easymediagallery', 'side', 'default' );
+		}
+		
 }
 add_action( 'do_meta_boxes', 'emg_customposttype_image_box' );
 
@@ -65,6 +69,16 @@ if ( strstr( $_SERVER['REQUEST_URI'], 'wp-admin/post-new.php' ) || strstr( $_SER
 			/* Easy Media Gallery */  
 			
 jQuery(document).ready(function($) {
+	
+	jQuery(document).on( 'scroll', function(){
+		if (jQuery(window).scrollTop() > 700) {
+			jQuery('.emg-scroll-top-wrapper').addClass('show');
+			} else {
+				jQuery('.emg-scroll-top-wrapper').removeClass('show');
+				}
+			});
+ 
+    jQuery('.emg-scroll-top-wrapper').on('click', scrollToTop);
 	
 	var snpprevPosition = jQuery('#side-sortables').offset();
 	
@@ -268,6 +282,13 @@ function IsValidAuUrl1(aurl1) {
  
 function easmedia_add_meta_box( $meta_box )
 {
+
+	echo '<div class="emg-scroll-top-wrapper">
+    		<span class="emg-scroll-top-inner">
+        		<i class="enotyfa"></i>
+    			</span>
+			</div>';
+	
     if ( !is_array( $meta_box ) ) return false;
     
     // Create a callback function
@@ -345,8 +366,8 @@ $curimgpth = explode(",", $curimgpth);
 	}	
 
 echo '<div id="medsingimgtut" style="text-decoration:underline;font-weight:bold;cursor:Pointer; color:#1A91F2 !important; margin-bottom:8px;">Video Tutorial</div><td id="imgupld"><input id="upload_image" type="text" name="easmedia_meta['. $field['id'] .']" value="'. ($meta ? $meta : $field['std']) .'" style="margin-bottom:5px;"/><div style="color:red;" id="notifynovalidimg"></div>
-<div class="addmed"><a rel="image-'.$emgepver.'" class="' . $uploaderclass . '" title="Add Media" '.$isdatacnt.' href="'.$emghref.'"><span class="emg-media-buttons-icon"></span>Add Media</a></div>
-<a onClick="return false;" style="'. $dsplynone .';" class="deleteimage button" title="Delete Image" href="#"><span class="emg-media-buttons-icon-del"></span>Delete Image</a><div style="'. $dsplynone .' width:'.$curimgpth[1].'px; height:'.$curimgpth[2].'px" id="imgpreviewbox" class="imgpreviewboxc">
+<div class="addmed"><a rel="image-'.$emgepver.'" class="' . $uploaderclass . '" title="Add Media" '.$isdatacnt.' href="'.$emghref.'"><span class="emg-media-buttons-icon"></span>Add Media</a>
+<a onClick="return false;" style="'. $dsplynone .';" class="deleteimage button" title="Delete Image" href="#"><span class="emg-media-buttons-icon-del"></span>Delete Image</a></div><div style="'. $dsplynone .' width:'.$curimgpth[1].'px; height:'.$curimgpth[2].'px" id="imgpreviewbox" class="imgpreviewboxc">
 <img id="imgthumbnailprv" src="' . $curimgpth[0] . '"/></div>
 </td>';
 			    break;
@@ -366,8 +387,8 @@ if ( $curaudiopth != '' ) { echo '
     </script>	
 '; }
 
-echo '<div id="medaudiotut" style="text-decoration:underline;font-weight:bold;cursor:Pointer; color:#1A91F2 !important; margin-bottom:8px;">Video Tutorial</div><td id="audioupld"><input id="upload_audio" type="text" name="easmedia_meta['. $field['id'] .']" value="'. ($meta ? $meta : $field['std']) .'" style="margin-bottom:5px;"/><div style="color:red;" id="notifynovalidaudio"></div><div class="addmed"><a rel="audio-'.$emgepver.'" class="' . $uploaderclass . '" title="Add Media" '.$isdatacnt.' href="'.$emghref.'"><span class="emg-media-buttons-icon"></span>Add Media</a></div>
-<a onClick="return false;" style="'. $adsplynone .';" class="deleteaudio button" title="Delete Audio" href="#"><span class="emg-media-buttons-icon-del"></span>Delete Audio</a>
+echo '<div id="medaudiotut" style="text-decoration:underline;font-weight:bold;cursor:Pointer; color:#1A91F2 !important; margin-bottom:8px;">Video Tutorial</div><td id="audioupld"><input id="upload_audio" type="text" name="easmedia_meta['. $field['id'] .']" value="'. ($meta ? $meta : $field['std']) .'" style="margin-bottom:5px;"/><div style="color:red;" id="notifynovalidaudio"></div><div class="addmed"><a rel="audio-'.$emgepver.'" class="' . $uploaderclass . '" title="Add Media" '.$isdatacnt.' href="'.$emghref.'"><span class="emg-media-buttons-icon"></span>Add Media</a>
+<a onClick="return false;" style="'. $adsplynone .';" class="deleteaudio button" title="Delete Audio" href="#"><span class="emg-media-buttons-icon-del"></span>Delete Audio</a></div>
 
 <div style="'. $adsplynone .';" id="audioprev" class="vidpreviewboxc">
 	<div id="jquery_jplayer_1" class="jp-jplayer"></div>

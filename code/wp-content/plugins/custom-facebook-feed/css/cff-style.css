@@ -29,6 +29,15 @@
 #cff .cff-item:first-child{
   padding-top: 0;
 }
+#cff .cff-item.cff-box,
+#cff .cff-item.cff-box:first-child{
+  padding: 15px;
+  margin: 5px 0;
+  border: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
 /* Feed Header */
 .cff-header{
   width: 100%;
@@ -97,24 +106,56 @@
   width: 100%;
 }
 #cff .cff-author a{
-  /*float: left;*/
+  float: left;
   display: block;
+  /*width: 100%;*/
   min-width: 100%\9;
+}
+#cff .cff-author-img{
+  float: left;
+  width: 40px;
+  margin: 0 0 0 -100% !important;
 }
 #cff .cff-author img{
   float: left;
-  margin: 0 15px 0 0;
 }
-#cff .cff-author span{
+#cff .cff-author .cff-author-text span{
   display: table-cell;
   vertical-align: middle;
-  height: 50px;
+  height: 40px;
   margin: 0;
   font-weight: bold;
+
+  /* For when there's no date immediately under author: */
+  padding-left: 50px;
+  float: none;
 }
 #cff .cff-author a{
   text-decoration: none;
 }
+
+/* Author Date */
+#cff .cff-author .cff-author-text{
+  float: left;
+  width: 100%;
+}
+#cff .cff-author .cff-author-text *{
+  float: left;
+  clear: both;
+  width: auto;
+  margin: 0 0 0 50px;
+  font-weight: bold;
+}
+#cff .cff-author .cff-date{
+  color: #9197a3;
+  font-weight: normal;
+  margin-top: 0px;
+}
+#cff .cff-author .cff-page-name.cff-author-date{
+  float: left;
+  padding: 2px 0 0 0;
+}
+
 /*************/
 /*** MEDIA ***/
 /*************/
@@ -136,6 +177,11 @@
   width: 100%;
   padding: 5px 10px;
   margin: 10px 0 5px 0;
+
+  /* IE8 */
+  background: #f9f9f9;
+  border: 1px solid #d9d9d9;
+
   background: rgba(0,0,0,0.02);
   border: 1px solid rgba(0,0,0,0.07);
 
@@ -166,14 +212,14 @@
   font-weight: bold;
 }
 #cff p.cff-link-title{
-  margin: 0;
+  margin: 5px 0 0 0;
 }
 #cff .cff-text-link{
   float: left;
   clear: none;
   width: 72%;
   margin-left: 3%;
-  padding: 5px 0 10px 0;
+  padding: 0 0 5px 0;
 }
 #cff .cff-link-caption{
   font-size: 12px;
@@ -188,7 +234,7 @@
   float: left;
   clear: none;
   width: 100%;
-  padding: 10px 0 0 0;
+  padding: 5px 0;
 }
 #cff .cff-details h5{
   margin: 0 0 5px 0;
@@ -210,9 +256,9 @@
 /* View on Facebook / View Link text */
 #cff .cff-viewpost-link,
 #cff .cff-viewpost-facebook{
-  float: right;
+  float: left;
   clear: none;
-  padding: 4px 0 0 4px;
+  padding: 4px 0 0 0;
   margin: 0;
   font-size: 11px;
 }
@@ -271,4 +317,14 @@
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+#cff .cff-error-msg{
+  font-size: 12px;
+  font-family: sans-serif;
+}
+#cff #cff-error-reason{
+  display: none;
+  padding: 5px 0 0 0;
+  clear: both;
 }

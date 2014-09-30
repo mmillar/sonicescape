@@ -1,10 +1,10 @@
 === Youtube Sidebar Widget ===
-Contributors: srcoley, douglaskarr
+Contributors: douglaskarr, srcoley
 Tags: YouTube, Video, Widget
 Requires at least: 2.0.2
-Tested up to: 3.4.1
-Stable tag: 1.3.2
-Version: 1.3.2
+Tested up to: 4.0.0
+Stable tag: 1.3.3
+Version: 1.3.3
 
 List video thumbnails from a Youtube video, account, or playlist in your WordPress theme using widgets. Play the videos right on your theme!
 
@@ -77,10 +77,10 @@ Go to the page of one of the videos in the playlist. In the url you will see som
 * Fixed titles option bug
 
 = 1.2.1 =
-# Fixed titles options bug
+*  Fixed titles options bug
 
 = 1.2.2 =
-# Turned php all errors off
+*  Turned php all errors off
 
 = 1.2.3 =
 * Fixed Video ID label on widget settings
@@ -95,34 +95,37 @@ Go to the page of one of the videos in the playlist. In the url you will see som
 = 1.3.2 =
 * Added .ysw-autoplay class to autoplay videos initiated with the .ysw-youtube class.
 
+= 1.3.3 =
+* Updated play button to the YouTube play button
+
 == Upgrade Notice ==
 
 = 1.0 =
-There's no new version to upgrade to!
+* There's no new version to upgrade to!
 = 1.1 =
-Urgent bug fixes! Update now!
+* Urgent bug fixes! Update now!
 = 1.1.1 =
-Fixed a filter bug.
+* Fixed a filter bug.
 = 1.1.2 =
-Added YouTube playlist support
+* Added YouTube playlist support
 = 1.1.3 =
-Widget will no longer display errors with the YouTube data feeds are not available
+* Widget will no longer display errors with the YouTube data feeds are not available
 = 1.1.4 =
-Fixed a major playlist support bug
+* Fixed a major playlist support bug
 = 1.1.5 =
-No longer requires allow_url_fopen to be enabled
+* No longer requires allow_url_fopen to be enabled
 = 1.1.6 =
-Hotfix for the last release
+* Hotfix for the last release
 = 1.1.7 = 
-You can now set the video thumbnail width from within the widget options
+* You can now set the video thumbnail width from within the widget options
 = 1.1.8 =
-Fixes width setting bug
+* Fixes width setting bug
 = 1.2 =
-This update fixes several bugs and adds the abilities to display a specific video useing only a video ID.
+* This update fixes several bugs and adds the abilities to display a specific video useing only a video ID.
 = 1.2.1 =
 Hot fix for v1.2 - fixes titles option bug
 = 1.2.2 =
-This hot fix turns off a debugging mechanism that currently prints php notices and errors to the screen. If you have errors popling up when you use this plugin, download this update.
+* This hot fix turns off a debugging mechanism that currently prints php notices and errors to the screen. If you have errors popling up when you use this plugin, download this update.
 = 1.2.3 =
 Fixes bug in the widget settings.
 = 1.3 =
@@ -132,3 +135,5 @@ Fixes bug in the widget settings.
 * This version fixes a major bug in ssl functionality and the .yws-youtube class.
 = 1.3.2 =
 * This updated adds a .ysw-autoplay class that will autoplay videos initiated by the .ysw-youtube class.
+= 1.3.3 =
+* Updated play button to the YouTube play button

@@ -3,11 +3,11 @@
 	Plugin Name: Youtube Sidebar Widget
 	Plugin URI: http://wordpress.org/extend/plugins/youtube-sidebar-widget/
 	Description: List video thumbnails from a Youtube account or playlist in your WordPress theme using widgets. Play the videos right on your theme!
-	Version: 1.3.2
-	Author: Stephen Coley
-	Author URI: http://coley.co
+	Version: 1.3.3
+	Author: Douglas Karr
+	Author URI: http://www.dknewmedia.com
 
-	Copyright 2010  DK New Media  (email : stephen@dknewmedia.com)
+	Copyright 2010  DK New Media  (email : info@dknewmedia.com)
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License, version 2, as 

@@ -204,7 +204,7 @@ if ( is_admin() && ( isset( $_GET['page'] ) == 'emg_settings' ) && $_GET['page']
 		var hash = window.location.hash.replace('#', '');
 		var currentTab = $('ul.navigationTabs a')
 							.bind('click', showTab)
-							.filter('a[rel=' + hash + ']');
+							.filter("a[rel='" + hash + "']");
 		if (currentTab.size() == 0) {
 			currentTab = $('ul.navigationTabs a:first');
 		}
@@ -509,7 +509,7 @@ $i++;
 ?>
  
 <input type="hidden" name="action" value="save" />
-<p><a target="_blank" href="http://ghozylab.com/plugins/ordernow.php?order=proplus&utm_source=lite&utm_medium=settingspage&utm_campaign=order" class="tsc_buttons2 red">Upgrade to Pro Version  &nbsp;for only $<?php echo EASYMEDIA_PRICE; ?></a> <span style="color:#666666;margin-left:2px; font-size:11px;">&nbsp; Need More Features? Upgrade to Pro Version!</span></p>
+<p><a target="_blank" href="http://ghozylab.com/plugins/ordernow.php?order=proplus&utm_source=lite&utm_medium=settingspage&utm_campaign=orderfromcp" class="tsc_buttons2 red">Upgrade to Pro Version  &nbsp;for only $<?php echo EASYMEDIA_PRICE; ?></a> <span style="color:#666666;margin-left:2px; font-size:11px;">&nbsp; Need More Features? Upgrade to Pro Version!</span></p>
  </div> </div>
  </form>
  </div>
