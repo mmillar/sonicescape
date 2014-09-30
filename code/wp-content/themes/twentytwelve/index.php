@@ -31,7 +31,7 @@ query_posts(array('category_name' => "news", 'posts_per_page' => 10));
 
 			<article class="post-748 post type-post status-publish format-standard hentry category-news">
 			<div class="entry-content">
-			<p><i>Sonic Escape</i> is a flute-violin-cello trio of Juilliard graduates who’ve soloed at Carnegie Hall, fiddle-danced in Riverdance and played rock clubs across NYC.  Songs, stories, dance moves and signature hyper-instrumentals combine to make Sonic Escape’s shows “wonderfully imaginative… with a wide-ranging, anything-goes sense of fun.” (The Washington Post)</p>
+			<p><i>Sonic Escape</i> is a flute-violin-cello trio of Juilliard graduates who’ve soloed at Carnegie Hall, fiddle-danced in Riverdance and played rock clubs across NYC.&nbsp;&nbsp;Songs, stories, dance moves and signature hyper-instrumentals combine to make <i>Sonic Escape</i>’s shows “wonderfully imaginative… with a wide-ranging, anything-goes sense of fun.” (The Washington Post)</p>
 			</div></article>
 
 			<?php while ( have_posts() ) : the_post(); ?>
