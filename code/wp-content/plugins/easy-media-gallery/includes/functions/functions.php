@@ -762,7 +762,7 @@ function easmedia_put_notify_head() {
 	/* Easy Media Gallery */
 function generate(e){
 	var emgNews = new Array(); /* Random Heading temporary disabled */
-      emgNews[0] = "#1 Best Selling Gallery Plugin for WordPress<br />19,800+ PRO users from around the World can not be wrong...";
+      emgNews[0] = "#1 Best Selling Gallery Plugin for WordPress<br />23,155+ PRO users from around the World...";
       emgNews[1] = "Easy to use, looks nice and has a very good feel";
       emgNews[2] = "Powerfull control panel and Shortcode Manager make getting started super easy";
       emgNews[3] = "Easy Media Gallery PRO can be used to embed more than 12 video. Not only from Youtube and Vimeo";
@@ -926,13 +926,13 @@ function easymedia_comparison() {
         <li class="row_style_4"><span>Audio Media</span></li>
         <li class="row_style_2"><span>HTML5 Video/Audio (mp4, webm, ogv)</span></li>   
         <li class="row_style_4"><span>Auto Fetch Youtube/Vimeo Thumbnail</span><span class="newftr"></span></li>    
-        <li class="row_style_2"><span>Photo Albums</span><a target="_blank" href="http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-and-photo-albums-demo/" style="text-decoration:underline !important;"> Click for Sample</a>&nbsp;&nbsp;<span class="newftr"></span></li>                 
-        <li class="row_style_4"><span>Image Slider</span><a target="_blank" href="http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-image-slider-plugin/" style="text-decoration:underline !important;"> Click for Sample</a>&nbsp;&nbsp;<span class="newftr"></span></li>
-        <li class="row_style_2"><span>Grid Gallery</span><a target="_blank" href="http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-grid-galleries-plugin/" style="text-decoration:underline !important;"> Click for Sample</a></li>  
-         <li class="row_style_4"><span>Filterable Media</span><a target="_blank" href="http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-portfolio-plugin/" style="text-decoration:underline !important;"> Click for Sample</a></li>                     
-        <li class="row_style_2"><span>Pagination</span><a target="_blank" href="http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-plugin-gallery-using-pagination/" style="text-decoration:underline !important;"> Click for Sample</a>&nbsp;&nbsp;<span class="newftr"></span></li>
-        <li class="row_style_4"><span>Carousel</span><a target="_blank" href="http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-carousel-image-plugin/" style="text-decoration:underline !important;"> Click for Sample</a>&nbsp;&nbsp;<span class="newftr"></span></li>
-        <li class="row_style_2"><span>10+ Lightbox styles</span><a target="_blank" href="http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-lightboxes/" style="text-decoration:underline !important;"> Click for Sample</a>&nbsp;&nbsp;<span class="newftr"></span></li>      
+        <li class="row_style_2"><span>Photo Albums</span><a target="_blank" href="http://goo.gl/B6WraQ" style="text-decoration:underline !important;"> Click for Sample</a>&nbsp;&nbsp;<span class="newftr"></span></li>                 
+        <li class="row_style_4"><span>Image Slider</span><a target="_blank" href="http://goo.gl/kica46" style="text-decoration:underline !important;"> Click for Sample</a>&nbsp;&nbsp;<span class="newftr"></span></li>
+        <li class="row_style_2"><span>Grid Gallery</span><a target="_blank" href="http://goo.gl/CLoA4r" style="text-decoration:underline !important;"> Click for Sample</a></li>  
+         <li class="row_style_4"><span>Filterable Media</span><a target="_blank" href="http://goo.gl/XprVz6" style="text-decoration:underline !important;"> Click for Sample</a></li>                     
+        <li class="row_style_2"><span>Pagination</span><a target="_blank" href="http://goo.gl/Bk0gUE" style="text-decoration:underline !important;"> Click for Sample</a>&nbsp;&nbsp;<span class="newftr"></span></li>
+        <li class="row_style_4"><span>Carousel</span><a target="_blank" href="http://goo.gl/Zyy6DE" style="text-decoration:underline !important;"> Click for Sample</a>&nbsp;&nbsp;<span class="newftr"></span></li>
+        <li class="row_style_2"><span>10+ Lightbox styles</span><a target="_blank" href="http://goo.gl/4oz80i" style="text-decoration:underline !important;"> Click for Sample</a>&nbsp;&nbsp;<span class="newftr"></span></li>      
         <li class="row_style_4"><span>Backup & Restore Settings</span></li>
         <li class="row_style_2"><span>Google Maps / Street View</span></li>
         <li class="row_style_4"><span>Custom CSS</span></li>

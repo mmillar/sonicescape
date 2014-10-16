@@ -1,14 +1,14 @@
  === Easy Media Gallery - The Best Gallery & Photo Album Plugin ===
 Contributors: ghozylab
 Donate link: http://ghozylab.com/donate
-Tags: gallery, photo album, photo gallery, album, photo albums, seo, wordpress gallery plugin, responsive image gallery, wordpress seo, AJAX, fotoalbum, jquery gallery, wp slider, jquery slider, comments, images, best gallery, portfolio gallery, lightbox, nextgen, nextgen gallery, jquery slideshow, responsive slideshow, image slideshow, image rotate, wordpress portfolio plugin, best gallery plugin, plugin gallery, wp gallery, slideshow, jquery, responsive slider, gallery plugin, galerie, galerij, bilder, galleria, responsive gallery, grid gallery, wp gallery plugin, photo slider, image slider, responsive gallery, photo, shortcode, photos, picture, pictures, html5 video, html5 audio, widget, sidebar, fancy gallery, plugin for gallery, html5 player, pagination gallery, pagination portfolio, plugin, post, links, page, admin, posts, thumbnail, easy media gallery, seo image, twitter, image album, image, google, portfolio, best portfolio
+Tags: gallery, photo album, photo gallery, album, photo albums, seo, website gallery, wordpress gallery plugin, media gallery, photoset, photogallery, responsive image gallery, wordpress seo, AJAX, fotoalbum, jquery gallery, wp slider, jquery slider, comments, images, best gallery, portfolio gallery, lightbox, nextgen gallery, jquery slideshow, responsive slideshow, image slideshow, image rotate, wordpress portfolio plugin, best gallery plugin, plugin gallery, wp gallery, slideshow, jquery, responsive slider, gallery plugin, galerie, galerij, bilder, galleria, responsive gallery, grid gallery, wp gallery plugin, photo slider, image slider, responsive gallery, photo, shortcode, photos, picture, pictures, html5 video, html5 audio, widget, sidebar, fancy gallery, plugin for gallery, html5 player, pagination gallery, pagination portfolio, plugin, post, links, page, admin, posts, thumbnail, easy media gallery, seo image, twitter, image album, image, google, image lightbox, portfolio, best portfolio
 Requires at least: 3.3
 Tested up to: 4.0
-Stable tag: 1.2.67
+Stable tag: 1.2.70
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The best image gallery plugin enables you to create photo album or portfolio. Over 291,225+ sites are already using Easy Media Gallery.
+The best image gallery plugin enables you to create photo album or portfolio. Over 299,525+ sites are already using Easy Media Gallery.
 
 == Description ==
 
@@ -20,16 +20,16 @@ Easy Media Gallery is a wordpress plugin designed to display various media suppo
 
 > #### **Live Demos**
 
-> * [DEMO : Photo Albums](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-and-photo-albums-demo/)
-> * [DEMO : Photo Gallery / Grid Gallery](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-grid-galleries-plugin/)
-> * [DEMO : Image Slider](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-image-slider-plugin/)
-> * [DEMO : Image Slider Fotorama](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-image-slider-plugin-fotorama/)
-> * [DEMO : Carousel](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-carousel-image-plugin/)
-> * [DEMO : Gallery with Pagination](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-plugin-gallery-using-pagination/)
-> * [DEMO : Video Gallery](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-video-gallery-plugin/)
-> * [DEMO : Audio Gallery](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-audio-gallery/)
-> * [DEMO : Filterable Media](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-portfolio-plugin/)
-> * [DEMO : 10+ Lightboxes](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-lightboxes/)
+> * [DEMO : Photo Albums](http://goo.gl/PLlJwS)
+> * [DEMO : Photo Gallery / Grid Gallery](http://goo.gl/bZ53YR)
+> * [DEMO : Image Slider](http://goo.gl/JmFU82)
+> * [DEMO : Image Slider Fotorama](http://goo.gl/nNKUbA)
+> * [DEMO : Carousel](http://goo.gl/72MKwx)
+> * [DEMO : Gallery with Pagination](http://goo.gl/20ghC5)
+> * [DEMO : Video Gallery](http://goo.gl/ckecFP)
+> * [DEMO : Audio Gallery](http://goo.gl/ckecFP)
+> * [DEMO : Filterable Media](http://goo.gl/JAvlsq)
+> * [DEMO : 10+ Lightboxes](http://goo.gl/3vZHHb)
 
 = Full media support =
 <p>Easy Media Gallery plugin satisfy all your needs letting you create different types of wordpress portfolio, photo album and also from a simple picture to an image slider, a video and audio player. All in one solution. Easy Media Gallery represents a perfect solution for any type of media. Each item can be:</p> 
@@ -43,7 +43,6 @@ Easy Media Gallery is a wordpress plugin designed to display various media suppo
 * A video, Auto-retrieve YouTube and Vimeo Thumbnail (<em>Pro Version [learn more here](http://www.youtube.com/watch?v=uAGWUcs5ofE)</em>)
 * An mp3 player (<em>HTML5 player for Pro version and Flash player for Lite version</em>), embed from Reverbnation or Soundcloud (<em>[Pro Version](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-audio-gallery/)</em>)
 * Google Maps / Google Street View (<em>[Pro Version](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-portfolio-plugin/)</em>)
-* A link to specific URL (<em>[Pro Version](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-portfolio-plugin/)</em>) - see LINK tab
 * 10+ Lightboxes (<em>[Pro Version]( http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-lightboxes/)</em>)
 
 = Features =
@@ -61,7 +60,6 @@ Easy Media Gallery supports a wide range of media formats. Simply link to any im
 * YouKu
 * Break
 * Flickr
-* Megavideo
 * Rutube
 * Ustream
 * MP4 (<em>MP4 HTML5 player for Pro version and Flash player for Lite version</em>), MOV, SWF, M4V, M4A, FLV
@@ -85,6 +83,7 @@ It is a very customizable wordpress gallery and portfolio plugin that allow you 
 > * Fully CSS3 compliant with text shadowing, box shadowing, gradients, etc
 > * Color picker for unlimited color combinations
 > * See your media on different theme and more
+> * 3 Skins for main Lightbox [See Example](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-lightboxes/emg-lightbox-default/)
 > * More than 10 lightboxes
 > * Backup & Restore Settings
 > * Powerfull control panel and Shortcode Manager make getting started super easy
@@ -227,6 +226,12 @@ But seriously, I just want to drink coffee for free, so help a developer out. Yo
 9. Google Maps and Google Street View
 
 == Changelog ==
+
+= 1.2.70 =
+* Updated : Bottom Popup update ( content )
+
+= 1.2.69 =
+* Updated : Settings page bottom popup content
 
 = 1.2.67 =
 * Added : New option ( show hide magnify icon ) 
@@ -482,5 +487,5 @@ But seriously, I just want to drink coffee for free, so help a developer out. Yo
 
 == Upgrade Notice ==
 
-= 1.2.67 =
+= 1.2.70 =
 IMPORTANT! Added NEW Options PLEASE UPDATE NOW!

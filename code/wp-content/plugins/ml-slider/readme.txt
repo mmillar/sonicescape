@@ -4,7 +4,7 @@ Tags: wordpress slideshow,seo,slideshow,slider,widget,wordpress slider,image sli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CQ84KC4X8YKW8
 Requires at least: 3.5
 Tested up to: 4.0
-Stable tag: 3.0
+Stable tag: 3.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -143,6 +143,15 @@ See www.metaslider.com/documentation/image-cropping/
 6. Administration panel - selecting slides
 
 == Changelog ==
+
+= 3.1 [14/10/14] =
+
+* New feature: Ajax delete slide (to stop users from losing changes when deleting a slide)
+* New feature: restrict_to shortcode parameter now accepts page IDs
+* Update: Change icon
+* Fix: Minor admin styling fix
+* Fix: Hide share buttons for pro users
+* Change: Remove upgrade nags from media library, add Go Pro page (with an option to hide the page)
 
 = 3.0.1 [19/08/14] =
 

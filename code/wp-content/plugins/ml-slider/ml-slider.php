@@ -5,7 +5,7 @@
  * Plugin Name: Meta Slider
  * Plugin URI:  http://www.metaslider.com
  * Description: Easy to use slideshow plugin. Create SEO optimised responsive slideshows with Nivo Slider, Flex Slider, Coin Slider and Responsive Slides.
- * Version:     3.0.1
+ * Version:     3.1
  * Author:      Matcha Labs
  * Author URI:  http://www.metaslider.com
  * License:     GPL-2.0+
@@ -31,7 +31,7 @@ class MetaSliderPlugin {
     /**
      * @var string
      */
-    public $version = '3.0.1';
+    public $version = '3.1';
 
 
     /**
@@ -167,12 +167,11 @@ class MetaSliderPlugin {
         add_action( 'init', array( $this, 'register_taxonomy' ) );
         add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
         add_action( 'admin_footer', array( $this, 'admin_footer' ), 11 );
-        add_action( 'media_upload_vimeo', array( $this, 'upgrade_to_pro_tab' ) );
-        add_action( 'media_upload_youtube', array( $this, 'upgrade_to_pro_tab' ) );
-        add_action( 'media_upload_post_feed', array( $this, 'upgrade_to_pro_tab' ) );
-        add_action( 'media_upload_layer', array( $this, 'upgrade_to_pro_tab' ) );
-        add_action( 'admin_post_metaslider_preview', array( $this, 'do_preview' ) );
         add_action( 'widgets_init', array( $this, 'register_metaslider_widget' ) );
+
+        add_action( 'admin_post_metaslider_preview', array( $this, 'do_preview' ) );
+        add_action( 'admin_post_metaslider_hide_go_pro_page', array( $this, 'hide_go_pro_page' ) );
+        add_action( 'admin_post_metaslider_switch_view', array( $this, 'switch_view' ) );
 
         if ( defined( 'METASLIDER_ENABLE_RESOURCE_MANAGER' ) && METASLIDER_ENABLE_RESOURCE_MANAGER === true ) {
 
@@ -262,6 +261,7 @@ class MetaSliderPlugin {
      * Add the menu page
      */
     public function register_admin_menu() {
+        global $user_ID;
 
         $title = apply_filters( 'metaslider_menu_title', 'Meta Slider' );
 
@@ -275,6 +275,73 @@ class MetaSliderPlugin {
         add_action( 'admin_print_scripts-' . $page, array( $this, 'register_admin_scripts' ) );
         add_action( 'admin_print_styles-' . $page, array( $this, 'register_admin_styles' ) );
         add_action( 'load-' . $page, array( $this, 'help_tab' ) );
+
+        if ( ! is_plugin_active( 'ml-slider-pro/ml-slider-pro.php' ) && get_user_meta( $user_ID, "metaslider_hide_go_pro", true ) !== 'true' ) {
+
+            $page = add_submenu_page( 
+                'metaslider', 
+                __( 'Go Pro!', 'metaslider' ), 
+                __( 'Go Pro!', 'metaslider' ), 
+                $capability, 
+                'metaslider-go-pro', 
+                array( $this, 'go_pro_page' ) 
+            );
+
+            add_action( 'admin_print_styles-' . $page, array( $this, 'register_admin_styles' ) );
+
+        }
+
+    }
+
+    /**
+     * Go Pro page content
+     */
+    public function go_pro_page() {
+        $hide_link = '<a href="' . admin_url( "admin-post.php?action=metaslider_hide_go_pro_page" ) . '">Hide this page</a>';
+
+        $link = apply_filters( 'metaslider_hoplink', 'http://www.metaslider.com/upgrade/' );
+
+        $link .= '?utm_source=lite&amp;utm_medium=nag&amp;utm_campaign=pro';
+
+        $gopro_link = "<a class='button button-primary' href='{$link}'>Find out more</a>";
+        $support_link = '<a href="https://wordpress.org/support/plugin/ml-slider">Support</a>';
+        $documentation_link = '<a href="http://www.metaslider.com/documentation/">Documentation</a>';
+
+        ?>
+            <h2>Supercharge Your Sliders with Meta Slider Pro!</h2>
+
+            <ul class='metaslider_gopro'>
+                <li>Create <b>animated HTML slides</b> using the drag &amp; drop layer editor (WYSIWYG)</li>
+                <li>Insert <b>YouTube</b> and <b>Vimeo</b> videos into your slideshows</li>
+                <li>Automatically populate your slideshows with your <b>latest blog posts</b> or custom post types</li>
+                <li>Customize the look of your slideshows with the <b>Theme Editor</b> (25+ settings including custom arrow images, dot colors and caption styling)</li>
+                <li>Give your slideshows a gallery feel with <b>thumbnail navigation</b></li>
+                <li>Feature <b>WooCommerce</b> products in your slideshows</li>
+                <li>Show your latest events from <b>The Events Calendar</b> plugin</li>
+                <li><b>Easy to install</B> - Meta Slider Pro installs as a seperate plugin alongside Meta Slider and seamlessly adds in the new functionality</li>
+                <li><b>Easy to update</b> - new updates will be displayed on your plugins page (just like your other plugins!)</li>
+                <li>Upgrade with confidence with our <b>30 day no questions money back guarantee</b></li>
+                <li>Meta Slider Pro users receive <b>priority support</b> from our dedicated team, we’re on hand to help you get the most of Meta Slider</li>
+            </ul>
+
+            <p><?php echo $gopro_link; ?></p>
+            <p><?php echo $support_link; ?> <?php echo $documentation_link; ?></p>
+            <p><em>Don't want to see this? <?php echo $hide_link; ?></em></p>
+        <?php
+
+    }
+
+    /**
+     *  Store the users preference to hide the go pro page.
+     */
+    public function hide_go_pro_page() {
+        global $user_ID;
+
+        if ( ! get_user_meta( $user_ID, "metaslider_hide_go_pro" ) ) {
+            add_user_meta( $user_ID, "metaslider_hide_go_pro", "true" );
+        }
+
+        wp_redirect( admin_url( "admin.php?page=metaslider" ) );
 
     }
 
@@ -298,6 +365,11 @@ class MetaSliderPlugin {
 
         // handle [metaslider id=123 restrict_to=home]
         if ( $restrict_to == 'home' && ! is_front_page() ) {
+            return;
+        }
+
+        // handle [metaslider id=123 restrict_to=page_id]
+        if ( $restrict_to && ! is_page( $restrict_to ) ) {
             return;
         }
 
@@ -481,31 +553,13 @@ class MetaSliderPlugin {
      */
     public function custom_media_upload_tab_name( $tabs ) {
 
-        $metaslider_tabs = array( 'post_feed', 'layer', 'youtube', 'vimeo' );
-
         // restrict our tab changes to the meta slider plugin page
-        if ( ( isset( $_GET['page'] ) && $_GET['page'] == 'metaslider' ) || ( isset( $_GET['tab'] ) && in_array( $_GET['tab'], $metaslider_tabs ) ) ) {
-            $newtabs = array();
-
-            if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'ml-slider-pro/ml-slider-pro.php' ) ) {
-                $newtabs = array(
-                    'post_feed' => __( "Post Feed", "metaslider" ),
-                    'vimeo' => __( "Vimeo", "metaslider" ),
-                    'youtube' => __( "YouTube", "metaslider" ),
-                    'layer' => __( "Layer Slide", "metaslider" )
-                );
-            }
-
-            if ( isset( $tabs['nextgen'] ) ) 
+        if ( isset( $_GET['page'] ) && $_GET['page'] == 'metaslider' ) {
+          
+            if ( isset( $tabs['nextgen'] ) ) {
                 unset( $tabs['nextgen'] );
-
-
-            if ( is_array( $tabs ) ) {
-                return array_merge( $tabs, $newtabs );
-            } else {
-                return $newtabs;
             }
-            
+
         }
 
         return $tabs;
@@ -574,11 +628,6 @@ class MetaSliderPlugin {
             return;
         }
 
-        // handle switching view
-        if ( isset( $_GET['view'] ) ) {
-            $this->switch_view();
-        }
-
         // default to the latest slider
         $slider_id = $this->find_slider( 'modified', 'DESC' );
 
@@ -612,7 +661,7 @@ class MetaSliderPlugin {
     /**
      *
      */
-    private function switch_view() {
+    public function switch_view() {
         global $user_ID;
 
         $view = $_GET['view'];
@@ -628,6 +677,8 @@ class MetaSliderPlugin {
         if ( $view == 'dropdown' ) {
             add_user_meta( $user_ID, "metaslider_view", "dropdown");
         }
+
+        wp_redirect( admin_url( "admin.php?page=metaslider" ) );
 
     }
 
@@ -959,7 +1010,8 @@ class MetaSliderPlugin {
 
             if ( $this->get_view() == 'tabs' ) {
 
-                echo "<div style='display: none;' id='screen-options-switch-view-wrap'><a class='switchview dashicons-before dashicons-welcome-view-site' href='?page=metaslider&amp;view=dropdown'>" . __("Switch to Dropdown view", "metaslider") . "</a></div>";
+                echo "<div style='display: none;' id='screen-options-switch-view-wrap'>
+                <a class='switchview dashicons-before dashicons-randomize tipsy-tooltip' title='" . __("Switch to Dropdown view", "metaslider") . "' href='" . admin_url( "admin-post.php?action=metaslider_switch_view&view=dropdown") . "'>" . __("Dropdown", "metaslider") . "</a></div>";
 
                 echo "<h3 class='nav-tab-wrapper'>";
 
@@ -984,7 +1036,7 @@ class MetaSliderPlugin {
                 
                 }
                 
-                echo "<div style='display: none;' id='screen-options-switch-view-wrap'><a class='switchview dashicons-before dashicons-welcome-view-site' href='?page=metaslider&amp;view=tabs'>" . __("Switch to Tab view", "metaslider") . "</a></div>";
+                echo "<div style='display: none;' id='screen-options-switch-view-wrap'><a class='switchview dashicons-before dashicons-randomize tipsy-tooltip' title='" . __("Switch to Tab view", "metaslider") . "' href='" . admin_url( "admin-post.php?action=metaslider_switch_view&view=tabs") . "'>" . __("Tabs", "metaslider") . "</a></div>";
 
                 echo "<div class='dropdown_container'><label for='select-slider'>" . __("Select Slider", "metaslider") . ": </label>";
                 echo "<select name='select-slider' onchange='if (this.value) window.location.href=this.value'>";
@@ -1047,7 +1099,6 @@ class MetaSliderPlugin {
 
         <script type='text/javascript'>
             var metaslider_slider_id = <?php echo $slider_id; ?>;
-            var metaslider_pro_active = <?php echo function_exists( 'is_plugin_active' ) && is_plugin_active( 'ml-slider-pro/ml-slider-pro.php' ) ? 'true' : 'false' ?>;
         </script>
 
         <div class="wrap metaslider">
@@ -1068,16 +1119,21 @@ class MetaSliderPlugin {
 
                         <div id='post-body-content'>
                             <div class="left">
+
+                                <?php do_action( "metaslider_admin_table_before", $this->slider->id ); ?>
+
                                 <table class="widefat sortable">
                                     <thead>
                                         <tr>
                                             <th style="width: 100px;">
                                                 <h3><?php _e( "Slides", "metaslider" ) ?></h3>
+                                                <?php do_action( "metaslider_admin_table_header_left", $this->slider->id ); ?>
                                             </th>
                                             <th>
                                                 <a href='#' class='button alignright add-slide' data-editor='content' title='<?php _e( "Add Slide", "metaslider" ) ?>'>
                                                     <span class='wp-media-buttons-icon'></span> <?php _e( "Add Slide", "metaslider" ) ?>
                                                 </a>
+                                                <?php do_action( "metaslider_admin_table_header_right", $this->slider->id ); ?>
                                             </th>
                                         </tr>
                                     </thead>
@@ -1088,467 +1144,473 @@ class MetaSliderPlugin {
                                         ?>
                                     </tbody>
                                 </table>
+
+                                <?php do_action( "metaslider_admin_table_after", $this->slider->id ); ?>
+
                             </div>
                         </div>
 
                         <div id="postbox-container-1" class="postbox-container">
-                            <div id="side-sortables" class="meta-box-sortables">
-                                <div class='right'>
-                                    <div class="ms-postbox" id="metaslider_configuration">
-                                        <h3 class='configuration'>
-                                            <?php _e( "Settings", "metaslider" ) ?>
-                                            <input class='alignright button button-primary' type='submit' name='save' id='ms-save' value='<?php _e( "Save", "metaslider" ) ?>' />
-                                            <input class='alignright button button-primary' type='submit' name='preview' id='ms-preview' value='<?php _e( "Save & Preview", "metaslider" ) ?>' data-slider_id='<?php echo $this->slider->id ?>' data-slider_width='<?php echo $this->slider->get_setting( 'width' ) ?>' data-slider_height='<?php echo $this->slider->get_setting( 'height' ) ?>' />
-                                            <span class="spinner"></span>
-                                        </h3>
-                                        <div class="inside">
-                                            <table class="settings">
-                                                <tbody>
-                                                    <?php
-                                                        $aFields = array(
-                                                            'type' => array(
-                                                                'priority' => 0,
-                                                                'type' => 'slider-lib',
-                                                                'value' => $this->slider->get_setting( 'type' ),
-                                                                'options' => array(
-                                                                    'flex'       => array( 'label' => __( "Flex Slider", "metaslider" ) ),
-                                                                    'responsive' => array( 'label' => __( "R. Slides", "metaslider" ) ),
-                                                                    'nivo'       => array( 'label' => __( "Nivo Slider", "metaslider" ) ),
-                                                                    'coin'       => array( 'label' => __( "Coin Slider", "metaslider" ) )
-                                                                )
+                            <div class='right'>
+                                <div class="ms-postbox" id="metaslider_configuration">
+                                    <h3 class='configuration'>
+                                        <?php _e( "Settings", "metaslider" ) ?>
+                                        <input class='alignright button button-primary' type='submit' name='save' id='ms-save' value='<?php _e( "Save", "metaslider" ) ?>' />
+                                        <input class='alignright button button-primary' type='submit' name='preview' id='ms-preview' value='<?php _e( "Save & Preview", "metaslider" ) ?>' data-slider_id='<?php echo $this->slider->id ?>' data-slider_width='<?php echo $this->slider->get_setting( 'width' ) ?>' data-slider_height='<?php echo $this->slider->get_setting( 'height' ) ?>' />
+                                        <span class="spinner"></span>
+                                    </h3>
+                                    <div class="inside">
+                                        <table class="settings">
+                                            <tbody>
+                                                <?php
+                                                    $aFields = array(
+                                                        'type' => array(
+                                                            'priority' => 0,
+                                                            'type' => 'slider-lib',
+                                                            'value' => $this->slider->get_setting( 'type' ),
+                                                            'options' => array(
+                                                                'flex'       => array( 'label' => __( "Flex Slider", "metaslider" ) ),
+                                                                'responsive' => array( 'label' => __( "R. Slides", "metaslider" ) ),
+                                                                'nivo'       => array( 'label' => __( "Nivo Slider", "metaslider" ) ),
+                                                                'coin'       => array( 'label' => __( "Coin Slider", "metaslider" ) )
+                                                            )
+                                                        ),
+                                                        'width' => array(
+                                                            'priority' => 10,
+                                                            'type' => 'number',
+                                                            'size' => 3,
+                                                            'min' => 0,
+                                                            'max' => 9999,
+                                                            'step' => 1,
+                                                            'value' => $this->slider->get_setting( 'width' ),
+                                                            'label' => __( "Width", "metaslider" ),
+                                                            'class' => 'coin flex responsive nivo',
+                                                            'helptext' => __( "Slideshow width", "metaslider" ),
+                                                            'after' => __( "px", "metaslider" )
+                                                        ),
+                                                        'height' => array(
+                                                            'priority' => 20,
+                                                            'type' => 'number',
+                                                            'size' => 3,
+                                                            'min' => 0,
+                                                            'max' => 9999,
+                                                            'step' => 1,
+                                                            'value' => $this->slider->get_setting( 'height' ),
+                                                            'label' => __( "Height", "metaslider" ),
+                                                            'class' => 'coin flex responsive nivo',
+                                                            'helptext' => __( "Slideshow height", "metaslider" ),
+                                                            'after' => __( "px", "metaslider" )
+                                                        ),
+                                                        'effect' => array(
+                                                            'priority' => 30,
+                                                            'type' => 'select',
+                                                            'value' => $this->slider->get_setting( 'effect' ),
+                                                            'label' => __( "Effect", "metaslider" ),
+                                                            'class' => 'effect coin flex responsive nivo',
+                                                            'helptext' => __( "Slide transition effect", "metaslider" ),
+                                                            'options' => array(
+                                                                'random'             => array( 'class' => 'option coin nivo' , 'label' => __( "Random", "metaslider" ) ),
+                                                                'swirl'              => array( 'class' => 'option coin', 'label' => __( "Swirl", "metaslider" ) ),
+                                                                'rain'               => array( 'class' => 'option coin', 'label' => __( "Rain", "metaslider" ) ),
+                                                                'straight'           => array( 'class' => 'option coin', 'label' => __( "Straight", "metaslider" ) ),
+                                                                'sliceDown'          => array( 'class' => 'option nivo', 'label' => __( "Slide Down", "metaslider" ) ),
+                                                                'sliceUp'            => array( 'class' => 'option nivo', 'label' => __( "Slice Up", "metaslider" ) ),
+                                                                'sliceUpLeft'        => array( 'class' => 'option nivo', 'label' => __( "Slide Up Left", "metaslider" ) ),
+                                                                'sliceUpDown'        => array( 'class' => 'option nivo', 'label' => __( "Slice Up Down", "metaslider" ) ),
+                                                                'slideUpDownLeft'    => array( 'class' => 'option nivo', 'label' => __( "Slide Up Down Left", "metaslider" ) ),
+                                                                'fold'               => array( 'class' => 'option nivo', 'label' => __( "Fold", "metaslider" ) ),
+                                                                'fade'               => array( 'class' => 'option nivo flex responsive', 'label' => __( "Fade", "metaslider" ) ),
+                                                                'slideInRight'       => array( 'class' => 'option nivo', 'label' => __( "Slide In Right", "metaslider" ) ),
+                                                                'slideInLeft'        => array( 'class' => 'option nivo', 'label' => __( "Slide In Left", "metaslider" ) ),
+                                                                'boxRandom'          => array( 'class' => 'option nivo', 'label' => __( "Box Random", "metaslider" ) ),
+                                                                'boxRain'            => array( 'class' => 'option nivo', 'label' => __( "Box Rain", "metaslider" ) ),
+                                                                'boxRainReverse'     => array( 'class' => 'option nivo', 'label' => __( "Box Rain Reverse", "metaslider" ) ),
+                                                                'boxRainGrowReverse' => array( 'class' => 'option nivo', 'label' => __( "Box Rain Grow Reverse", "metaslider" ) ),
+                                                                'slide'              => array( 'class' => 'option flex', 'label' => __( "Slide", "metaslider" ) )
                                                             ),
-                                                            'width' => array(
-                                                                'priority' => 10,
-                                                                'type' => 'number',
-                                                                'size' => 3,
-                                                                'min' => 0,
-                                                                'max' => 9999,
-                                                                'step' => 1,
-                                                                'value' => $this->slider->get_setting( 'width' ),
-                                                                'label' => __( "Width", "metaslider" ),
-                                                                'class' => 'coin flex responsive nivo',
-                                                                'helptext' => __( "Slideshow width", "metaslider" ),
-                                                                'after' => __( "px", "metaslider" )
+                                                        ),
+                                                        'theme' => array(
+                                                            'priority' => 40,
+                                                            'type' => 'theme',
+                                                            'value' => $this->slider->get_setting( 'theme' ),
+                                                            'label' => __( "Theme", "metaslider" ),
+                                                            'class' => 'effect coin flex responsive nivo',
+                                                            'helptext' => __( "Slideshow theme", "metaslider" ),
+                                                            'options' => array(
+                                                                'default' => array( 'class' => 'option nivo flex coin responsive' , 'label' => __( "Default", "metaslider" ) ),
+                                                                'dark'    => array( 'class' => 'option nivo', 'label' => __( "Dark (Nivo)", "metaslider" ) ),
+                                                                'light'   => array( 'class' => 'option nivo', 'label' => __( "Light (Nivo)", "metaslider" ) ),
+                                                                'bar'     => array( 'class' => 'option nivo', 'label' => __( "Bar (Nivo)", "metaslider" ) ),
                                                             ),
-                                                            'height' => array(
-                                                                'priority' => 20,
-                                                                'type' => 'number',
-                                                                'size' => 3,
-                                                                'min' => 0,
-                                                                'max' => 9999,
-                                                                'step' => 1,
-                                                                'value' => $this->slider->get_setting( 'height' ),
-                                                                'label' => __( "Height", "metaslider" ),
-                                                                'class' => 'coin flex responsive nivo',
-                                                                'helptext' => __( "Slideshow height", "metaslider" ),
-                                                                'after' => __( "px", "metaslider" )
-                                                            ),
-                                                            'effect' => array(
-                                                                'priority' => 30,
-                                                                'type' => 'select',
-                                                                'value' => $this->slider->get_setting( 'effect' ),
-                                                                'label' => __( "Effect", "metaslider" ),
-                                                                'class' => 'effect coin flex responsive nivo',
-                                                                'helptext' => __( "Slide transition effect", "metaslider" ),
-                                                                'options' => array(
-                                                                    'random'             => array( 'class' => 'option coin nivo' , 'label' => __( "Random", "metaslider" ) ),
-                                                                    'swirl'              => array( 'class' => 'option coin', 'label' => __( "Swirl", "metaslider" ) ),
-                                                                    'rain'               => array( 'class' => 'option coin', 'label' => __( "Rain", "metaslider" ) ),
-                                                                    'straight'           => array( 'class' => 'option coin', 'label' => __( "Straight", "metaslider" ) ),
-                                                                    'sliceDown'          => array( 'class' => 'option nivo', 'label' => __( "Slide Down", "metaslider" ) ),
-                                                                    'sliceUp'            => array( 'class' => 'option nivo', 'label' => __( "Slice Up", "metaslider" ) ),
-                                                                    'sliceUpLeft'        => array( 'class' => 'option nivo', 'label' => __( "Slide Up Left", "metaslider" ) ),
-                                                                    'sliceUpDown'        => array( 'class' => 'option nivo', 'label' => __( "Slice Up Down", "metaslider" ) ),
-                                                                    'slideUpDownLeft'    => array( 'class' => 'option nivo', 'label' => __( "Slide Up Down Left", "metaslider" ) ),
-                                                                    'fold'               => array( 'class' => 'option nivo', 'label' => __( "Fold", "metaslider" ) ),
-                                                                    'fade'               => array( 'class' => 'option nivo flex responsive', 'label' => __( "Fade", "metaslider" ) ),
-                                                                    'slideInRight'       => array( 'class' => 'option nivo', 'label' => __( "Slide In Right", "metaslider" ) ),
-                                                                    'slideInLeft'        => array( 'class' => 'option nivo', 'label' => __( "Slide In Left", "metaslider" ) ),
-                                                                    'boxRandom'          => array( 'class' => 'option nivo', 'label' => __( "Box Random", "metaslider" ) ),
-                                                                    'boxRain'            => array( 'class' => 'option nivo', 'label' => __( "Box Rain", "metaslider" ) ),
-                                                                    'boxRainReverse'     => array( 'class' => 'option nivo', 'label' => __( "Box Rain Reverse", "metaslider" ) ),
-                                                                    'boxRainGrowReverse' => array( 'class' => 'option nivo', 'label' => __( "Box Rain Grow Reverse", "metaslider" ) ),
-                                                                    'slide'              => array( 'class' => 'option flex', 'label' => __( "Slide", "metaslider" ) )
-                                                                ),
-                                                            ),
-                                                            'theme' => array(
-                                                                'priority' => 40,
-                                                                'type' => 'theme',
-                                                                'value' => $this->slider->get_setting( 'theme' ),
-                                                                'label' => __( "Theme", "metaslider" ),
-                                                                'class' => 'effect coin flex responsive nivo',
-                                                                'helptext' => __( "Slideshow theme", "metaslider" ),
-                                                                'options' => array(
-                                                                    'default' => array( 'class' => 'option nivo flex coin responsive' , 'label' => __( "Default", "metaslider" ) ),
-                                                                    'dark'    => array( 'class' => 'option nivo', 'label' => __( "Dark (Nivo)", "metaslider" ) ),
-                                                                    'light'   => array( 'class' => 'option nivo', 'label' => __( "Light (Nivo)", "metaslider" ) ),
-                                                                    'bar'     => array( 'class' => 'option nivo', 'label' => __( "Bar (Nivo)", "metaslider" ) ),
-                                                                ),
-                                                            ),
-                                                            'links' => array(
-                                                                'priority' => 50,
-                                                                'type' => 'checkbox',
-                                                                'label' => __( "Arrows", "metaslider" ),
-                                                                'class' => 'option coin flex nivo responsive',
-                                                                'checked' => $this->slider->get_setting( 'links' ) == 'true' ? 'checked' : '',
-                                                                'helptext' => __( "Show the previous/next arrows", "metaslider" )
-                                                            ),
-                                                            'navigation' => array(
-                                                                'priority' => 60,
-                                                                'type' => 'navigation',
-                                                                'label' => __( "Navigation", "metaslider" ),
-                                                                'class' => 'option coin flex nivo responsive',
-                                                                'value' => $this->slider->get_setting( 'navigation' ),
-                                                                'helptext' => __( "Show the slide navigation bullets", "metaslider" ),
-                                                                'options' => array(
-                                                                    'false'      => array( 'label' => __( "Hidden", "metaslider" ) ),
-                                                                    'true'       => array( 'label' => __( "Dots", "metaslider" ) ),
-                                                                )
-                                                            ),
+                                                        ),
+                                                        'links' => array(
+                                                            'priority' => 50,
+                                                            'type' => 'checkbox',
+                                                            'label' => __( "Arrows", "metaslider" ),
+                                                            'class' => 'option coin flex nivo responsive',
+                                                            'checked' => $this->slider->get_setting( 'links' ) == 'true' ? 'checked' : '',
+                                                            'helptext' => __( "Show the previous/next arrows", "metaslider" )
+                                                        ),
+                                                        'navigation' => array(
+                                                            'priority' => 60,
+                                                            'type' => 'navigation',
+                                                            'label' => __( "Navigation", "metaslider" ),
+                                                            'class' => 'option coin flex nivo responsive',
+                                                            'value' => $this->slider->get_setting( 'navigation' ),
+                                                            'helptext' => __( "Show the slide navigation bullets", "metaslider" ),
+                                                            'options' => array(
+                                                                'false'      => array( 'label' => __( "Hidden", "metaslider" ) ),
+                                                                'true'       => array( 'label' => __( "Dots", "metaslider" ) ),
+                                                            )
+                                                        ),
+                                                    );
+
+                                                    if ( $this->get_view() == 'dropdown' ) {
+                                                        $aFields['title'] = array(
+                                                            'type' => 'title',
+                                                            'priority' => 5,
+                                                            'class' => 'option flex nivo responsive coin',
+                                                            'value' => get_the_title($this->slider->id),
+                                                            'label' => __( "Title", "metaslider" ),
+                                                            'helptext' => __( "Slideshow title", "metaslider" )
                                                         );
+                                                    }
 
-                                                        if ( $this->get_view() == 'dropdown' ) {
-                                                            $aFields['title'] = array(
-                                                                'type' => 'title',
-                                                                'priority' => 5,
-                                                                'class' => 'option flex nivo responsive coin',
-                                                                'value' => get_the_title($this->slider->id),
-                                                                'label' => __( "Title", "metaslider" ),
-                                                                'helptext' => __( "Slideshow title", "metaslider" )
-                                                            );
-                                                        }
+                                                    $aFields = apply_filters( 'metaslider_basic_settings', $aFields, $this->slider );
 
-                                                        $aFields = apply_filters( 'metaslider_basic_settings', $aFields, $this->slider );
-
-                                                        echo $this->build_settings_rows( $aFields );
-                                                    ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                                    echo $this->build_settings_rows( $aFields );
+                                                ?>
+                                            </tbody>
+                                        </table>
                                     </div>
-
-                                    <div class="ms-postbox ms-toggle closed" id="metaslider_advanced_settings">
-                                        <div class="handlediv" title="Click to toggle"><br></div><h3 class="hndle"><span><?php _e( "Advanced Settings", "metaslider" ) ?></span></h3>
-                                        <div class="inside">
-                                            <table>
-                                                <tbody>
-                                                    <?php
-                                                        $aFields = array(
-                                                            'fullWidth' => array(
-                                                                'priority' => 5,
-                                                                'type' => 'checkbox',
-                                                                'label' => __( "Stretch", "metaslider" ),
-                                                                'class' => 'option flex nivo responsive',
-                                                                'after' => __( "100% wide output", "metaslider" ),
-                                                                'checked' => $this->slider->get_setting( 'fullWidth' ) == 'true' ? 'checked' : '',
-                                                                'helptext' => __( "Stretch the slideshow output to fill it's parent container", "metaslider" )
-                                                            ),
-                                                            'center' => array(
-                                                                'priority' => 10,
-                                                                'type' => 'checkbox',
-                                                                'label' => __( "Center align", "metaslider" ),
-                                                                'class' => 'option coin flex nivo responsive',
-                                                                'checked' => $this->slider->get_setting( 'center' ) == 'true' ? 'checked' : '',
-                                                                'helptext' => __( "Center align the slideshow", "metaslider" )
-                                                            ),
-                                                            'autoPlay' => array(
-                                                                'priority' => 20,
-                                                                'type' => 'checkbox',
-                                                                'label' => __( "Auto play", "metaslider" ),
-                                                                'class' => 'option flex nivo responsive',
-                                                                'checked' => $this->slider->get_setting( 'autoPlay' ) == 'true' ? 'checked' : '',
-                                                                'helptext' => __( "Transition between slides automatically", "metaslider" )
-                                                            ),
-                                                            'smartCrop' => array(
-                                                                'priority' => 30,
-                                                                'type' => 'select',
-                                                                'label' => __( "Image Crop", "metaslider" ),
-                                                                'class' => 'option coin flex nivo responsive',
-                                                                'value' => $this->slider->get_setting( 'smartCrop' ),
-                                                                'options' => array(
-                                                                    'true' => array( 'label' => __( "Smart", "metaslider" ), 'class' => '' ),
-                                                                    'false' => array( 'label' => __( "Standard", "metaslider" ), 'class' => '' ),
-                                                                    'disabled' => array( 'label' => __( "Disabled", "metaslider" ), 'class' => '' ),
-                                                                ),
-                                                                'helptext' => __( "Smart Crop ensures your responsive slides are cropped to a ratio that results in a consistent slideshow size", "metaslider" )
-                                                            ),
-                                                            'carouselMode' => array(
-                                                                'priority' => 40,
-                                                                'type' => 'checkbox',
-                                                                'label' => __( "Carousel mode", "metaslider" ),
-                                                                'class' => 'option flex showNextWhenChecked',
-                                                                'checked' => $this->slider->get_setting( 'carouselMode' ) == 'true' ? 'checked' : '',
-                                                                'helptext' => __( "Display multiple slides at once. Slideshow output will be 100% wide.", "metaslider" )
-                                                            ),
-                                                            'carouselMargin' => array(
-                                                                'priority' => 45,
-                                                                'min' => 0,
-                                                                'max' => 9999,
-                                                                'step' => 1,
-                                                                'type' => 'number',
-                                                                'label' => __( "Carousel margin", "metaslider" ),
-                                                                'class' => 'option flex',
-                                                                'value' => $this->slider->get_setting( 'carouselMargin' ),
-                                                                'helptext' => __( "Pixel margin between slides in carousel.", "metaslider" ),
-                                                                'after' => __( "px", "metaslider" )
-                                                            ),
-                                                            'random' => array(
-                                                                'priority' => 50,
-                                                                'type' => 'checkbox',
-                                                                'label' => __( "Random", "metaslider" ),
-                                                                'class' => 'option coin flex nivo responsive',
-                                                                'checked' => $this->slider->get_setting( 'random' ) == 'true' ? 'checked' : '',
-                                                                'helptext' => __( "Randomise the order of the slides", "metaslider" )
-                                                            ),
-                                                            'hoverPause' => array(
-                                                                'priority' => 60,
-                                                                'type' => 'checkbox',
-                                                                'label' => __( "Hover pause", "metaslider" ),
-                                                                'class' => 'option coin flex nivo responsive',
-                                                                'checked' => $this->slider->get_setting( 'hoverPause' ) == 'true' ? 'checked' : '',
-                                                                'helptext' => __( "Pause the slideshow when hovering over slider, then resume when no longer hovering.", "metaslider" )
-                                                            ),
-                                                            'reverse' => array(
-                                                                'priority' => 70,
-                                                                'type' => 'checkbox',
-                                                                'label' => __( "Reverse", "metaslider" ),
-                                                                'class' => 'option flex',
-                                                                'checked' => $this->slider->get_setting( 'reverse' ) == 'true' ? 'checked' : '',
-                                                                'helptext' => __( "Reverse the animation direction", "metaslider" )
-                                                            ),
-                                                            'delay' => array(
-                                                                'priority' => 80,
-                                                                'type' => 'number',
-                                                                'size' => 3,
-                                                                'min' => 500,
-                                                                'max' => 10000,
-                                                                'step' => 100,
-                                                                'value' => $this->slider->get_setting( 'delay' ),
-                                                                'label' => __( "Slide delay", "metaslider" ),
-                                                                'class' => 'option coin flex responsive nivo',
-                                                                'helptext' => __( "How long to display each slide, in milliseconds", "metaslider" ),
-                                                                'after' => __( "ms", "metaslider" )
-                                                            ),
-                                                            'animationSpeed' => array(
-                                                                'priority' => 90,
-                                                                'type' => 'number',
-                                                                'size' => 3,
-                                                                'min' => 0,
-                                                                'max' => 2000,
-                                                                'step' => 100,
-                                                                'value' => $this->slider->get_setting( 'animationSpeed' ),
-                                                                'label' => __( "Animation speed", "metaslider" ),
-                                                                'class' => 'option flex responsive nivo',
-                                                                'helptext' => __( "Set the speed of animations, in milliseconds", "metaslider" ),
-                                                                'after' => __( "ms", "metaslider" )
-                                                            ),
-                                                            'slices' => array(
-                                                                'priority' => 100,
-                                                                'type' => 'number',
-                                                                'size' => 3,
-                                                                'min' => 0,
-                                                                'max' => 20,
-                                                                'step' => 1,
-                                                                'value' => $this->slider->get_setting( 'slices' ),
-                                                                'label' => __( "Number of slices", "metaslider" ),
-                                                                'class' => 'option nivo',
-                                                                'helptext' => __( "Number of slices", "metaslider" ),
-                                                                'after' => __( "ms", "metaslider" )
-                                                            ),
-                                                            'spw' => array(
-                                                                'priority' => 110,
-                                                                'type' => 'number',
-                                                                'size' => 3,
-                                                                'min' => 0,
-                                                                'max' => 20,
-                                                                'step' => 1,
-                                                                'value' => $this->slider->get_setting( 'spw' ),
-                                                                'label' => __( "Number of squares", "metaslider" ) . " (" . __( "Width", "metaslider" ) . ")",
-                                                                'class' => 'option nivo',
-                                                                'helptext' => __( "Number of squares", "metaslider" ),
-                                                                'after' => ''
-                                                            ),
-                                                            'sph' => array(
-                                                                'priority' => 120,
-                                                                'type' => 'number',
-                                                                'size' => 3,
-                                                                'min' => 0,
-                                                                'max' => 20,
-                                                                'step' => 1,
-                                                                'value' => $this->slider->get_setting( 'sph' ),
-                                                                'label' => __( "Number of squares", "metaslider" ) . " (" . __( "Height", "metaslider" ) . ")",
-                                                                'class' => 'option nivo',
-                                                                'helptext' => __( "Number of squares", "metaslider" ),
-                                                                'after' => ''
-                                                            ),
-                                                            'direction' => array(
-                                                                'priority' => 130,
-                                                                'type' => 'select',
-                                                                'label' => __( "Slide direction", "metaslider" ),
-                                                                'class' => 'option flex',
-                                                                'helptext' => __( "Select the sliding direction", "metaslider" ),
-                                                                'value' => $this->slider->get_setting( 'direction' ),
-                                                                'options' => array(
-                                                                    'horizontal' => array( 'label' => __( "Horizontal", "metaslider" ), 'class' => '' ),
-                                                                    'vertical' => array( 'label' => __( "Vertical", "metaslider" ), 'class' => '' ),
-                                                                )
-                                                            ),
-                                                            'easing' => array(
-                                                                'priority' => 140,
-                                                                'type' => 'select',
-                                                                'label' => __( "Easing", "metaslider" ),
-                                                                'class' => 'option flex',
-                                                                'helptext' => __( "Animation easing effect", "metaslider" ),
-                                                                'value' => $this->slider->get_setting( 'easing' ),
-                                                                'options' => $this->get_easing_options()
-                                                            ),
-                                                            'prevText' => array(
-                                                                'priority' => 150,
-                                                                'type' => 'text',
-                                                                'label' => __( "Previous text", "metaslider" ),
-                                                                'class' => 'option coin flex responsive nivo',
-                                                                'helptext' => __( "Set the text for the 'previous' direction item", "metaslider" ),
-                                                                'value' => $this->slider->get_setting( 'prevText' ) == 'false' ? '' : $this->slider->get_setting( 'prevText' )
-                                                            ),
-                                                            'nextText' => array(
-                                                                'priority' => 160,
-                                                                'type' => 'text',
-                                                                'label' => __( "Next text", "metaslider" ),
-                                                                'class' => 'option coin flex responsive nivo',
-                                                                'helptext' => __( "Set the text for the 'next' direction item", "metaslider" ),
-                                                                'value' => $this->slider->get_setting( 'nextText' ) == 'false' ? '' : $this->slider->get_setting( 'nextText' )
-                                                            ),
-                                                            'sDelay' => array(
-                                                                'priority' => 170,
-                                                                'type' => 'number',
-                                                                'size' => 3,
-                                                                'min' => 0,
-                                                                'max' => 500,
-                                                                'step' => 10,
-                                                                'value' => $this->slider->get_setting( 'sDelay' ),
-                                                                'label' => __( "Square delay", "metaslider" ),
-                                                                'class' => 'option coin',
-                                                                'helptext' => __( "Delay between squares in ms", "metaslider" ),
-                                                                'after' => __( "ms", "metaslider" )
-                                                            ),
-                                                            'opacity' => array(
-                                                                'priority' => 180,
-                                                                'type' => 'number',
-                                                                'size' => 3,
-                                                                'min' => 0,
-                                                                'max' => 1,
-                                                                'step' => 0.1,
-                                                                'value' => $this->slider->get_setting( 'opacity' ),
-                                                                'label' => __( "Opacity", "metaslider" ),
-                                                                'class' => 'option coin',
-                                                                'helptext' => __( "Opacity of title and navigation", "metaslider" ),
-                                                                'after' => ''
-                                                            ),
-                                                            'titleSpeed' => array(
-                                                                'priority' => 190,
-                                                                'type' => 'number',
-                                                                'size' => 3,
-                                                                'min' => 0,
-                                                                'max' => 10000,
-                                                                'step' => 100,
-                                                                'value' => $this->slider->get_setting( 'titleSpeed' ),
-                                                                'label' => __( "Caption speed", "metaslider" ),
-                                                                'class' => 'option coin',
-                                                                'helptext' => __( "Set the fade in speed of the caption", "metaslider" ),
-                                                                'after' => __( "ms", "metaslider" )
-                                                            ),
-                                                            'developerOptions' => array(
-                                                                'priority' => 195,
-                                                                'type' => 'divider',
-                                                                'class' => 'option coin flex responsive nivo',
-                                                                'value' => __( "Developer options", "metaslider" )
-                                                            ),
-                                                            'cssClass' => array(
-                                                                'priority' => 200,
-                                                                'type' => 'text',
-                                                                'label' => __( "CSS classes", "metaslider" ),
-                                                                'class' => 'option coin flex responsive nivo',
-                                                                'helptext' => __( "Specify any custom CSS Classes you would like to be added to the slider wrapper", "metaslider" ),
-                                                                'value' => $this->slider->get_setting( 'cssClass' ) == 'false' ? '' : $this->slider->get_setting( 'cssClass' )
-                                                            ),
-                                                            'printCss' => array(
-                                                                'priority' => 210,
-                                                                'type' => 'checkbox',
-                                                                'label' => __( "Print CSS", "metaslider" ),
-                                                                'class' => 'option coin flex responsive nivo useWithCaution',
-                                                                'checked' => $this->slider->get_setting( 'printCss' ) == 'true' ? 'checked' : '',
-                                                                'helptext' => __( "Uncheck this is you would like to include your own CSS", "metaslider" )
-                                                            ),
-                                                            'printJs' => array(
-                                                                'priority' => 220,
-                                                                'type' => 'checkbox',
-                                                                'label' => __( "Print JS", "metaslider" ),
-                                                                'class' => 'option coin flex responsive nivo useWithCaution',
-                                                                'checked' => $this->slider->get_setting( 'printJs' ) == 'true' ? 'checked' : '',
-                                                                'helptext' => __( "Uncheck this is you would like to include your own Javascript", "metaslider" )
-                                                            ),
-                                                            'noConflict' => array(
-                                                                'priority' => 230,
-                                                                'type' => 'checkbox',
-                                                                'label' => __( "No conflict mode", "metaslider" ),
-                                                                'class' => 'option flex',
-                                                                'checked' => $this->slider->get_setting( 'noConflict' ) == 'true' ? 'checked' : '',
-                                                                'helptext' => __( "Delay adding the flexslider class to the slideshow", "metaslider" )
-                                                            ),
-                                                        );
-
-                                                        $aFields = apply_filters( 'metaslider_advanced_settings', $aFields, $this->slider );
-
-                                                        echo $this->build_settings_rows( $aFields );
-                                                    ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                    <div class="ms-postbox shortcode ms-toggle" id="metaslider_usage">
-                                        <div class="handlediv" title="Click to toggle"><br></div><h3 class="hndle"><span><?php _e( "Usage", "metaslider" ) ?></span></h3>
-                                        <div class="inside">
-                                            <ul class='tabs'>
-                                                <li rel='tab-1' class='selected'><?php _e( "Shortcode", "metaslider" ) ?></li>
-                                                <li rel='tab-2'><?php _e( "Template Include", "metaslider" ) ?></li>
-                                            </ul>
-                                            <div class='tabs-content'>
-                                                <div class='tab tab-1'>
-                                                <p><?php _e( "Copy & paste the shortcode directly into any WordPress post or page.", "metaslider" ); ?></p>
-                                                <input readonly='readonly' type='text' value='[metaslider id=<?php echo $this->slider->id ?>]' /></div>
-                                                <div class='tab tab-2' style='display: none'>
-                                                <p><?php _e( "Copy & paste this code into a template file to include the slideshow within your theme.", "metaslider" ); ?></p>
-                                                <textarea readonly='readonly'>&lt;?php &#13;&#10;    echo do_shortcode("[metaslider id=<?php echo $this->slider->id ?>]"); &#13;&#10;?></textarea></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="ms-postbox social" id="metaslider_social">
-                                        <div class="inside">
-                                            <ul class='info'>
-                                                <li style='width: 33%;'>
-                                                    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.metaslider.com" data-text="Check out Meta Slider, an easy to use slideshow plugin for WordPress" data-hashtags="metaslider, wordpress, slideshow">Tweet</a>
-                                                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                                                </li>
-                                                <li style='width: 34%;'>
-                                                    <div class="g-plusone" data-size="medium" data-href="http://www.metaslider.com"></div>
-                                                    <script type="text/javascript">
-                                                      (function() {
-                                                        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-                                                        po.src = 'https://apis.google.com/js/plusone.js';
-                                                        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-                                                      })();
-                                                    </script>
-                                                </li>
-                                                <li style='width: 33%;'>
-                                                    <iframe style='border:none; overflow:hidden; width:80px; height:21px;' src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.metaslider.com&amp;send=false&amp;layout=button_count&amp;width=90&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21&amp;appId=156668027835524" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <a class='delete-slider alignright button-secondary confirm' href='<?php echo wp_nonce_url( "?page=metaslider&amp;delete={$this->slider->id}", "metaslider_delete_slider" ); ?>'><?php _e( "Delete Slider", "metaslider" ) ?></a>
                                 </div>
+
+                                <div class="ms-postbox ms-toggle closed" id="metaslider_advanced_settings">
+                                    <div class="handlediv" title="Click to toggle"><br></div><h3 class="hndle"><span><?php _e( "Advanced Settings", "metaslider" ) ?></span></h3>
+                                    <div class="inside">
+                                        <table>
+                                            <tbody>
+                                                <?php
+                                                    $aFields = array(
+                                                        'fullWidth' => array(
+                                                            'priority' => 5,
+                                                            'type' => 'checkbox',
+                                                            'label' => __( "Stretch", "metaslider" ),
+                                                            'class' => 'option flex nivo responsive',
+                                                            'after' => __( "100% wide output", "metaslider" ),
+                                                            'checked' => $this->slider->get_setting( 'fullWidth' ) == 'true' ? 'checked' : '',
+                                                            'helptext' => __( "Stretch the slideshow output to fill it's parent container", "metaslider" )
+                                                        ),
+                                                        'center' => array(
+                                                            'priority' => 10,
+                                                            'type' => 'checkbox',
+                                                            'label' => __( "Center align", "metaslider" ),
+                                                            'class' => 'option coin flex nivo responsive',
+                                                            'checked' => $this->slider->get_setting( 'center' ) == 'true' ? 'checked' : '',
+                                                            'helptext' => __( "Center align the slideshow", "metaslider" )
+                                                        ),
+                                                        'autoPlay' => array(
+                                                            'priority' => 20,
+                                                            'type' => 'checkbox',
+                                                            'label' => __( "Auto play", "metaslider" ),
+                                                            'class' => 'option flex nivo responsive',
+                                                            'checked' => $this->slider->get_setting( 'autoPlay' ) == 'true' ? 'checked' : '',
+                                                            'helptext' => __( "Transition between slides automatically", "metaslider" )
+                                                        ),
+                                                        'smartCrop' => array(
+                                                            'priority' => 30,
+                                                            'type' => 'select',
+                                                            'label' => __( "Image Crop", "metaslider" ),
+                                                            'class' => 'option coin flex nivo responsive',
+                                                            'value' => $this->slider->get_setting( 'smartCrop' ),
+                                                            'options' => array(
+                                                                'true' => array( 'label' => __( "Smart", "metaslider" ), 'class' => '' ),
+                                                                'false' => array( 'label' => __( "Standard", "metaslider" ), 'class' => '' ),
+                                                                'disabled' => array( 'label' => __( "Disabled", "metaslider" ), 'class' => '' ),
+                                                            ),
+                                                            'helptext' => __( "Smart Crop ensures your responsive slides are cropped to a ratio that results in a consistent slideshow size", "metaslider" )
+                                                        ),
+                                                        'carouselMode' => array(
+                                                            'priority' => 40,
+                                                            'type' => 'checkbox',
+                                                            'label' => __( "Carousel mode", "metaslider" ),
+                                                            'class' => 'option flex showNextWhenChecked',
+                                                            'checked' => $this->slider->get_setting( 'carouselMode' ) == 'true' ? 'checked' : '',
+                                                            'helptext' => __( "Display multiple slides at once. Slideshow output will be 100% wide.", "metaslider" )
+                                                        ),
+                                                        'carouselMargin' => array(
+                                                            'priority' => 45,
+                                                            'min' => 0,
+                                                            'max' => 9999,
+                                                            'step' => 1,
+                                                            'type' => 'number',
+                                                            'label' => __( "Carousel margin", "metaslider" ),
+                                                            'class' => 'option flex',
+                                                            'value' => $this->slider->get_setting( 'carouselMargin' ),
+                                                            'helptext' => __( "Pixel margin between slides in carousel.", "metaslider" ),
+                                                            'after' => __( "px", "metaslider" )
+                                                        ),
+                                                        'random' => array(
+                                                            'priority' => 50,
+                                                            'type' => 'checkbox',
+                                                            'label' => __( "Random", "metaslider" ),
+                                                            'class' => 'option coin flex nivo responsive',
+                                                            'checked' => $this->slider->get_setting( 'random' ) == 'true' ? 'checked' : '',
+                                                            'helptext' => __( "Randomise the order of the slides", "metaslider" )
+                                                        ),
+                                                        'hoverPause' => array(
+                                                            'priority' => 60,
+                                                            'type' => 'checkbox',
+                                                            'label' => __( "Hover pause", "metaslider" ),
+                                                            'class' => 'option coin flex nivo responsive',
+                                                            'checked' => $this->slider->get_setting( 'hoverPause' ) == 'true' ? 'checked' : '',
+                                                            'helptext' => __( "Pause the slideshow when hovering over slider, then resume when no longer hovering.", "metaslider" )
+                                                        ),
+                                                        'reverse' => array(
+                                                            'priority' => 70,
+                                                            'type' => 'checkbox',
+                                                            'label' => __( "Reverse", "metaslider" ),
+                                                            'class' => 'option flex',
+                                                            'checked' => $this->slider->get_setting( 'reverse' ) == 'true' ? 'checked' : '',
+                                                            'helptext' => __( "Reverse the animation direction", "metaslider" )
+                                                        ),
+                                                        'delay' => array(
+                                                            'priority' => 80,
+                                                            'type' => 'number',
+                                                            'size' => 3,
+                                                            'min' => 500,
+                                                            'max' => 10000,
+                                                            'step' => 100,
+                                                            'value' => $this->slider->get_setting( 'delay' ),
+                                                            'label' => __( "Slide delay", "metaslider" ),
+                                                            'class' => 'option coin flex responsive nivo',
+                                                            'helptext' => __( "How long to display each slide, in milliseconds", "metaslider" ),
+                                                            'after' => __( "ms", "metaslider" )
+                                                        ),
+                                                        'animationSpeed' => array(
+                                                            'priority' => 90,
+                                                            'type' => 'number',
+                                                            'size' => 3,
+                                                            'min' => 0,
+                                                            'max' => 2000,
+                                                            'step' => 100,
+                                                            'value' => $this->slider->get_setting( 'animationSpeed' ),
+                                                            'label' => __( "Animation speed", "metaslider" ),
+                                                            'class' => 'option flex responsive nivo',
+                                                            'helptext' => __( "Set the speed of animations, in milliseconds", "metaslider" ),
+                                                            'after' => __( "ms", "metaslider" )
+                                                        ),
+                                                        'slices' => array(
+                                                            'priority' => 100,
+                                                            'type' => 'number',
+                                                            'size' => 3,
+                                                            'min' => 0,
+                                                            'max' => 20,
+                                                            'step' => 1,
+                                                            'value' => $this->slider->get_setting( 'slices' ),
+                                                            'label' => __( "Number of slices", "metaslider" ),
+                                                            'class' => 'option nivo',
+                                                            'helptext' => __( "Number of slices", "metaslider" ),
+                                                            'after' => __( "ms", "metaslider" )
+                                                        ),
+                                                        'spw' => array(
+                                                            'priority' => 110,
+                                                            'type' => 'number',
+                                                            'size' => 3,
+                                                            'min' => 0,
+                                                            'max' => 20,
+                                                            'step' => 1,
+                                                            'value' => $this->slider->get_setting( 'spw' ),
+                                                            'label' => __( "Number of squares", "metaslider" ) . " (" . __( "Width", "metaslider" ) . ")",
+                                                            'class' => 'option nivo',
+                                                            'helptext' => __( "Number of squares", "metaslider" ),
+                                                            'after' => ''
+                                                        ),
+                                                        'sph' => array(
+                                                            'priority' => 120,
+                                                            'type' => 'number',
+                                                            'size' => 3,
+                                                            'min' => 0,
+                                                            'max' => 20,
+                                                            'step' => 1,
+                                                            'value' => $this->slider->get_setting( 'sph' ),
+                                                            'label' => __( "Number of squares", "metaslider" ) . " (" . __( "Height", "metaslider" ) . ")",
+                                                            'class' => 'option nivo',
+                                                            'helptext' => __( "Number of squares", "metaslider" ),
+                                                            'after' => ''
+                                                        ),
+                                                        'direction' => array(
+                                                            'priority' => 130,
+                                                            'type' => 'select',
+                                                            'label' => __( "Slide direction", "metaslider" ),
+                                                            'class' => 'option flex',
+                                                            'helptext' => __( "Select the sliding direction", "metaslider" ),
+                                                            'value' => $this->slider->get_setting( 'direction' ),
+                                                            'options' => array(
+                                                                'horizontal' => array( 'label' => __( "Horizontal", "metaslider" ), 'class' => '' ),
+                                                                'vertical' => array( 'label' => __( "Vertical", "metaslider" ), 'class' => '' ),
+                                                            )
+                                                        ),
+                                                        'easing' => array(
+                                                            'priority' => 140,
+                                                            'type' => 'select',
+                                                            'label' => __( "Easing", "metaslider" ),
+                                                            'class' => 'option flex',
+                                                            'helptext' => __( "Animation easing effect", "metaslider" ),
+                                                            'value' => $this->slider->get_setting( 'easing' ),
+                                                            'options' => $this->get_easing_options()
+                                                        ),
+                                                        'prevText' => array(
+                                                            'priority' => 150,
+                                                            'type' => 'text',
+                                                            'label' => __( "Previous text", "metaslider" ),
+                                                            'class' => 'option coin flex responsive nivo',
+                                                            'helptext' => __( "Set the text for the 'previous' direction item", "metaslider" ),
+                                                            'value' => $this->slider->get_setting( 'prevText' ) == 'false' ? '' : $this->slider->get_setting( 'prevText' )
+                                                        ),
+                                                        'nextText' => array(
+                                                            'priority' => 160,
+                                                            'type' => 'text',
+                                                            'label' => __( "Next text", "metaslider" ),
+                                                            'class' => 'option coin flex responsive nivo',
+                                                            'helptext' => __( "Set the text for the 'next' direction item", "metaslider" ),
+                                                            'value' => $this->slider->get_setting( 'nextText' ) == 'false' ? '' : $this->slider->get_setting( 'nextText' )
+                                                        ),
+                                                        'sDelay' => array(
+                                                            'priority' => 170,
+                                                            'type' => 'number',
+                                                            'size' => 3,
+                                                            'min' => 0,
+                                                            'max' => 500,
+                                                            'step' => 10,
+                                                            'value' => $this->slider->get_setting( 'sDelay' ),
+                                                            'label' => __( "Square delay", "metaslider" ),
+                                                            'class' => 'option coin',
+                                                            'helptext' => __( "Delay between squares in ms", "metaslider" ),
+                                                            'after' => __( "ms", "metaslider" )
+                                                        ),
+                                                        'opacity' => array(
+                                                            'priority' => 180,
+                                                            'type' => 'number',
+                                                            'size' => 3,
+                                                            'min' => 0,
+                                                            'max' => 1,
+                                                            'step' => 0.1,
+                                                            'value' => $this->slider->get_setting( 'opacity' ),
+                                                            'label' => __( "Opacity", "metaslider" ),
+                                                            'class' => 'option coin',
+                                                            'helptext' => __( "Opacity of title and navigation", "metaslider" ),
+                                                            'after' => ''
+                                                        ),
+                                                        'titleSpeed' => array(
+                                                            'priority' => 190,
+                                                            'type' => 'number',
+                                                            'size' => 3,
+                                                            'min' => 0,
+                                                            'max' => 10000,
+                                                            'step' => 100,
+                                                            'value' => $this->slider->get_setting( 'titleSpeed' ),
+                                                            'label' => __( "Caption speed", "metaslider" ),
+                                                            'class' => 'option coin',
+                                                            'helptext' => __( "Set the fade in speed of the caption", "metaslider" ),
+                                                            'after' => __( "ms", "metaslider" )
+                                                        ),
+                                                        'developerOptions' => array(
+                                                            'priority' => 195,
+                                                            'type' => 'divider',
+                                                            'class' => 'option coin flex responsive nivo',
+                                                            'value' => __( "Developer options", "metaslider" )
+                                                        ),
+                                                        'cssClass' => array(
+                                                            'priority' => 200,
+                                                            'type' => 'text',
+                                                            'label' => __( "CSS classes", "metaslider" ),
+                                                            'class' => 'option coin flex responsive nivo',
+                                                            'helptext' => __( "Specify any custom CSS Classes you would like to be added to the slider wrapper", "metaslider" ),
+                                                            'value' => $this->slider->get_setting( 'cssClass' ) == 'false' ? '' : $this->slider->get_setting( 'cssClass' )
+                                                        ),
+                                                        'printCss' => array(
+                                                            'priority' => 210,
+                                                            'type' => 'checkbox',
+                                                            'label' => __( "Print CSS", "metaslider" ),
+                                                            'class' => 'option coin flex responsive nivo useWithCaution',
+                                                            'checked' => $this->slider->get_setting( 'printCss' ) == 'true' ? 'checked' : '',
+                                                            'helptext' => __( "Uncheck this is you would like to include your own CSS", "metaslider" )
+                                                        ),
+                                                        'printJs' => array(
+                                                            'priority' => 220,
+                                                            'type' => 'checkbox',
+                                                            'label' => __( "Print JS", "metaslider" ),
+                                                            'class' => 'option coin flex responsive nivo useWithCaution',
+                                                            'checked' => $this->slider->get_setting( 'printJs' ) == 'true' ? 'checked' : '',
+                                                            'helptext' => __( "Uncheck this is you would like to include your own Javascript", "metaslider" )
+                                                        ),
+                                                        'noConflict' => array(
+                                                            'priority' => 230,
+                                                            'type' => 'checkbox',
+                                                            'label' => __( "No conflict mode", "metaslider" ),
+                                                            'class' => 'option flex',
+                                                            'checked' => $this->slider->get_setting( 'noConflict' ) == 'true' ? 'checked' : '',
+                                                            'helptext' => __( "Delay adding the flexslider class to the slideshow", "metaslider" )
+                                                        ),
+                                                    );
+
+                                                    $aFields = apply_filters( 'metaslider_advanced_settings', $aFields, $this->slider );
+
+                                                    echo $this->build_settings_rows( $aFields );
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="ms-postbox shortcode ms-toggle" id="metaslider_usage">
+                                    <div class="handlediv" title="Click to toggle"><br></div><h3 class="hndle"><span><?php _e( "Usage", "metaslider" ) ?></span></h3>
+                                    <div class="inside">
+                                        <ul class='tabs'>
+                                            <li rel='tab-1' class='selected'><?php _e( "Shortcode", "metaslider" ) ?></li>
+                                            <li rel='tab-2'><?php _e( "Template Include", "metaslider" ) ?></li>
+                                        </ul>
+                                        <div class='tabs-content'>
+                                            <div class='tab tab-1'>
+                                            <p><?php _e( "Copy & paste the shortcode directly into any WordPress post or page.", "metaslider" ); ?></p>
+                                            <input readonly='readonly' type='text' value='[metaslider id=<?php echo $this->slider->id ?>]' /></div>
+                                            <div class='tab tab-2' style='display: none'>
+                                            <p><?php _e( "Copy & paste this code into a template file to include the slideshow within your theme.", "metaslider" ); ?></p>
+                                            <textarea readonly='readonly'>&lt;?php &#13;&#10;    echo do_shortcode("[metaslider id=<?php echo $this->slider->id ?>]"); &#13;&#10;?></textarea></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <?php if ( ! is_plugin_active('ml-slider-pro/ml-slider-pro.php') ) : ?>
+
+                                <div class="ms-postbox social" id="metaslider_social">
+                                    <div class="inside">
+                                        <ul class='info'>
+                                            <li style='width: 33%;'>
+                                                <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.metaslider.com" data-text="Check out Meta Slider, an easy to use slideshow plugin for WordPress" data-hashtags="metaslider, wordpress, slideshow">Tweet</a>
+                                                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                                            </li>
+                                            <li style='width: 34%;'>
+                                                <div class="g-plusone" data-size="medium" data-href="http://www.metaslider.com"></div>
+                                                <script type="text/javascript">
+                                                  (function() {
+                                                    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                                                    po.src = 'https://apis.google.com/js/plusone.js';
+                                                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+                                                  })();
+                                                </script>
+                                            </li>
+                                            <li style='width: 33%;'>
+                                                <iframe style='border:none; overflow:hidden; width:80px; height:21px;' src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.metaslider.com&amp;send=false&amp;layout=button_count&amp;width=90&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21&amp;appId=156668027835524" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <?php endif; ?>
+
+                                <a class='delete-slider alignright button-secondary' href='<?php echo wp_nonce_url( "?page=metaslider&amp;delete={$this->slider->id}", "metaslider_delete_slider" ); ?>'><?php _e( "Delete Slider", "metaslider" ) ?></a>
                             </div>
                         </div>
                     </div>
@@ -1640,57 +1702,24 @@ class MetaSliderPlugin {
 
 
     /**
-     * Return the meta slider pro upgrade iFrame
-     */
-    public function upgrade_to_pro_tab() {
-
-        if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'ml-slider-pro/ml-slider-pro.php' ) ) {
-            return wp_iframe( array( $this, 'upgrade_to_pro_iframe' ) );
-        }
-
-    }
-
-
-    /**
-     * Media Manager iframe HTML
-     */
-    public function upgrade_to_pro_iframe() {
-
-        wp_enqueue_style( 'metaslider-admin-styles', METASLIDER_ASSETS_URL . 'metaslider/admin.css', false, METASLIDER_VERSION );
-        wp_enqueue_script( 'google-font-api', 'http://fonts.googleapis.com/css?family=PT+Sans:400,700' );
-
-        $link = apply_filters( 'metaslider_hoplink', 'http://www.metaslider.com/upgrade/' );
-        $link .= '?utm_source=lite&amp;utm_medium=more-slide-types&amp;utm_campaign=pro';
-
-        echo implode("", array(
-            "<div class='metaslider_pro'>",
-                "<p>Get the Pro Addon pack to add support for: <b>Post Feed</b> Slides, <b>YouTube</b> Slides, <b>HTML</b> Slides & <b>Vimeo</b> Slides</p>",
-                "<p><b>NEW: </b> Animated HTML <b>Layer</b> Slides (with an awesome Drag & Drop editor!)</p>",
-                "<p><b></b> Live Theme Editor!</p>",
-                "<p><b>NEW:</b> Thumbnail Navigation for Flex & Nivo Slider!</p>",
-                "<a class='probutton' href='{$link}' target='_blank'>Get <span class='logo'><strong>Meta</strong>Slider</span><span class='super'>Pro</span></a>",
-                "<span class='subtext'>Opens in a new window</span>",
-            "</div>"
-        ));
-
-    }
-
-
-    /**
      * Upgrade CTA.
      */
     public function upgrade_to_pro_cta() {
+        global $user_ID;
 
         if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'ml-slider-pro/ml-slider-pro.php' ) ) {
             $link = apply_filters( 'metaslider_hoplink', 'http://www.metaslider.com/upgrade/' );
 
             $link .= '?utm_source=lite&amp;utm_medium=nag&amp;utm_campaign=pro';
 
-            $goPro = "<div style='display: none;' id='screen-options-link-wrap'><a target='_blank' class='show-settings' href='{$link}'>Meta Slider v" . METASLIDER_VERSION . " - " .
-                __( 'Upgrade to Pro $19', "metaslider" ) .
-                "</a></div>";
+            $text = "Meta Slider v" . METASLIDER_VERSION;
 
-            echo $goPro;
+            if ( get_user_meta( $user_ID, "metaslider_hide_go_pro", true ) === "true" ) {
+                $text .= " - " . __( 'Upgrade to Pro $19', "metaslider" );
+            }
+
+            echo "<div style='display: none;' id='screen-options-link-wrap'><a target='_blank' class='show-settings dashicons-before dashicons-performance' href='{$link}'>{$text}</a></div>";
+
         }
 
     }

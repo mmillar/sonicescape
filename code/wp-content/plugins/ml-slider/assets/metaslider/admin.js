@@ -50,12 +50,6 @@ jQuery(document).ready(function($) {
         // Remove the Media Library tab (media_upload_tabs filter is broken in 3.6)
         jQuery(".media-menu a:contains('Media Library')").remove();
 
-        if (!metaslider_pro_active) {
-            jQuery(".media-menu a:contains('YouTube')").addClass('disabled');
-            jQuery(".media-menu a:contains('Vimeo')").addClass('disabled');
-            jQuery(".media-menu a:contains('Post Feed')").addClass('disabled');
-            jQuery(".media-menu a:contains('Layer Slide')").addClass('disabled');
-        }
     });
 
     jQuery("#screen-options-link-wrap").appendTo("#screen-meta-links").show();
@@ -184,10 +178,6 @@ jQuery(document).ready(function($) {
         jQuery(".metaslider input[type=submit]").removeAttr("disabled");
     });
 
-    // show the confirm dialogue
-    jQuery(".confirm").on("click", function() {
-        return confirm(metaslider.confirm);
-    });
 
     jQuery(".useWithCaution").on("change", function(){
         if(!this.checked) {
@@ -196,8 +186,8 @@ jQuery(document).ready(function($) {
     });
 
     // helptext tooltips
-    jQuery(".metaslider .tipsy-tooltip").tipsy({className: 'msTipsy', live: true, delayIn: 500, html: true, gravity: 'e'});
-    jQuery(".metaslider .tipsy-tooltip-top").tipsy({live: true, delayIn: 500, html: true, gravity: 'se'});
+    jQuery(".tipsy-tooltip").tipsy({className: 'msTipsy', live: true, delayIn: 500, html: true, gravity: 'e'});
+    jQuery(".tipsy-tooltip-top").tipsy({live: true, delayIn: 500, html: true, gravity: 'se'});
 
     // Select input field contents when clicked
     jQuery(".metaslider .shortcode input, .metaslider .shortcode textarea").on('click', function() {
@@ -254,6 +244,27 @@ jQuery(document).ready(function($) {
     	tab.parent().parent().children('.tabs-content').children('div.'+tab.attr('rel')).show();
     	tab.siblings().removeClass("selected");
     	tab.addClass("selected");
+    });
+
+
+    // show the confirm dialogue
+    jQuery(".metaslider").on('click', '.delete-slider', function() {
+        return confirm(metaslider.confirm);
+    });
+
+    // delete a slide using ajax (avoid losing changes)
+    jQuery(".metaslider").on('click', '.delete-slide', function(e) {
+        e.preventDefault();
+
+        var link = jQuery(this);
+
+        if (confirm(metaslider.confirm)) {
+            jQuery.get( link.attr('href') , function( data ) {
+                link.closest('tr').fadeOut(400, function() {
+                    jQuery(this).remove();
+                });
+            });
+        }
     });
 
     // AJAX save & preview
