@@ -16,7 +16,7 @@
 
 get_header(); 
 
-query_posts(array('category_name' => "news", 'posts_per_page' => 10));
+query_posts(array('category_name' => "news", 'posts_per_page' => -1));
 ?>
 
 		<?php 

@@ -17,7 +17,7 @@ $submenu = get_post_meta(get_the_ID(), "sub-menu", true);
 
 	<?php } 
 
-	query_posts( array ( 'category_name' => get_post_meta(get_the_ID(), "category", true), 'posts_per_page' => 20 ) );
+	query_posts( array ( 'category_name' => get_post_meta(get_the_ID(), "category", true), 'posts_per_page' => -1) );
 	?>
 
 	<div id="primary" class="site-content" style="width: 100%; max-width: 960px">
