@@ -4,8 +4,8 @@ Donate link:  http://peadig.com/go/facebook-comments-paypal/
 License: GPLv3
 Tags: comments, facebook, facebook comments, commenting, widgets, posts, post, pages, page, wordpress
 Requires at least: 3.1
-Tested up to: 4.0
-Stable tag: 2.1.3
+Tested up to: 4.2.2
+Stable tag: 2.3.2
 
 The Facebook Comments WordPress plugin makes it easier for you to setup, administer and customise Facebook comments from your WordPress site.
 
@@ -17,7 +17,7 @@ Simply install the plugin and follow the instructions on the Settings page.
 
 * [Facebook Comments](http://peadig.com/wordpress-plugins/facebook-comments/) Plugin homepage.
 * More [WordPress Plugins](http://peadig.com/wordpress-plugins/).
-* [Peadig](http://peadig.com/): A WordPress Framework built with Bootstrap.
+* Peadig: A [WordPress Bootstrap](http://peadig.com/) theme framework.
 
 You can also insert the comment box as a shortcode into any post, page or template and use your own settings for each time you do it! Simply use the shortcode [fbcomments]
 
@@ -33,6 +33,35 @@ This section describes how to install the plugin and get it working.
 4. Go through the steps and hit update!
 
 == Changelog ==
+
+= 2.3.2 =
+
+* Removed duplicate shortcode example
+
+= 2.3.1 =
+
+* Added in option to choose between v2.3 and v2.0 of SDK as per some requests
+
+= 2.3 =
+
+* Updated Facebook SDK to 2.3 (coincidentally for FB Comments v2.3!)
+
+= 2.2.3 =
+
+* Admin and mod code only appear if something is entered. Removes potential conflicts with other third party plugins doing the same.
+
+= 2.2.2 =
+
+* Fixed a few compatibility issues
+
+= 2.2.1 =
+
+* Bug fixes
+
+= 2.2 =
+
+* Added META box for single posts, post types and pages so you can enable/disable Facebook comments per post or page
+* Bug fixes for non-defined variables
 
 = 2.1.3 =
 

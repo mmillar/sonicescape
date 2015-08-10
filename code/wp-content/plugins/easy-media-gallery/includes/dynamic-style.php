@@ -1,7 +1,9 @@
-<?php error_reporting(0);ini_set('display_errors', 0);header("Content-type: text/css; charset: UTF-8"); ?>
 <?php
-$parse_uri = explode( 'wp-content', $_SERVER['SCRIPT_FILENAME'] );
-require_once( $parse_uri[0] . 'wp-load.php' );
+
+/*-------------------------------------------------------------------------------*/
+/*   Dynamic CSS @since 1.2.9.5
+/*-------------------------------------------------------------------------------*/
+function emg_dynamic_css_generator() {
 
 //Get Plugin settings
 $frmcol = easy_get_option( 'easymedia_frm_col' );
@@ -17,6 +19,7 @@ $marginhlf = $mrgnbox / 2;
 $theoptstl = easy_get_option( 'easymedia_frm_size' );
 $globalwidth = stripslashes( $theoptstl[ 'width' ] );
 $pattover = easy_get_option( 'easymedia_style_pattern' );
+$overcol = easy_get_option( 'easymedia_overlay_col' );
 $ttlcol = easy_get_option( 'easymedia_ttl_col' );
 $thumbhov = ucfirst( easy_get_option( 'easymedia_hover_style' ) ) . '.png';
 $thumbhov = plugins_url( 'css/images/' . $thumbhov . '', dirname(__FILE__) );
@@ -26,6 +29,8 @@ $thumbiconcol = easy_get_option( 'easymedia_icon_col' );
 $disenico = easy_get_option( 'easymedia_disen_ticon' );
 $borderrgba = easymedia_hex2rgb( easy_get_option( 'easymedia_frm_col' ) );
 $borderrgbaopcty = easy_get_option( 'easymedia_thumb_border_opcty' ) / 100;
+
+ob_start();
 
 // IMAGES
 echo '.view {margin-bottom:'.$mrgnbox.'px; margin-right:'.$marginhlf.'px; margin-left:'.$marginhlf.'px;}';
@@ -57,7 +62,7 @@ echo $addshadow;
 
 // MEDIA BOX Patterns
 if ( $pattover != '' || $pattover != 'no_pattern' ) {	
-echo '#mbOverlay {background: url(../css/images/patterns/'.$pattover.'); background-repeat: repeat;}';
+echo '#mbOverlay {background: url('.EASYMEDG_PLUGIN_URL.'css/images/patterns/'.$pattover.'); background-repeat: repeat;}';
 }
 
 // Thumbnails Title Background color @since 1.2.61
@@ -102,8 +107,13 @@ echo '.da-thumbs article{position: absolute; background: rgba('.$thumbhovcol.','
 if ( easy_get_option( 'easymedia_mag_icon' ) != '' && $disenico == 1 ) {	
 echo '	
 span.zoom{
-background-image:url(../css/images/magnify/'.easy_get_option( 'easymedia_mag_icon' ).'.png); background-repeat:no-repeat; background-position:center;
+background-image:url('.EASYMEDG_PLUGIN_URL.'css/images/magnify/'.easy_get_option( 'easymedia_mag_icon' ).'.png); background-repeat:no-repeat; background-position:center;
 }';	
+
+}
+
+$content = ob_get_clean();
+echo emg_css_compress( $content );
 
 }
 

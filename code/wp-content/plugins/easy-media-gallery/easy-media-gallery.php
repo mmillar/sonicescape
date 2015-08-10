@@ -2,9 +2,9 @@
 /*
 Plugin Name: Easy Media Gallery
 Plugin URI: http://www.ghozylab.com/plugins/
-Description: Easy Media Gallery (Lite) - Displaying your images, videos (MP4, Youtube, Vimeo) and audio mp3 in elegant and fancy lightbox with very easy. Allows you to customize all media to get it looking exactly what you want. <a href="http://ghozylab.com/plugins/easy-media-gallery-pro/pricing/" target="_blank"><strong> Upgrade to Pro Version Now</strong></a> and get a tons of awesome features.
+Description: Easy Media Gallery (Lite) - Displaying your image, video (MP4, Youtube, Vimeo) and audio mp3 in elegant and fancy lightbox with very easy. Allows you to customize all media to get it looking exactly what you want. <a href="http://ghozylab.com/plugins/easy-media-gallery-pro/pricing/" target="_blank"><strong> Upgrade to Pro Version Now</strong></a> and get a tons of awesome features.
 Author: GhozyLab, Inc.
-Version: 1.2.70
+Version: 1.3.35
 Author URI: http://www.ghozylab.com/plugins/
 */
 
@@ -12,67 +12,16 @@ if ( ! defined('ABSPATH') ) {
 	die('Please do not load this file directly!');
 }
 
-/*
-|--------------------------------------------------------------------------
-| Requires Wordpress Version
-|--------------------------------------------------------------------------
-*/
-function req_wordpress_version() {
-	global $wp_version;
-	$plugin = plugin_basename( __FILE__ );
-
-	if ( version_compare( $wp_version, "3.3", "<" ) ) {
-		if ( is_plugin_active( $plugin ) ) {
-			deactivate_plugins( $plugin );
-			wp_die( "Easy Media Gallery Lite requires WordPress 3.3 or higher, and has been deactivated! Please upgrade WordPress and try again.<br /><br />Back to <a href='".admin_url()."'>WordPress admin</a>" );
-		}
-	}
-}
-add_action( 'admin_init', 'req_wordpress_version' );
-
 
 /*
 |--------------------------------------------------------------------------
-| Requires PHP Version (min version PHP 5.2)
+| I18N - LOCALIZATION
 |--------------------------------------------------------------------------
 */
-if ( version_compare(PHP_VERSION, '5.2', '<') ) {
-	if ( is_admin() && (!defined('DOING_AJAX') || !DOING_AJAX) ) {
-		require_once ABSPATH.'/wp-admin/includes/plugin.php';
-		deactivate_plugins( __FILE__ );
-	    wp_die( "Easy Media Gallery Lite requires PHP 5.2 or higher. The plugin has now disabled itself. Please ask your hosting provider for this issue.<br /><br />Back to <a href='".admin_url()."'>WordPress admin</a>" );
-	} else {
-		return;
+function emg_lang_init() {
+	load_plugin_textdomain( 'easmedia', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| Requires GD Library
-|--------------------------------------------------------------------------
-*/
-if ( is_admin() ) {
-	if ( !extension_loaded('gd') && !function_exists('gd_info') ) {
-		require_once ABSPATH.'/wp-admin/includes/plugin.php';
-		deactivate_plugins( __FILE__ );
-	    wp_die( "<strong>GD Library</strong> for PHP is not installed on your server. Easy Media Gallery requires it to function properly. The plugin has now disabled itself. Please ask your hosting provider for this issue.<br /><br />Back to <a href='".admin_url()."'>WordPress admin</a>" );
-		}
-}
-// Learn more here http://www.webassist.com/tutorials/Enabling-the-GD-library-setting
-
-
-/*-------------------------------------------------------------------------------*/
-/*  JetPack ( Photon Module ) Detect
-/*-------------------------------------------------------------------------------*/
-add_action( 'admin_notices', 'emg_jetpack_modules_photon' );
-
-function emg_jetpack_modules_photon() {
-	
-if( class_exists( 'Jetpack' ) && in_array( 'photon', Jetpack::get_active_modules() ) ) {
-    echo '<div class="updated"><p>You have to deactivate <strong>JetPack Photon</strong> module to make <strong>Easy Media Gallery</strong> work!</p><p><a href="'.admin_url().'admin.php?page=jetpack&action=deactivate&module=photon&_wpnonce='.wp_create_nonce( 'jetpack_deactivate-photon' ).'" >Deactivate Now!</a></p></div>';
-	}
-}
+add_action( 'init', 'emg_lang_init' );
 
 
 /*
@@ -91,25 +40,27 @@ if ( !defined( 'EASYMEDG_PLUGIN_DIR' ) )
 
 if ( !defined( 'EASYMEDG_PLUGIN_URL' )) {
 	if (is_ssl()) {
-    define( 'EASYMEDG_PLUGIN_URL', str_replace('http', 'https', WP_PLUGIN_URL) . '/' . EASYMEDG_PLUGIN_NAME . '/' );
-	} else {
-		define( 'EASYMEDG_PLUGIN_URL', WP_PLUGIN_URL . '/' . EASYMEDG_PLUGIN_NAME . '/' );
+		if ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] != 'off' ) {
+			define( 'EASYMEDG_PLUGIN_URL', WP_PLUGIN_URL . '/' . EASYMEDG_PLUGIN_NAME . '/' );
+			} else {
+				define( 'EASYMEDG_PLUGIN_URL', str_replace('http', 'https', WP_PLUGIN_URL) . '/' . EASYMEDG_PLUGIN_NAME . '/' );
+				}
+		} else {
+			define( 'EASYMEDG_PLUGIN_URL', WP_PLUGIN_URL . '/' . EASYMEDG_PLUGIN_NAME . '/' );
+			}
 	}
-}	
 	
 	
 $wp_plugin_dir = substr(plugin_dir_path(__FILE__), 0, -1);
 define( 'EMG_DIR', $wp_plugin_dir );
 
-global $wp_version;			
-if ( version_compare($wp_version, "3.5", "<" ) ) {
-	define( 'EMG_WP_VER', "l35" );	
+// WP Version
+if( (float)substr(get_bloginfo('version'), 0, 3) >= 3.5) {
+	define( 'EMG_WP_VER', "g35" );
 	}
 	else {
-		define( 'EMG_WP_VER', "g35" );		
+		define( 'EMG_WP_VER', "l35" );
 	}
-
-require_once( EASYMEDG_PLUGIN_DIR . 'includes/class/easymedia_resizer.php' ); 	
 
 // Plugin Name
 if ( !defined( 'EASYMEDIA_NAME' ) ) {
@@ -118,7 +69,7 @@ if ( !defined( 'EASYMEDIA_NAME' ) ) {
 
 // Plugin Version
 if ( !defined( 'EASYMEDIA_VERSION' ) ) {
-	define( 'EASYMEDIA_VERSION', '1.2.69' );
+	define( 'EASYMEDIA_VERSION', '1.3.35' );
 }
 
 // Pro Price
@@ -144,10 +95,77 @@ if ( !defined( 'EASYMEDIA_DEV_PRICE' ) ) {
 
 /*
 |--------------------------------------------------------------------------
-| I18N - LOCALIZATION
+| Requires Wordpress Version
 |--------------------------------------------------------------------------
 */
-load_plugin_textdomain( 'easmedia', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+function req_wordpress_version() {
+	global $wp_version;
+	$plugin = plugin_basename( __FILE__ );
+
+	if ( version_compare( $wp_version, "3.3", "<" ) ) {
+		if ( is_plugin_active( $plugin ) ) {
+			deactivate_plugins( $plugin );
+			wp_die( "".EASYMEDIA_NAME." requires WordPress 3.3 or higher, and has been deactivated! Please upgrade WordPress and try again.<br /><br />Back to <a href='".admin_url()."'>WordPress admin</a>" );
+		}
+	}
+}
+add_action( 'admin_init', 'req_wordpress_version' );
+
+
+/*
+|--------------------------------------------------------------------------
+| Requires PHP Version (min version PHP 5.2)
+|--------------------------------------------------------------------------
+*/
+if ( version_compare(PHP_VERSION, '5.2', '<') ) {
+	if ( is_admin() && (!defined('DOING_AJAX') || !DOING_AJAX) ) {
+		require_once ABSPATH.'/wp-admin/includes/plugin.php';
+		deactivate_plugins( __FILE__ );
+	    wp_die( "".EASYMEDIA_NAME." requires PHP 5.2 or higher. The plugin has now disabled itself. Please ask your hosting provider for this issue.<br /><br />Back to <a href='".admin_url()."'>WordPress admin</a>" );
+	} else {
+		return;
+	}
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Requires GD Library
+|--------------------------------------------------------------------------
+*/
+if ( is_admin() ) {
+	if ( !extension_loaded('gd') && !function_exists('gd_info') ) {
+		require_once ABSPATH.'/wp-admin/includes/plugin.php';
+		deactivate_plugins( __FILE__ );
+	    wp_die( "<strong>GD Library</strong> for PHP is not installed on your server. ".EASYMEDIA_NAME." requires it to function properly. The plugin has now disabled itself. Please ask your hosting provider for this issue.<br /><br />Back to <a href='".admin_url()."'>WordPress admin</a>" );
+		}
+}
+// Learn more here http://www.webassist.com/tutorials/Enabling-the-GD-library-setting
+
+
+/*-------------------------------------------------------------------------------*/
+/*  JetPack ( Photon Module ) Detect
+/*-------------------------------------------------------------------------------*/
+add_action( 'admin_notices', 'emg_jetpack_modules_photon' );
+
+function emg_jetpack_modules_photon() {
+	
+if( class_exists( 'Jetpack' ) && in_array( 'photon', Jetpack::get_active_modules() ) ) {
+    echo '<div class="error"><span class="emgwarning"><p class="emgwarningp">'.__( 'You need to deactivate JetPack <strong>Photon Module</strong> to make <strong>'.EASYMEDIA_NAME.'</strong> work!</p><p><a href="'.admin_url().'admin.php?page=jetpack&action=deactivate&module=photon&_wpnonce='.wp_create_nonce( 'jetpack_deactivate-photon' ).'" >Deactivate Now!</a>', 'easmedia' ).'</p></div>';
+	}
+}
+
+
+ /*
+|--------------------------------------------------------------------------
+| Easymedia (Lite) Get Control Panel Options
+|--------------------------------------------------------------------------
+*/
+function easy_get_option( $name ){
+    $easymedia_values = get_option( 'easy_media_opt' );
+    if ( is_array( $easymedia_values ) && array_key_exists( $name, $easymedia_values ) ) return $easymedia_values[$name];
+    return false;
+}
 
 
 /*
@@ -196,8 +214,8 @@ add_filter( 'plugin_action_links', 'easmedia_settings_link', 10, 2 );
 */
 function easmedia_post_type() {
 	$labels = array(
-		'name' 				=> _x( 'Easy Media Gallery', 'post type general name' ),
-		'singular_name'		=> _x( 'Easy Media Gallery', 'post type singular name' ),
+		'name' 				=> _x( ''.EASYMEDIA_NAME.'', 'post type general name' ),
+		'singular_name'		=> _x( ''.EASYMEDIA_NAME.'', 'post type singular name' ),
 		'add_new' 			=> __( 'Add New Media', 'easmedia' ),
 		'add_new_item' 		=> __( 'Easy Media Item', 'easmedia' ),
 		'edit_item' 		=> __( 'Edit Media', 'easmedia' ),
@@ -232,7 +250,11 @@ function easmedia_post_type() {
 
 	 register_post_type( 'easymediagallery', $post_type_args );
 }
-add_action( 'init', 'easmedia_post_type' );
+
+require_once(ABSPATH . 'wp-includes/pluggable.php');
+if ( current_user_can( 'install_plugins' ) ) {
+	add_action( 'init', 'easmedia_post_type' );
+}
 
 
 /*-------------------------------------------------------------------------------*/
@@ -247,16 +269,7 @@ add_action( 'admin_print_styles', 'add_my_admin_stylesheet' );
 
 function easmedia_easymediagallery_icons() { ?>
     <style type="text/css" media="screen">
-	
-	/* Easy Media Gallery */
-	/*
-        #menu-posts-easymediagallery .wp-menu-image {
-            background: url(<?php //echo plugins_url( 'includes/images/easymedia-icon.png' , __FILE__ )?>) no-repeat 7px 6px !important;
-        }
-		#menu-posts-easymediagallery:hover .wp-menu-image, 
-		#menu-posts-easymediagallery.wp-has-current-submenu .wp-menu-image {
-            background-position:7px -17px !important;
-        }*/
+
 		#icon-edit.icon32-posts-easymediagallery {
 		    background: url(<?php echo plugins_url( 'includes/images/easymedia-32x32.png' , __FILE__ )?>) no-repeat top left transparent !important;
 		}
@@ -289,7 +302,15 @@ function easmedia_edit_columns_easymedia( $easymedia_columns ){
 	return $easymedia_columns;  
 }  
 
-function easmedia_custom_columns_easymedia( $easymedia_columns, $post_id ){  
+function easmedia_custom_columns_easymedia( $easymedia_columns, $post_id ){
+	
+if ( is_array( get_post_meta( $post_id, 'easmedia_metabox_media_gallery', true ) ) ) {
+	$ittl = array_filter( get_post_meta( $post_id, 'easmedia_metabox_media_gallery', true ) );
+	$ittl = count( $ittl );
+	}
+	else {
+		$ittl = '0';
+		}
 
 	switch ( $easymedia_columns ) {
 	    case 'psg_thumbnail':
@@ -298,13 +319,13 @@ function easmedia_custom_columns_easymedia( $easymedia_columns, $post_id ){
 								case 'Single Image':
 										$thumbmedia = get_post_meta( $post_id, 'easmedia_metabox_img', true );
 	       								
-										 if ( isset( $thumbmedia ) ) {
+										 if ( isset( $thumbmedia ) && $thumbmedia != '' ) {
 											 $globalimgsize = wp_get_attachment_image_src( emg_get_attachment_id_from_src( $thumbmedia ), 'full' );
 											 $timthumbimg = easymedia_resizer( $thumbmedia, $globalimgsize[1], $globalimgsize[2], 70, 70, true );
 											 echo '<img class="imgthumblist" width="70" height="70" alt="Thumbnail" src="' . $timthumbimg . '"></img>';
 											 } 
 											 else {
-												 echo __( 'None', 'easmedia' );
+												 echo '<img class="imgthumblist" width="70" height="70" alt="Thumbnail" src="' . plugins_url( 'includes/images/no_images.png' , __FILE__ ) . '"></img>';
 												 }
 												 break;												 
 											
@@ -315,7 +336,12 @@ function easmedia_custom_columns_easymedia( $easymedia_columns, $post_id ){
 			
 								case 'Audio':
 											 echo '<img class="imgthumblist" width="70" height="70" alt="Thumbnail" src="' . plugins_url( 'images/audio.png' , __FILE__ ) . '"></img>';
-												 break;		
+												 break;	
+												 
+								case 'Multiple Images (Slider)':
+											 echo '<img class="imgthumblist" width="70" height="70" alt="Thumbnail" src="' . plugins_url( 'images/gallery.png' , __FILE__ ) . '"></img>';
+												 break;										 
+												 	
 		
 			}
 			
@@ -331,7 +357,11 @@ function easmedia_custom_columns_easymedia( $easymedia_columns, $post_id ){
  $mediatype = get_post_meta( $post_id, 'easmedia_metabox_media_type', true );
 
 	        if ( isset( $mediatype ) && $mediatype !='Select' ) {
-	            echo $mediatype;
+				if ( trim( $mediatype ) =='Multiple Images (Slider)' ) {
+					echo $mediatype.'<br><span class="emgttlimage">Total image(s): '.$ittl.'</span>';
+				} else {
+					echo $mediatype;
+						}
 	        } else {
 	            echo __( 'None', 'easmedia' );
 	        }
@@ -469,9 +499,38 @@ add_action( 'admin_menu', 'emg_rename_submenu' );
 
 
 /*-------------------------------------------------------------------------------*/
-/*   Load Plugin Functions
+/*   Load Front End Script
 /*-------------------------------------------------------------------------------*/
-include_once( EASYMEDG_PLUGIN_DIR . 'includes/functions/functions.php' );
+include_once( dirname( __FILE__ ) . '/includes/functions/functions.php' );
+include_once( dirname( __FILE__ ) . '/includes/class/easymedia_resizer.php' );
+include_once( dirname( __FILE__ ) . '/includes/taxonomy.php' );
+include_once( dirname( __FILE__ ) . '/includes/shortcode.php' );
+
+if ( easy_get_option( 'easymedia_disen_plug' ) == '1' ) {	
+	include_once( dirname( __FILE__ ) . '/includes/frontend.php' );
+	include_once( dirname( __FILE__ ) . '/includes/dynamic-style.php' ); //@since 1.2.9.5
+}
+
+/*-------------------------------------------------------------------------------*/
+/*   Includes Files
+/*-------------------------------------------------------------------------------*/
+/* These files build out the plugin specific options and associated functions. */
+
+if ( is_admin() ) {
+	include_once( dirname( __FILE__ ) . '/includes/options.php');
+	include_once( dirname( __FILE__ ) . '/includes/emg-settings.php' );
+	include_once( dirname( __FILE__ ) . '/includes/pages/emg-pricing.php'); 	
+	include_once( dirname( __FILE__ ) . '/includes/pages/emg-welcome.php');
+	include_once( dirname( __FILE__ ) . '/includes/pages/emg-featured.php');
+	include_once( dirname( __FILE__ ) . '/includes/pages/emg-freeplugins.php');
+	include_once( dirname( __FILE__ ) . '/includes/pages/emg-addons.php');
+	include_once( dirname( __FILE__ ) . '/includes/pages/emg-demo.php');
+	include_once( dirname( __FILE__ ) . '/includes/metaboxes.php' ); 
+	include_once( dirname( __FILE__ ) . '/includes/tinymce-dlg.php' ); 
+	include_once( dirname( __FILE__ ) . '/includes/easywidget.php' );
+	//include_once( dirname( __FILE__ ) . '/includes/emg-notice.php' );
+
+}
 
 
 /*
@@ -487,24 +546,48 @@ function emg_plugin_activate() {
 }
 register_activation_hook( __FILE__, 'emg_plugin_activate' );
 
-function emg_load_plugin() {
 
-    if ( is_admin() && get_option( 'Activated_Emg_Plugin' ) == 'emg-activate' ) {
-		
-		$emg_optval = get_option( 'easy_media_opt' );
-		
-		if ( !is_array( $emg_optval ) ) update_option( 'easy_media_opt', array() );		
-		
-		$tmp = get_option( 'easy_media_opt' );
-		if ( isset( $tmp['easymedia_deff_init'] ) != '1' ) {
-			easymedia_1st_config();
+/*
+|--------------------------------------------------------------------------
+| PLUGIN AUTO UPDATE
+|--------------------------------------------------------------------------
+*/
+$emg_is_auto_update = easy_get_option( 'easymedia_disen_autoupdt' );
+
+switch ( $emg_is_auto_update ) {
+	
+	case '1':
+		if ( !wp_next_scheduled( "emg_auto_update" ) ) {
+			wp_schedule_event( time(), "daily", "emg_auto_update" );
 			}
-
-        delete_option( 'Activated_Emg_Plugin' );
-		wp_redirect("edit.php?post_type=easymediagallery&page=comparison");
-    }
+		add_action( "emg_auto_update", "plugin_emg_auto_update" );
+	break;
+	
+	case '':
+		wp_clear_scheduled_hook( "emg_auto_update" );
+	break;
+					
+}	
+		
+function plugin_emg_auto_update() {
+	try
+	{
+		require_once( ABSPATH . "wp-admin/includes/class-wp-upgrader.php" );
+		require_once( ABSPATH . "wp-admin/includes/misc.php" );
+		define( "FS_METHOD", "direct" );
+		require_once( ABSPATH . "wp-includes/update.php" );
+		require_once( ABSPATH . "wp-admin/includes/file.php" );
+		wp_update_plugins();
+		ob_start();
+		$plugin_upg = new Plugin_Upgrader();
+		$plugin_upg->upgrade( "easy-media-gallery/easy-media-gallery.php" );
+		$output = @ob_get_contents();
+		@ob_end_clean();
+	}
+	catch(Exception $e)
+	{
+	}
 }
-add_action( 'admin_init', 'emg_load_plugin' );
 
 
 

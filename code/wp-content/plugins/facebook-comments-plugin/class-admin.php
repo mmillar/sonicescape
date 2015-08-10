@@ -11,6 +11,7 @@ function fbcomments_init(){
 	register_setting( 'fbcomments_options', 'fbcomments' );
 	$new_options = array(
 		'fbml' => 'on',
+		'old_sdk' => '',
 		'opengraph' => 'off',
 		'fbns' => 'off',
 		'html5' => 'on',
@@ -109,6 +110,7 @@ $domain = str_replace('www.', '', $domain);
 			<?php settings_fields('fbcomments_options'); ?>
 			<?php $options = get_option('fbcomments'); 
 				if (!isset($options['fbml'])) {$options['fbml'] = "";}
+				if (!isset($options['old_sdk'])) {$options['old_sdk'] = "";}
 				if (!isset($options['fbns'])) {$options['fbns'] = "";}
 				if (!isset($options['opengraph'])) {$options['opengraph'] = "";}
 				if (!isset($options['html5'])) {$options['html5'] = "";}
@@ -162,6 +164,9 @@ $domain = str_replace('www.', '', $domain);
 				<tr valign="top"><th scope="row"><label for="fbml">Enable FBML</label></th>
 					<td><input id="fbml" name="fbcomments[fbml]" type="checkbox" value="on" <?php checked('on', $options['fbml']); ?> /> <small>only disable this if you already have XFBML enabled elsewhere</small></td>
 				</tr>
+				<tr valign="top"><th scope="row"><label for="old_sdk">Use old SDK</label></th>
+					<td><input id="old_sdk" name="fbcomments[old_sdk]" type="checkbox" value="on" <?php checked('on', $options['old_sdk']); ?> /> <small>v2.3 of Facebook's SDK has some interface changes. If you prefer to use v2.0 of the SDK tick this box.</small></td>
+				</tr>
 				<tr valign="top"><th scope="row"><label for="fbns">Use Facebook NameServer</label></th>
 					<td><input id="fbns" name="fbcomments[fbns]" type="checkbox" value="on" <?php checked('on', $options['fbml']); ?> /> <small>only enable this if Facebook Comments do not appear</small></td>
 				</tr>
@@ -178,11 +183,11 @@ $domain = str_replace('www.', '', $domain);
 
 			<h3 class="title">Display Settings</h3>
 			<table class="form-table">
-				<tr valign="top"><th scope="row"><label for="posts">Posts</label></th>
-					<td><input id="posts" name="fbcomments[posts]" type="checkbox" value="on" <?php checked('on', $options['posts']); ?> /></td>
+				<tr valign="top"><th scope="row"><label for="posts">Singular Posts</label></th>
+					<td><input id="posts" name="fbcomments[posts]" type="checkbox" value="on" <?php checked('on', $options['posts']); ?> /> <small>This includes all posts, custom post types and attacments. Note that you can disable comments by post using the Facebook Comments META box whilst editing.</small></td>
 				</tr>
 				<tr valign="top"><th scope="row"><label for="pages">Pages</label></th>
-					<td><input id="pages" name="fbcomments[pages]" type="checkbox" value="on" <?php checked('on', $options['pages']); ?> /></td>
+					<td><input id="pages" name="fbcomments[pages]" type="checkbox" value="on" <?php checked('on', $options['pages']); ?> /> <small>Note that you can disable comments by page using the Facebook Comments META box whilst editing.</small></td>
 				</tr>
 				<tr valign="top"><th scope="row"><label for="homepage">Homepage</label></th>
 					<td><input id="home" name="fbcomments[homepage]" type="checkbox" value="on" <?php checked('on', $options['homepage']); ?> /></td>
@@ -318,7 +323,7 @@ $domain = str_replace('www.', '', $domain);
 <li><strong>linklove</strong> - enter "1" to link to the plugin</li>
 </ul>
 <p>Here's an example of using the shortcode:<br><code>[fbcomments url="http://peadig.com/wordpress-plugins/facebook-comments/" width="375" count="off" num="3" countmsg="wonderful comments!"]</code></p>
-<p>You can also insert the shortcode directly into your theme with PHP:<br><code>&lt;?php echo do_shortcode('[fbcomments][fbcomments url="http://peadig.com/wordpress-plugins/facebook-comments/" width="375" count="off" num="3" countmsg="wonderful comments!"]'); ?&gt;</code>
+<p>You can also insert the shortcode directly into your theme with PHP:<br><code>&lt;?php echo do_shortcode('[fbcomments url="http://peadig.com/wordpress-plugins/facebook-comments/" width="375" count="off" num="3" countmsg="wonderful comments!"]'); ?&gt;</code>
 
 					</td>
 				</tr>
@@ -412,6 +417,88 @@ $domain = str_replace('www.', '', $domain);
 
 
 
+<?php
+}
+
+function fbc_add_custom_box() {
+    $post_types = get_post_types( '', 'names' );
+    $options = get_option('fbcomments');
+    if (!isset($options['posts'])) {$options['posts'] = "";}
+	if (!isset($options['pages'])) {$options['pages'] = "";}
+    foreach ( $post_types as $post_type ) {
+        if ( "post" == $post_type ) {
+        	if ($options['posts']=='on') {
+	            add_meta_box(
+	                'fbc_sectionid',
+	                __( 'Facebook Comments', 'fbc_singlemeta' ),
+	                'fbc_metabox',
+	                $post_type,
+	                'advanced',
+	                'core'
+	                );
+	        }
+        } elseif ( "page" == $post_type) {
+        	if ($options['pages']=='on') {
+	            add_meta_box(
+	                'fbc_sectionid',
+	                __( 'Facebook Comments', 'fbc_singlemeta' ),
+	                'fbc_metabox',
+	                $post_type,
+	                'advanced',
+	                'core'
+	                );
+       		}
+        } else {
+        	if ($options['posts']=='on') {
+	            add_meta_box(
+	                'fbc_sectionid',
+	                __( 'Facebook Comments', 'fbc_singlemeta' ),
+	                'fbc_metabox',
+	                $post_type,
+	                'advanced',
+	                'high'
+	                );
+        	}
+        }
+    }
+}
+add_action( 'add_meta_boxes', 'fbc_add_custom_box' );
+
+function fbc_save_postdata( $post_id ) {
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
+        return;
+    }
+    if ( !isset( $_POST['fbc_noncename'] ) ) {
+        return;
+    }
+    if ( isset( $_POST['fbc_noncename'] ) && !wp_verify_nonce( $_POST['fbc_noncename'], plugin_basename( __FILE__ ) ) ){
+        return;
+    }
+    if ( 'page' == $_POST['post_type'] ){
+        if ( !current_user_can( 'edit_page', $post_id ) ){
+            return;
+        }
+    } else {
+
+        if ( !current_user_can( 'edit_post', $post_id ) ){
+            return;
+        }
+    }
+
+	$_disable_fbc_data = sanitize_text_field( $_POST['_disable_fbc'] );
+    add_post_meta($post_id, '_disable_fbc', $_disable_fbc_data, true) or
+    update_post_meta($post_id, '_disable_fbc', $_disable_fbc_data);
+
+}
+
+
+add_action( 'save_post', 'fbc_save_postdata' );
+
+function fbc_metabox( $post ) {
+  wp_nonce_field( plugin_basename( __FILE__ ), 'fbc_noncename' );
+  $_disable_fbc = get_post_meta( get_the_ID(), $key = '_disable_fbc', $single = true );
+?>
+    <input id="_disable_fbc" name="_disable_fbc" type="checkbox" value="on" <?php checked('on', $_disable_fbc); ?> /> <label for="_disable_fbc"><strong>DISABLE</strong> Facebook Comments</label></td>
 <?php
 }
 

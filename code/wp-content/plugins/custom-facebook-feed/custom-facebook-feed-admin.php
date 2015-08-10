@@ -56,19 +56,29 @@ function cff_settings_page() {
     $cff_cache_time_val = get_option( $cff_cache_time, '1' );
     $cff_cache_time_unit_val = get_option( $cff_cache_time_unit, 'hours' );
     $cff_locale_val = get_option( $cff_locale, 'en_US' );
+
+    //Timezone
+    $defaults = array(
+        'cff_timezone' => 'America/Chicago'
+    );
+    $options = wp_parse_args(get_option('cff_style_settings'), $defaults);
+    $cff_timezone = $options[ 'cff_timezone' ];
+
     // See if the user has posted us some information. If they did, this hidden field will be set to 'Y'.
     if( isset($_POST[ $hidden_field_name ]) && $_POST[ $hidden_field_name ] == 'Y' ) {
         // Read their posted value
-        $show_access_token_val = $_POST[ $show_access_token ];
-        $access_token_val = $_POST[ $access_token ];
-        $page_id_val = $_POST[ $page_id ];
-        $cff_page_type_val = $_POST[ $cff_page_type ];
-        $num_show_val = $_POST[ $num_show ];
-        $cff_post_limit_val = $_POST[ $cff_post_limit ];
-        $cff_show_others_val = $_POST[ $cff_show_others ];
-        $cff_cache_time_val = $_POST[ $cff_cache_time ];
-        $cff_cache_time_unit_val = $_POST[ $cff_cache_time_unit ];
-        $cff_locale_val = $_POST[ $cff_locale ];
+        isset( $_POST[ $show_access_token ] ) ? $show_access_token_val = $_POST[ $show_access_token ] : $show_access_token_val = '';
+        isset( $_POST[ $access_token ] ) ? $access_token_val = $_POST[ $access_token ] : $access_token_val = '';
+        isset( $_POST[ $page_id ] ) ? $page_id_val = $_POST[ $page_id ] : $page_id_val = '';
+        isset( $_POST[ $cff_page_type ] ) ? $cff_page_type_val = $_POST[ $cff_page_type ] : $cff_page_type_val = '';
+        isset( $_POST[ $num_show ] ) ? $num_show_val = $_POST[ $num_show ] : $num_show_val = '';
+        isset( $_POST[ $cff_post_limit ] ) ? $cff_post_limit_val = $_POST[ $cff_post_limit ] : $cff_post_limit_val = '';
+        isset( $_POST[ $cff_show_others ] ) ? $cff_show_others_val = $_POST[ $cff_show_others ] : $cff_show_others_val = '';
+        isset( $_POST[ $cff_cache_time ] ) ? $cff_cache_time_val = $_POST[ $cff_cache_time ] : $cff_cache_time_val = '';
+        isset( $_POST[ $cff_cache_time_unit ] ) ? $cff_cache_time_unit_val = $_POST[ $cff_cache_time_unit ] : $cff_cache_time_unit_val = '';
+        isset( $_POST[ $cff_locale ] ) ? $cff_locale_val = $_POST[ $cff_locale ] : $cff_locale_val = '';
+        if (isset($_POST[ 'cff_timezone' ]) ) $cff_timezone = $_POST[ 'cff_timezone' ];
+
         // Save the posted value in the database
         update_option( $show_access_token, $show_access_token_val );
         update_option( $access_token, $access_token_val );
@@ -80,6 +90,9 @@ function cff_settings_page() {
         update_option( $cff_cache_time, $cff_cache_time_val );
         update_option( $cff_cache_time_unit, $cff_cache_time_unit_val );
         update_option( $cff_locale, $cff_locale_val );
+
+        $options[ 'cff_timezone' ] = $cff_timezone;
+        update_option( 'cff_style_settings', $options );
         
         //Delete the transient for the main page ID
         delete_transient( 'cff_posts_json_' .$page_id_val );
@@ -147,10 +160,10 @@ function cff_settings_page() {
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row" style="padding-bottom: 10px;"><?php _e('Enter my own Access Token <i style="font-weight: normal; font-size: 12px;">This is Optional</i>'); ?></th>
+                        <th scope="row" style="padding-bottom: 10px;"><?php _e('Enter my own Access Token <i style="font-weight: normal; font-size: 12px;">This is Recommended</i>'); ?></th>
                         <td>
                             <input name="cff_show_access_token" type="checkbox" id="cff_show_access_token" <?php if($show_access_token_val == true) echo "checked"; ?> />&nbsp;<a class="cff-tooltip-link" href="JavaScript:void(0);"><?php _e("What is this?"); ?></a>
-                            <p class="cff-tooltip cff-more-info"><?php _e("A Facebook Access Token is not required to use this plugin, but if you have your own that you'd like to use then you can check this box and enter it here. To get your own Access Token you can follow these <a href='https://smashballoon.com/custom-facebook-feed/access-token/' target='_blank'>step-by-step instructions</a>"); ?>.</p>
+                            <p class="cff-tooltip cff-more-info"><?php _e("A Facebook Access Token is not required to use this plugin, but we recommend it so that you're not reliant on the token built into the plugin. If you have your own token then you can check this box and enter it here. To get your own Access Token you can follow these <a href='https://smashballoon.com/custom-facebook-feed/access-token/' target='_blank'>step-by-step instructions</a>"); ?>.</p>
                         </td>
                     </tr>
 
@@ -312,6 +325,104 @@ function cff_settings_page() {
                             <i style="color: #666; font-size: 11px;"><?php _e('Select a language'); ?></i>
                         </td>
                     </tr>
+
+                    <tr>
+                        <th><label for="cff_timezone" class="bump-left"><?php _e('Timezone'); ?></label></th>
+                            <td>
+                                <select name="cff_timezone" style="width: 300px;">
+                                    <option value="Pacific/Midway" <?php if($cff_timezone == "Pacific/Midway") echo 'selected="selected"' ?> ><?php _e('(GMT-11:00) Midway Island, Samoa'); ?></option>
+                                    <option value="America/Adak" <?php if($cff_timezone == "America/Adak") echo 'selected="selected"' ?> ><?php _e('(GMT-10:00) Hawaii-Aleutian'); ?></option>
+                                    <option value="Etc/GMT+10" <?php if($cff_timezone == "Etc/GMT+10") echo 'selected="selected"' ?> ><?php _e('(GMT-10:00) Hawaii'); ?></option>
+                                    <option value="Pacific/Marquesas" <?php if($cff_timezone == "Pacific/Marquesas") echo 'selected="selected"' ?> ><?php _e('(GMT-09:30) Marquesas Islands'); ?></option>
+                                    <option value="Pacific/Gambier" <?php if($cff_timezone == "Pacific/Gambier") echo 'selected="selected"' ?> ><?php _e('(GMT-09:00) Gambier Islands'); ?></option>
+                                    <option value="America/Anchorage" <?php if($cff_timezone == "America/Anchorage") echo 'selected="selected"' ?> ><?php _e('(GMT-09:00) Alaska'); ?></option>
+                                    <option value="America/Ensenada" <?php if($cff_timezone == "America/Ensenada") echo 'selected="selected"' ?> ><?php _e('(GMT-08:00) Tijuana, Baja California'); ?></option>
+                                    <option value="Etc/GMT+8" <?php if($cff_timezone == "Etc/GMT+8") echo 'selected="selected"' ?> ><?php _e('(GMT-08:00) Pitcairn Islands'); ?></option>
+                                    <option value="America/Los_Angeles" <?php if($cff_timezone == "America/Los_Angeles") echo 'selected="selected"' ?> ><?php _e('(GMT-08:00) Pacific Time (US & Canada)'); ?></option>
+                                    <option value="America/Denver" <?php if($cff_timezone == "America/Denver") echo 'selected="selected"' ?> ><?php _e('(GMT-07:00) Mountain Time (US & Canada)'); ?></option>
+                                    <option value="America/Chihuahua" <?php if($cff_timezone == "America/Chihuahua") echo 'selected="selected"' ?> ><?php _e('(GMT-07:00) Chihuahua, La Paz, Mazatlan'); ?></option>
+                                    <option value="America/Dawson_Creek" <?php if($cff_timezone == "America/Dawson_Creek") echo 'selected="selected"' ?> ><?php _e('(GMT-07:00) Arizona'); ?></option>
+                                    <option value="America/Belize" <?php if($cff_timezone == "America/Belize") echo 'selected="selected"' ?> ><?php _e('(GMT-06:00) Saskatchewan, Central America'); ?></option>
+                                    <option value="America/Cancun" <?php if($cff_timezone == "America/Cancun") echo 'selected="selected"' ?> ><?php _e('(GMT-06:00) Guadalajara, Mexico City, Monterrey'); ?></option>
+                                    <option value="Chile/EasterIsland" <?php if($cff_timezone == "Chile/EasterIsland") echo 'selected="selected"' ?> ><?php _e('(GMT-06:00) Easter Island'); ?></option>
+                                    <option value="America/Chicago" <?php if($cff_timezone == "America/Chicago") echo 'selected="selected"' ?> ><?php _e('(GMT-06:00) Central Time (US & Canada)'); ?></option>
+                                    <option value="America/New_York" <?php if($cff_timezone == "America/New_York") echo 'selected="selected"' ?> ><?php _e('(GMT-05:00) Eastern Time (US & Canada)'); ?></option>
+                                    <option value="America/Havana" <?php if($cff_timezone == "America/Havana") echo 'selected="selected"' ?> ><?php _e('(GMT-05:00) Cuba'); ?></option>
+                                    <option value="America/Bogota" <?php if($cff_timezone == "America/Bogota") echo 'selected="selected"' ?> ><?php _e('(GMT-05:00) Bogota, Lima, Quito, Rio Branco'); ?></option>
+                                    <option value="America/Caracas" <?php if($cff_timezone == "America/Caracas") echo 'selected="selected"' ?> ><?php _e('(GMT-04:30) Caracas'); ?></option>
+                                    <option value="America/Santiago" <?php if($cff_timezone == "America/Santiago") echo 'selected="selected"' ?> ><?php _e('(GMT-04:00) Santiago'); ?></option>
+                                    <option value="America/La_Paz" <?php if($cff_timezone == "America/La_Paz") echo 'selected="selected"' ?> ><?php _e('(GMT-04:00) La Paz'); ?></option>
+                                    <option value="Atlantic/Stanley" <?php if($cff_timezone == "Atlantic/Stanley") echo 'selected="selected"' ?> ><?php _e('(GMT-04:00) Faukland Islands'); ?></option>
+                                    <option value="America/Campo_Grande" <?php if($cff_timezone == "America/Campo_Grande") echo 'selected="selected"' ?> ><?php _e('(GMT-04:00) Brazil'); ?></option>
+                                    <option value="America/Goose_Bay" <?php if($cff_timezone == "America/Goose_Bay") echo 'selected="selected"' ?> ><?php _e('(GMT-04:00) Atlantic Time (Goose Bay)'); ?></option>
+                                    <option value="America/Glace_Bay" <?php if($cff_timezone == "America/Glace_Bay") echo 'selected="selected"' ?> ><?php _e('(GMT-04:00) Atlantic Time (Canada)'); ?></option>
+                                    <option value="America/St_Johns" <?php if($cff_timezone == "America/St_Johns") echo 'selected="selected"' ?> ><?php _e('(GMT-03:30) Newfoundland'); ?></option>
+                                    <option value="America/Araguaina" <?php if($cff_timezone == "America/Araguaina") echo 'selected="selected"' ?> ><?php _e('(GMT-03:00) UTC-3'); ?></option>
+                                    <option value="America/Montevideo" <?php if($cff_timezone == "America/Montevideo") echo 'selected="selected"' ?> ><?php _e('(GMT-03:00) Montevideo'); ?></option>
+                                    <option value="America/Miquelon" <?php if($cff_timezone == "America/Miquelon") echo 'selected="selected"' ?> ><?php _e('(GMT-03:00) Miquelon, St. Pierre'); ?></option>
+                                    <option value="America/Godthab" <?php if($cff_timezone == "America/Godthab") echo 'selected="selected"' ?> ><?php _e('(GMT-03:00) Greenland'); ?></option>
+                                    <option value="America/Argentina/Buenos_Aires" <?php if($cff_timezone == "America/Argentina/Buenos_Aires") echo 'selected="selected"' ?> ><?php _e('(GMT-03:00) Buenos Aires'); ?></option>
+                                    <option value="America/Sao_Paulo" <?php if($cff_timezone == "America/Sao_Paulo") echo 'selected="selected"' ?> ><?php _e('(GMT-03:00) Brasilia'); ?></option>
+                                    <option value="America/Noronha" <?php if($cff_timezone == "America/Noronha") echo 'selected="selected"' ?> ><?php _e('(GMT-02:00) Mid-Atlantic'); ?></option>
+                                    <option value="Atlantic/Cape_Verde" <?php if($cff_timezone == "Atlantic/Cape_Verde") echo 'selected="selected"' ?> ><?php _e('(GMT-01:00) Cape Verde Is.'); ?></option>
+                                    <option value="Atlantic/Azores" <?php if($cff_timezone == "Atlantic/Azores") echo 'selected="selected"' ?> ><?php _e('(GMT-01:00) Azores'); ?></option>
+                                    <option value="Europe/Belfast" <?php if($cff_timezone == "Europe/Belfast") echo 'selected="selected"' ?> ><?php _e('(GMT) Greenwich Mean Time : Belfast'); ?></option>
+                                    <option value="Europe/Dublin" <?php if($cff_timezone == "Europe/Dublin") echo 'selected="selected"' ?> ><?php _e('(GMT) Greenwich Mean Time : Dublin'); ?></option>
+                                    <option value="Europe/Lisbon" <?php if($cff_timezone == "Europe/Lisbon") echo 'selected="selected"' ?> ><?php _e('(GMT) Greenwich Mean Time : Lisbon'); ?></option>
+                                    <option value="Europe/London" <?php if($cff_timezone == "Europe/London") echo 'selected="selected"' ?> ><?php _e('(GMT) Greenwich Mean Time : London'); ?></option>
+                                    <option value="Africa/Abidjan" <?php if($cff_timezone == "Africa/Abidjan") echo 'selected="selected"' ?> ><?php _e('(GMT) Monrovia, Reykjavik'); ?></option>
+                                    <option value="Europe/Amsterdam" <?php if($cff_timezone == "Europe/Amsterdam") echo 'selected="selected"' ?> ><?php _e('(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna'); ?></option>
+                                    <option value="Europe/Belgrade" <?php if($cff_timezone == "Europe/Belgrade") echo 'selected="selected"' ?> ><?php _e('(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague'); ?></option>
+                                    <option value="Europe/Brussels" <?php if($cff_timezone == "Europe/Brussels") echo 'selected="selected"' ?> ><?php _e('(GMT+01:00) Brussels, Copenhagen, Madrid, Paris'); ?></option>
+                                    <option value="Africa/Algiers" <?php if($cff_timezone == "Africa/Algiers") echo 'selected="selected"' ?> ><?php _e('(GMT+01:00) West Central Africa'); ?></option>
+                                    <option value="Africa/Windhoek" <?php if($cff_timezone == "Africa/Windhoek") echo 'selected="selected"' ?> ><?php _e('(GMT+01:00) Windhoek'); ?></option>
+                                    <option value="Asia/Beirut" <?php if($cff_timezone == "Asia/Beirut") echo 'selected="selected"' ?> ><?php _e('(GMT+02:00) Beirut'); ?></option>
+                                    <option value="Africa/Cairo" <?php if($cff_timezone == "Africa/Cairo") echo 'selected="selected"' ?> ><?php _e('(GMT+02:00) Cairo'); ?></option>
+                                    <option value="Asia/Gaza" <?php if($cff_timezone == "Asia/Gaza") echo 'selected="selected"' ?> ><?php _e('(GMT+02:00) Gaza'); ?></option>
+                                    <option value="Africa/Blantyre" <?php if($cff_timezone == "Africa/Blantyre") echo 'selected="selected"' ?> ><?php _e('(GMT+02:00) Harare, Pretoria'); ?></option>
+                                    <option value="Asia/Jerusalem" <?php if($cff_timezone == "Asia/Jerusalem") echo 'selected="selected"' ?> ><?php _e('(GMT+02:00) Jerusalem'); ?></option>
+                                    <option value="Europe/Minsk" <?php if($cff_timezone == "Europe/Minsk") echo 'selected="selected"' ?> ><?php _e('(GMT+02:00) Minsk'); ?></option>
+                                    <option value="Asia/Damascus" <?php if($cff_timezone == "Asia/Damascus") echo 'selected="selected"' ?> ><?php _e('(GMT+02:00) Syria'); ?></option>
+                                    <option value="Europe/Moscow" <?php if($cff_timezone == "Europe/Moscow") echo 'selected="selected"' ?> ><?php _e('(GMT+03:00) Moscow, St. Petersburg, Volgograd'); ?></option>
+                                    <option value="Africa/Addis_Ababa" <?php if($cff_timezone == "Africa/Addis_Ababa") echo 'selected="selected"' ?> ><?php _e('(GMT+03:00) Nairobi'); ?></option>
+                                    <option value="Asia/Tehran" <?php if($cff_timezone == "Asia/Tehran") echo 'selected="selected"' ?> ><?php _e('(GMT+03:30) Tehran'); ?></option>
+                                    <option value="Asia/Dubai" <?php if($cff_timezone == "Asia/Dubai") echo 'selected="selected"' ?> ><?php _e('(GMT+04:00) Abu Dhabi, Muscat'); ?></option>
+                                    <option value="Asia/Yerevan" <?php if($cff_timezone == "Asia/Yerevan") echo 'selected="selected"' ?> ><?php _e('(GMT+04:00) Yerevan'); ?></option>
+                                    <option value="Asia/Kabul" <?php if($cff_timezone == "Asia/Kabul") echo 'selected="selected"' ?> ><?php _e('(GMT+04:30) Kabul'); ?></option>
+                                    <option value="Asia/Yekaterinburg" <?php if($cff_timezone == "Asia/Yekaterinburg") echo 'selected="selected"' ?> ><?php _e('(GMT+05:00) Ekaterinburg'); ?></option>
+                                    <option value="Asia/Tashkent" <?php if($cff_timezone == "Asia/Tashkent") echo 'selected="selected"' ?> ><?php _e('(GMT+05:00) Tashkent'); ?></option>
+                                    <option value="Asia/Kolkata" <?php if($cff_timezone == "Asia/Kolkata") echo 'selected="selected"' ?> ><?php _e('(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi'); ?></option>
+                                    <option value="Asia/Katmandu" <?php if($cff_timezone == "Asia/Katmandu") echo 'selected="selected"' ?> ><?php _e('(GMT+05:45) Kathmandu'); ?></option>
+                                    <option value="Asia/Dhaka" <?php if($cff_timezone == "Asia/Dhaka") echo 'selected="selected"' ?> ><?php _e('(GMT+06:00) Astana, Dhaka'); ?></option>
+                                    <option value="Asia/Novosibirsk" <?php if($cff_timezone == "Asia/Novosibirsk") echo 'selected="selected"' ?> ><?php _e('(GMT+06:00) Novosibirsk'); ?></option>
+                                    <option value="Asia/Rangoon" <?php if($cff_timezone == "Asia/Rangoon") echo 'selected="selected"' ?> ><?php _e('(GMT+06:30) Yangon (Rangoon)'); ?></option>
+                                    <option value="Asia/Bangkok" <?php if($cff_timezone == "Asia/Bangkok") echo 'selected="selected"' ?> ><?php _e('(GMT+07:00) Bangkok, Hanoi, Jakarta'); ?></option>
+                                    <option value="Asia/Krasnoyarsk" <?php if($cff_timezone == "Asia/Krasnoyarsk") echo 'selected="selected"' ?> ><?php _e('(GMT+07:00) Krasnoyarsk'); ?></option>
+                                    <option value="Asia/Hong_Kong" <?php if($cff_timezone == "Asia/Hong_Kong") echo 'selected="selected"' ?> ><?php _e('(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi'); ?></option>
+                                    <option value="Asia/Irkutsk" <?php if($cff_timezone == "Asia/Irkutsk") echo 'selected="selected"' ?> ><?php _e('(GMT+08:00) Irkutsk, Ulaan Bataar'); ?></option>
+                                    <option value="Australia/Perth" <?php if($cff_timezone == "Australia/Perth") echo 'selected="selected"' ?> ><?php _e('(GMT+08:00) Perth'); ?></option>
+                                    <option value="Australia/Eucla" <?php if($cff_timezone == "Australia/Eucla") echo 'selected="selected"' ?> ><?php _e('(GMT+08:45) Eucla'); ?></option>
+                                    <option value="Asia/Tokyo" <?php if($cff_timezone == "Asia/Tokyo") echo 'selected="selected"' ?> ><?php _e('(GMT+09:00) Osaka, Sapporo, Tokyo'); ?></option>
+                                    <option value="Asia/Seoul" <?php if($cff_timezone == "Asia/Seoul") echo 'selected="selected"' ?> ><?php _e('(GMT+09:00) Seoul'); ?></option>
+                                    <option value="Asia/Yakutsk" <?php if($cff_timezone == "Asia/Yakutsk") echo 'selected="selected"' ?> ><?php _e('(GMT+09:00) Yakutsk'); ?></option>
+                                    <option value="Australia/Adelaide" <?php if($cff_timezone == "Australia/Adelaide") echo 'selected="selected"' ?> ><?php _e('(GMT+09:30) Adelaide'); ?></option>
+                                    <option value="Australia/Darwin" <?php if($cff_timezone == "Australia/Darwin") echo 'selected="selected"' ?> ><?php _e('(GMT+09:30) Darwin'); ?></option>
+                                    <option value="Australia/Brisbane" <?php if($cff_timezone == "Australia/Brisbane") echo 'selected="selected"' ?> ><?php _e('(GMT+10:00) Brisbane'); ?></option>
+                                    <option value="Australia/Hobart" <?php if($cff_timezone == "Australia/Hobart") echo 'selected="selected"' ?> ><?php _e('(GMT+10:00) Hobart'); ?></option>
+                                    <option value="Asia/Vladivostok" <?php if($cff_timezone == "Asia/Vladivostok") echo 'selected="selected"' ?> ><?php _e('(GMT+10:00) Vladivostok'); ?></option>
+                                    <option value="Australia/Lord_Howe" <?php if($cff_timezone == "Australia/Lord_Howe") echo 'selected="selected"' ?> ><?php _e('(GMT+10:30) Lord Howe Island'); ?></option>
+                                    <option value="Etc/GMT-11" <?php if($cff_timezone == "Etc/GMT-11") echo 'selected="selected"' ?> ><?php _e('(GMT+11:00) Solomon Is., New Caledonia'); ?></option>
+                                    <option value="Asia/Magadan" <?php if($cff_timezone == "Asia/Magadan") echo 'selected="selected"' ?> ><?php _e('(GMT+11:00) Magadan'); ?></option>
+                                    <option value="Pacific/Norfolk" <?php if($cff_timezone == "Pacific/Norfolk") echo 'selected="selected"' ?> ><?php _e('(GMT+11:30) Norfolk Island'); ?></option>
+                                    <option value="Asia/Anadyr" <?php if($cff_timezone == "Asia/Anadyr") echo 'selected="selected"' ?> ><?php _e('(GMT+12:00) Anadyr, Kamchatka'); ?></option>
+                                    <option value="Pacific/Auckland" <?php if($cff_timezone == "Pacific/Auckland") echo 'selected="selected"' ?> ><?php _e('(GMT+12:00) Auckland, Wellington'); ?></option>
+                                    <option value="Etc/GMT-12" <?php if($cff_timezone == "Etc/GMT-12") echo 'selected="selected"' ?> ><?php _e('(GMT+12:00) Fiji, Kamchatka, Marshall Is.'); ?></option>
+                                    <option value="Pacific/Chatham" <?php if($cff_timezone == "Pacific/Chatham") echo 'selected="selected"' ?> ><?php _e('(GMT+12:45) Chatham Islands'); ?></option>
+                                    <option value="Pacific/Tongatapu" <?php if($cff_timezone == "Pacific/Tongatapu") echo 'selected="selected"' ?> ><?php _e('(GMT+13:00) Nuku\'alofa'); ?></option>
+                                    <option value="Pacific/Kiritimati" <?php if($cff_timezone == "Pacific/Kiritimati") echo 'selected="selected"' ?> ><?php _e('(GMT+14:00) Kiritimati'); ?></option>
+                                </select>
+                            </td>
+                        </tr>
                     
                 </tbody>
             </table>
@@ -330,6 +441,38 @@ function cff_settings_page() {
 
         <br />
         <a href="https://smashballoon.com/custom-facebook-feed/demo" target="_blank"><img src="<?php echo plugins_url( 'img/pro.png' , __FILE__ ) ?>" /></a>
+
+        <hr />
+        <h3><?php _e('Like the plugin? Help spread the word!'); ?></h3>
+
+        <!-- TWITTER -->
+        <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://wordpress.org/plugins/custom-facebook-feed/" data-text="Display your Facebook posts on your site your way using the Custom Facebook Feed WordPress plugin!" data-via="smashballoon" data-dnt="true">Tweet</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <style type="text/css">
+        #twitter-widget-0{ float: left; width: 100px !important; }
+        .IN-widget{ margin-right: 20px; }
+        </style>
+
+        <!-- FACEBOOK -->
+        <div id="fb-root" style="display: none;"></div>
+        <script>(function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&appId=640861236031365&version=v2.0";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+        <div class="fb-like" data-href="https://wordpress.org/plugins/custom-facebook-feed/" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true" style="display: block; float: left; margin-right: 20px;"></div>
+
+        <!-- LINKEDIN -->
+        <script src="//platform.linkedin.com/in.js" type="text/javascript">
+          lang: en_US
+        </script>
+        <script type="IN/Share" data-url="https://wordpress.org/plugins/custom-facebook-feed/"></script>
+
+        <!-- GOOGLE + -->
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <div class="g-plusone" data-size="medium" data-href="https://wordpress.org/plugins/custom-facebook-feed/"></div>
 
     <?php } //End config tab ?>
 
@@ -354,26 +497,73 @@ function cff_settings_page() {
         </ul>
 
         <br />
-        <p><?php _e('Still need help? <a href="https://smashballoon.com/custom-facebook-feed/support/" target="_blank">Request support</a>.'); ?></p>
+        <p><?php _e('Still need help? <a href="http://smashballoon.com/custom-facebook-feed/support/" target="_blank">Request support</a>. Please include your <b>System Info</b> below with all support requests.'); ?></p>
 
         <br />
-        <h3><?php _e('System Info'); ?></h3>
-        <p>PHP Version:          <b><?php echo PHP_VERSION . "\n"; ?></b></p>
-        <p>Web Server Info:      <b><?php echo $_SERVER['SERVER_SOFTWARE'] . "\n"; ?></b></p>
-        <p>PHP allow_url_fopen:  <b><?php echo ini_get( 'allow_url_fopen' ) ? "<span style='color: green;'>Yes</span>" : "<span style='color: red;'>No</span>"; ?></b></p>
-        <p>PHP cURL:             <b><?php echo is_callable('curl_init') ? "<span style='color: green;'>Yes</span>" : "<span style='color: red;'>No</span>" ?></b></p>
-        <p>JSON:                 <b><?php echo function_exists("json_decode") ? "<span style='color: green;'>Yes</span>" : "<span style='color: red;'>No</span>" ?></b></p>
+        <h3><?php _e('System Info &nbsp; <i style="color: #666; font-size: 11px; font-weight: normal;">Click the text below to select all</i>'); ?></h3>
 
-        <button class="button secondary-button" id="cff-api-test">Test connection to Facebook API</button>
-        
-        <div id="cff-api-test-result">
-            <?php
-            $access_token = get_option( $access_token );
-            if ( $access_token == '' || empty($access_token) ) $access_token = '1436737606570258|MGh1BX4_b_D9HzJtKe702cwMRPI';
-            ?>
-            <?php $posts_json = cff_fetchUrl("https://graph.facebook.com/".get_option( trim($page_id) )."/feed?access_token=". trim($access_token) ."&limit=1"); ?>
-            <textarea readonly="readonly" onclick="this.focus();this.select()" title="To copy, click the field then press Ctrl + C (PC) or Cmd + C (Mac)."><?php echo $posts_json; ?></textarea>
-        </div>
+        <?php
+        $access_token = get_option( $access_token );
+        if ( $access_token == '' || empty($access_token) ) $access_token = '611606915581035|RdRHbHtrHseQw4C7SDUBFWIrJLA';
+        ?>
+        <?php $posts_json = cff_fetchUrl("https://graph.facebook.com/".get_option( trim($page_id) )."/feed?access_token=". trim($access_token) ."&limit=1"); ?>
+
+
+        <textarea readonly="readonly" onclick="this.focus();this.select()" title="To copy, click the field then press Ctrl + C (PC) or Cmd + C (Mac)." style="width: 70%; height: 500px; white-space: pre; font-family: Menlo,Monaco,monospace;">
+## SITE/SERVER INFO: ##
+Site URL:                 <?php echo site_url() . "\n"; ?>
+Home URL:                 <?php echo home_url() . "\n"; ?>
+WordPress Version:        <?php echo get_bloginfo( 'version' ) . "\n"; ?>
+PHP Version:              <?php echo PHP_VERSION . "\n"; ?>
+Web Server Info:          <?php echo $_SERVER['SERVER_SOFTWARE'] . "\n"; ?>
+PHP allow_url_fopen:      <?php echo ini_get( 'allow_url_fopen' ) ? "Yes" . "\n" : "No" . "\n"; ?>
+PHP cURL:                 <?php echo is_callable('curl_init') ? "Yes" . "\n" : "No" . "\n"; ?>
+JSON:                     <?php echo function_exists("json_decode") ? "Yes" . "\n" : "No" . "\n" ?>
+SSL Stream:               <?php echo in_array('https', stream_get_wrappers()) ? "Yes" . "\n" : "No" . "\n" ?>
+
+## ACTIVE PLUGINS: ##
+<?php
+$plugins = get_plugins();
+$active_plugins = get_option( 'active_plugins', array() );
+
+foreach ( $plugins as $plugin_path => $plugin ) {
+    // If the plugin isn't active, don't show it.
+    if ( ! in_array( $plugin_path, $active_plugins ) )
+        continue;
+
+    echo $plugin['Name'] . ': ' . $plugin['Version'] ."\n";
+}
+?>
+
+## PLUGIN SETTINGS: ##
+Use own Access Token:   <?php echo get_option( 'cff_show_access_token' ) ."\n"; ?>
+Access Token:           <?php echo get_option( 'cff_access_token' ) ."\n"; ?>
+Page ID:                <?php echo get_option( 'cff_page_id' ) ."\n"; ?>
+Page Type:              <?php echo get_option( 'cff_page_type' ) ."\n"; ?>
+Number of Posts:        <?php echo get_option( 'cff_num_show' ) ."\n"; ?>
+Post Limit:             <?php echo get_option( 'cff_post_limit' ) ."\n"; ?>
+Show Posts by:          <?php echo get_option( 'cff_show_others' ) ."\n"; ?>
+Cache Time:             <?php echo get_option( 'cff_cache_time' ) ."\n"; ?>
+Cache Unit:             <?php echo get_option( 'cff_cache_time_unit' ) ."\n"; ?>
+Locale:                 <?php echo get_option( 'cff_locale' ) ."\n"; ?>
+Timezone:               <?php $options = get_option( 'cff_style_settings', array() );
+                        echo $options[ 'cff_timezone' ] ."\n"; ?>
+
+
+## CUSTOMIZE: ##
+cff_ajax => <?php echo get_option('cff_ajax') ."\n"; ?>
+cff_preserve_settings => <?php echo get_option('cff_preserve_settings') ."\n"; ?>
+cff_title_length => <?php echo get_option('cff_title_length') ."\n"; ?>
+cff_body_length => <?php echo get_option('cff_body_length') ."\n"; ?>
+<?php 
+while (list($key, $val) = each($options)) {
+    echo "$key => $val\n";
+}
+?>
+
+## FACEBOOK API RESPONSE: ##
+<?php echo $posts_json; ?>
+        </textarea>
 
     <?php } ?>
         
@@ -482,6 +672,9 @@ function cff_style_page() {
         'cff_likebox_height'        => '',
         'cff_like_box_faces'        => false,
         'cff_like_box_border'       => false,
+        'cff_like_box_cover'        => true,
+        'cff_like_box_small_header' => false,
+        'cff_like_box_hide_cta'     => false,
 
         'cff_bg_color'              => '',
         'cff_likebox_bg_color'      => '',
@@ -496,9 +689,11 @@ function cff_style_page() {
         'cff_title_link'            => false,
         'cff_post_tags'             => true,
         'cff_link_hashtags'         => true,
-        'cff_event_title_link'      => false,
+        'cff_event_title_link'      => true,
         'cff_video_action'          => 'post',
         'cff_app_id'                => '',
+        'cff_show_credit'           => '',
+        'cff_font_source'           => '',
         'cff_sep_color'             => '',
         'cff_sep_size'              => '1',
 
@@ -523,6 +718,9 @@ function cff_style_page() {
         'cff_see_more_text'         => 'See More',
         'cff_see_less_text'         => 'See Less',
         'cff_facebook_link_text'    => 'View on Facebook',
+        'cff_facebook_share_text'   => 'Share',
+        'cff_show_facebook_link'    => true,
+        'cff_show_facebook_share'   => true,
 
         'cff_translate_photos_text' => 'photos',
 
@@ -644,6 +842,9 @@ function cff_style_page() {
     $cff_facebook_link_text = $options[ 'cff_facebook_link_text' ];
     $cff_view_link_text = $options[ 'cff_view_link_text' ];
     $cff_link_to_timeline = $options[ 'cff_link_to_timeline' ];
+    $cff_facebook_share_text = $options[ 'cff_facebook_share_text' ];
+    $cff_show_facebook_link = $options[ 'cff_show_facebook_link' ];
+    $cff_show_facebook_share = $options[ 'cff_show_facebook_share' ];
     //Meta
     $cff_icon_style = $options[ 'cff_icon_style' ];
     $cff_meta_text_color = $options[ 'cff_meta_text_color' ];
@@ -660,6 +861,10 @@ function cff_style_page() {
     $cff_likebox_height = $options[ 'cff_likebox_height' ];
     $cff_like_box_faces = $options[ 'cff_like_box_faces' ];
     $cff_like_box_border = $options[ 'cff_like_box_border' ];
+    $cff_like_box_cover = $options[ 'cff_like_box_cover' ];
+    $cff_like_box_small_header = $options[ 'cff_like_box_small_header' ];
+    $cff_like_box_hide_cta = $options[ 'cff_like_box_hide_cta' ];
+
 
     $cff_show_media = $options[ 'cff_show_media' ];
     $cff_bg_color = $options[ 'cff_bg_color' ];
@@ -670,6 +875,8 @@ function cff_style_page() {
     $cff_class = $options[ 'cff_class' ];
     $cff_open_links = $options[ 'cff_open_links' ];
     $cff_app_id = $options[ 'cff_app_id' ];
+    $cff_show_credit = $options[ 'cff_show_credit' ];
+    $cff_font_source = $options[ 'cff_font_source' ];
     $cff_preserve_settings   = 'cff_preserve_settings';
     $cff_preserve_settings_val = get_option( $cff_preserve_settings );
 
@@ -825,7 +1032,8 @@ function cff_style_page() {
             if (isset($_POST[ 'cff_link_url_color' ]) ) $cff_link_url_color = $_POST[ 'cff_link_url_color' ];
             if (isset($_POST[ 'cff_link_bg_color' ]) ) $cff_link_bg_color = $_POST[ 'cff_link_bg_color' ];
             if (isset($_POST[ 'cff_link_border_color' ]) ) $cff_link_border_color = $_POST[ 'cff_link_border_color' ];
-            $cff_disable_link_box = $_POST[ 'cff_disable_link_box' ];
+            (isset($_POST[ 'cff_disable_link_box' ]) ) ? $cff_disable_link_box = $_POST[ 'cff_disable_link_box' ] : $cff_disable_link_box = '';
+
 
             //Event title
             if (isset($_POST[ 'cff_event_title_format' ]) ) $cff_event_title_format = $_POST[ 'cff_event_title_format' ];
@@ -878,6 +1086,9 @@ function cff_style_page() {
             if (isset($_POST[ 'cff_link_weight' ]) ) $cff_link_weight = $_POST[ 'cff_link_weight' ];
             if (isset($_POST[ 'cff_link_color' ]) ) $cff_link_color = $_POST[ 'cff_link_color' ];
             if (isset($_POST[ 'cff_facebook_link_text' ]) ) $cff_facebook_link_text = $_POST[ 'cff_facebook_link_text' ];
+            if (isset($_POST[ 'cff_facebook_share_text' ]) ) $cff_facebook_share_text = $_POST[ 'cff_facebook_share_text' ];
+            (isset($_POST[ 'cff_show_facebook_link' ]) ) ? $cff_show_facebook_link = $_POST[ 'cff_show_facebook_link' ] : $cff_show_facebook_link = '';
+            (isset($_POST[ 'cff_show_facebook_share' ]) ) ? $cff_show_facebook_share = $_POST[ 'cff_show_facebook_share' ] : $cff_show_facebook_share = '';
             if (isset($_POST[ 'cff_view_link_text' ]) ) $cff_view_link_text = $_POST[ 'cff_view_link_text' ];
             if (isset($_POST[ 'cff_link_to_timeline' ]) ) $cff_link_to_timeline = $_POST[ 'cff_link_to_timeline' ];
 
@@ -970,6 +1181,9 @@ function cff_style_page() {
             $options[ 'cff_link_weight' ] = $cff_link_weight;
             $options[ 'cff_link_color' ] = $cff_link_color;
             $options[ 'cff_facebook_link_text' ] = $cff_facebook_link_text;
+            $options[ 'cff_facebook_share_text' ] = $cff_facebook_share_text;
+            $options[ 'cff_show_facebook_link' ] = $cff_show_facebook_link;
+            $options[ 'cff_show_facebook_share' ] = $cff_show_facebook_share;
             $options[ 'cff_view_link_text' ] = $cff_view_link_text;
             $options[ 'cff_link_to_timeline' ] = $cff_link_to_timeline;
         }
@@ -995,6 +1209,10 @@ function cff_style_page() {
             if (isset($_POST[ 'cff_likebox_height' ])) $cff_likebox_height = $_POST[ 'cff_likebox_height' ];
             (isset($_POST[ 'cff_like_box_faces' ])) ? $cff_like_box_faces = $_POST[ 'cff_like_box_faces' ] : $cff_like_box_faces = '';
             (isset($_POST[ 'cff_like_box_border' ])) ? $cff_like_box_border = $_POST[ 'cff_like_box_border' ] : $cff_like_box_border = '';
+            (isset($_POST[ 'cff_like_box_cover' ])) ? $cff_like_box_cover = $_POST[ 'cff_like_box_cover' ] : $cff_like_box_cover = '';
+            (isset($_POST[ 'cff_like_box_small_header' ])) ? $cff_like_box_small_header = $_POST[ 'cff_like_box_small_header' ] : $cff_like_box_small_header = '';
+            (isset($_POST[ 'cff_like_box_hide_cta' ])) ? $cff_like_box_hide_cta = $_POST[ 'cff_like_box_hide_cta' ] : $cff_like_box_hide_cta = '';
+
 
             if (isset($_POST[ 'cff_video_height' ])) $cff_video_height = $_POST[ 'cff_video_height' ];
             if (isset($_POST[ 'cff_video_action' ])) $cff_video_action = $_POST[ 'cff_video_action' ];
@@ -1002,7 +1220,9 @@ function cff_style_page() {
 
             (isset($_POST[ $cff_ajax ])) ? $cff_ajax_val = $_POST[ 'cff_ajax' ] : $cff_ajax_val = '';
             if (isset($_POST[ 'cff_app_id' ])) $cff_app_id = $_POST[ 'cff_app_id' ];
-            $cff_preserve_settings_val = $_POST[ $cff_preserve_settings ];
+            (isset($_POST[ 'cff_show_credit' ])) ? $cff_show_credit = $_POST[ 'cff_show_credit' ] : $cff_show_credit = '';
+            (isset($_POST[ 'cff_font_source' ])) ? $cff_font_source = $_POST[ 'cff_font_source' ] : $cff_font_source = '';
+            (isset($_POST[ $cff_preserve_settings ])) ? $cff_preserve_settings_val = $_POST[ 'cff_preserve_settings' ] : $cff_preserve_settings_val = '';
 
             //Meta
             $options[ 'cff_icon_style' ] = $cff_icon_style;
@@ -1024,6 +1244,10 @@ function cff_style_page() {
             $options[ 'cff_likebox_height' ] = $cff_likebox_height;
             $options[ 'cff_like_box_faces' ] = $cff_like_box_faces;
             $options[ 'cff_like_box_border' ] = $cff_like_box_border;
+            $options[ 'cff_like_box_cover' ] = $cff_like_box_cover;
+            $options[ 'cff_like_box_small_header' ] = $cff_like_box_small_header;
+            $options[ 'cff_like_box_hide_cta' ] = $cff_like_box_hide_cta;
+
 
             $options[ 'cff_video_height' ] = $cff_video_height;
             $options[ 'cff_video_action' ] = $cff_video_action;
@@ -1031,6 +1255,8 @@ function cff_style_page() {
 
             update_option( $cff_ajax, $cff_ajax_val );
             $options[ 'cff_app_id' ] = $cff_app_id;
+            $options[ 'cff_show_credit' ] = $cff_show_credit;
+            $options[ 'cff_font_source' ] = $cff_font_source;
             update_option( $cff_preserve_settings, $cff_preserve_settings_val );
         }
         //Update the Custom Text / Translate options
@@ -1040,6 +1266,7 @@ function cff_style_page() {
             if (isset($_POST[ 'cff_see_more_text' ])) $cff_see_more_text = $_POST[ 'cff_see_more_text' ];
             if (isset($_POST[ 'cff_see_less_text' ])) $cff_see_less_text = $_POST[ 'cff_see_less_text' ];
             if (isset($_POST[ 'cff_facebook_link_text' ])) $cff_facebook_link_text = $_POST[ 'cff_facebook_link_text' ];
+            if (isset($_POST[ 'cff_facebook_share_text' ])) $cff_facebook_share_text = $_POST[ 'cff_facebook_share_text' ];
 
             //Social translate
             if (isset($_POST[ 'cff_translate_photos_text' ])) $cff_translate_photos_text = $_POST[ 'cff_translate_photos_text' ];
@@ -1065,6 +1292,8 @@ function cff_style_page() {
             $options[ 'cff_see_more_text' ] = $cff_see_more_text;
             $options[ 'cff_see_less_text' ] = $cff_see_less_text;
             $options[ 'cff_facebook_link_text' ] = $cff_facebook_link_text;
+            $options[ 'cff_facebook_share_text' ] = $cff_facebook_share_text;
+
             //Social translate
             $options[ 'cff_translate_photos_text' ] = $cff_translate_photos_text;
 
@@ -2238,7 +2467,28 @@ function cff_style_page() {
                             <tr>
                                 <th><label for="cff_facebook_link_text" class="bump-left"><?php _e('Text'); ?></label></th>
                                 <td>
-                                    <input name="cff_facebook_link_text" type="text" value="<?php esc_attr_e( $cff_facebook_link_text ); ?>" size="25" />
+                                    <input name="cff_facebook_link_text" type="text" value="<?php echo stripslashes( esc_attr( $cff_facebook_link_text ) ); ?>" size="25" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th><label for="cff_facebook_share_text" class="bump-left"><?php _e('"Share" Text'); ?></label></th>
+                                <td>
+                                    <input name="cff_facebook_share_text" type="text" value="<?php echo stripslashes( esc_attr( $cff_facebook_share_text ) ); ?>" size="25" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th><label for="cff_show_facebook_link" class="bump-left"><?php _e('Show "View on Facebook" link'); ?></label></th>
+                                <td>
+                                    <input type="checkbox" name="cff_show_facebook_link" id="cff_show_facebook_link" <?php if($cff_show_facebook_link == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th><label for="cff_show_facebook_share" class="bump-left"><?php _e('Show "Share" link'); ?></label></th>
+                                <td>
+                                    <input type="checkbox" name="cff_show_facebook_share" id="cff_show_facebook_share" <?php if($cff_show_facebook_share == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
                                 </td>
                             </tr>
                             
@@ -2261,23 +2511,21 @@ function cff_style_page() {
             <h3><?php _e('Likes, Shares and Comments'); ?></h3><i style="color: #666; font-size: 11px;"><a href="https://smashballoon.com/custom-facebook-feed/" target="_blank"><?php _e('Upgrade to Pro to enable likes, shares and comments'); ?></a></i>
             
             <hr />
-            <h3><?php _e('Like Box'); ?></h3>
+            <h3><?php _e('Like Box / Page Plugin'); ?></h3>
             <table class="form-table">
                 <tbody>
                     <tr valign="top">
                         <th class="bump-left" scope="row"><label><?php _e('Show the Like Box'); ?></label></th>
                         <td>
                             <input type="checkbox" name="cff_show_like_box" id="cff_show_like_box" <?php if($cff_show_like_box == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
-                            <i style="margin-left: 5px; font-size: 11px;"><a class="cff-tooltip-link" href="JavaScript:void(0);"><?php _e("Why isn't the Like Box showing up?"); ?></a></i>
-                            <p class="cff-tooltip cff-more-info"><?php _e("The most common reason is that you may have an extension installed in your web browser which is blocking the plugin from loading the Like Box from Facebook."); ?></p>
                         </td>
                     </tr>
                     <tr valign="top">
                         <th class="bump-left" scope="row"><label><?php _e('Position'); ?></label></th>
                         <td>
                             <select name="cff_like_box_position">
-                                <option value="bottom" <?php if($cff_like_box_position == "bottom") echo 'selected="selected"' ?> ><?php _e('Below posts'); ?></option>
-                                <option value="top" <?php if($cff_like_box_position == "top") echo 'selected="selected"' ?> ><?php _e('Above posts'); ?></option>
+                                <option value="bottom" <?php if($cff_like_box_position == "bottom") echo 'selected="selected"' ?> ><?php _e('Bottom'); ?></option>
+                                <option value="top" <?php if($cff_like_box_position == "top") echo 'selected="selected"' ?> ><?php _e('Top'); ?></option>
                             </select>
                         </td>
                     </tr>
@@ -2285,40 +2533,10 @@ function cff_style_page() {
                         <th class="bump-left" scope="row"><label><?php _e('Display outside the scrollable area'); ?></label></th>
                         <td>
                             <input type="checkbox" name="cff_like_box_outside" id="cff_like_box_outside" <?php if($cff_like_box_outside == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
-                            <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('(Only applicable if you have set a height on the feed)'); ?></i>
+                            <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Only applicable if you have set a height on the feed'); ?></i>
                         </td>
                     </tr>
-                    <tr valign="top">
-                        <th class="bump-left" scope="row"><label><?php _e('Background Color'); ?></label></th>
-                        <td>
-                            <input name="cff_likebox_bg_color" value="#<?php esc_attr_e( str_replace('#', '', $cff_likebox_bg_color) ); ?>" class="cff-colorpicker" />
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <th class="bump-left" scope="row"><label><?php _e('Color of page name'); ?></label></th>
-                        <td>
-                            <select name="cff_like_box_text_color">
-                                <option value="blue" <?php if($cff_like_box_text_color == "blue") echo 'selected="selected"' ?> ><?php _e('Blue'); ?></option>
-                                <option value="white" <?php if($cff_like_box_text_color == "white") echo 'selected="selected"' ?> ><?php _e('White'); ?></option>
-                            </select>
-                            <i style="margin-left: 5px; font-size: 11px;"><a class="cff-tooltip-link" href="JavaScript:void(0);"><?php _e('Why only these 2 colors?'); ?></a></i>
-                            <p class="cff-tooltip cff-more-info"><?php _e("The styling of the Facebook Like box widget is restricted by Facebook. This means that the only two text colors available are blue and white, intended for either a light of dark color scheme respectively."); ?></p>
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <th class="bump-left" scope="row"><label for="cff_likebox_width"><?php _e('Custom Like Box Width'); ?></label></th>
-                        <td>
-                            <input name="cff_likebox_width" type="text" value="<?php esc_attr_e( $cff_likebox_width ); ?>" size="6" />
-                            <span><span>Eg. 50%, 300px</span> <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Default is 100%'); ?></i></span>
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <th class="bump-left" for="cff_likebox_height" scope="row"><label><?php _e('Custom Like Box Height'); ?></label></th>
-                        <td>
-                            <input name="cff_likebox_height" type="text" value="<?php esc_attr_e( $cff_likebox_height ); ?>" size="3" />
-                            <span>px</span>
-                        </td>
-                    </tr>
+                
                     <tr valign="top">
                         <th class="bump-left" scope="row"><label><?php _e('Show faces of fans'); ?></label></th>
                         <td>
@@ -2327,12 +2545,40 @@ function cff_style_page() {
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th class="bump-left" scope="row"><label><?php _e('Show the Like Box border'); ?></label></th>
+                        <th class="bump-left" scope="row"><label><?php _e('Include the Cover Photo'); ?></label></th>
                         <td>
-                            <input type="checkbox" name="cff_like_box_border" id="cff_like_box_outside" <?php if($cff_like_box_border == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
-                            <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Only applicable if you are showing faces of fans'); ?></i>
+                            <input type="checkbox" name="cff_like_box_cover" id="cff_like_box_cover" <?php if($cff_like_box_cover == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
                         </td>
                     </tr>
+                    <tr valign="top">
+                        <th class="bump-left" scope="row"><label><?php _e('Use a small header'); ?></label></th>
+                        <td>
+                            <input type="checkbox" name="cff_like_box_small_header" id="cff_like_box_small_header" <?php if($cff_like_box_small_header == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <th class="bump-left" scope="row"><label><?php _e('Hide the call to action button (if available)'); ?></label></th>
+                        <td>
+                            <input type="checkbox" name="cff_like_box_hide_cta" id="cff_like_box_hide_cta" <?php if($cff_like_box_hide_cta == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
+                        </td>
+                    </tr>
+
+
+                    <tr valign="top">
+                        <th class="bump-left" for="cff_likebox_width" scope="row"><label><?php _e('Custom Like Box Width'); ?></label></th>
+                        <td>
+                            <input name="cff_likebox_width" type="text" value="<?php esc_attr_e( $cff_likebox_width ); ?>" size="3" />
+                            <span>px <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Default: 340, Min: 280, Max: 500'); ?></i></span>
+                        </td>
+                    </tr>
+                    <!-- <tr valign="top">
+                        <th class="bump-left" for="cff_likebox_height" scope="row"><label><?php _e('Custom Like Box Height'); ?></label></th>
+                        <td>
+                            <input name="cff_likebox_height" type="text" value="<?php esc_attr_e( $cff_likebox_height ); ?>" size="3" />
+                            <span>px <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Default: 500, Min: 130'); ?></i></span>
+                        </td>
+                    </tr> -->
+
                 </tbody>
             </table>
 
@@ -2403,6 +2649,25 @@ function cff_style_page() {
                             <p class="cff-tooltip cff-more-info"><?php _e('When removing the plugin your settings are automatically deleted from your database. Checking this box will prevent any settings from being deleted. This means that you can uninstall and reinstall the plugin without losing your settings.'); ?></p>
                         </td>
                     </tr>
+                    <tr>
+                        <th class="bump-left"><label for="cff_show_credit" class="bump-left"><?php _e("Display credit link"); ?></label></th>
+                        <td>
+                            <input name="cff_show_credit" type="checkbox" id="cff_show_credit" <?php if($cff_show_credit == true) echo "checked"; ?> />
+                            <label for="cff_show_credit"><?php _e('Yes'); ?></label>
+                            <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Display a link at the bottom of the feed to help promote the plugin'); ?></i>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th class="bump-left"><label for="cff_font_source" class="bump-left"><?php _e("Icon font source"); ?></label></th>
+                        <td>
+                            <select name="cff_font_source">
+                                <option value="cdn" <?php if($cff_font_source == "cdn") echo 'selected="selected"' ?> ><?php _e('CDN'); ?></option>
+                                <option value="local" <?php if($cff_font_source == "local") echo 'selected="selected"' ?> ><?php _e('Local copy'); ?></option>
+                                <option value="none" <?php if($cff_font_source == "none") echo 'selected="selected"' ?> ><?php _e("Don't load"); ?></option>
+                            </select>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -2430,29 +2695,33 @@ function cff_style_page() {
                     <tr class="cff-table-header"><th colspan="3"><?php _e('Post Text'); ?></th></tr>
                     <tr>
                         <td><label for="cff_see_more_text" class="bump-left"><?php _e('See More'); ?></label></td>
-                        <td><input name="cff_see_more_text" type="text" value="<?php esc_attr_e( $cff_see_more_text ); ?>" /></td>
+                        <td><input name="cff_see_more_text" type="text" value="<?php echo stripslashes( esc_attr( $cff_see_more_text ) ); ?>" /></td>
                         <td class="cff-context"><?php _e('Used when truncating the post text'); ?></td>
                     </tr>
 
                     <tr>
                         <td><label for="cff_see_less_text" class="bump-left"><?php _e('See Less'); ?></label></td>
-                        <td><input name="cff_see_less_text" type="text" value="<?php esc_attr_e( $cff_see_less_text ); ?>" /></td>
+                        <td><input name="cff_see_less_text" type="text" value="<?php echo stripslashes( esc_attr( $cff_see_less_text ) ); ?>" /></td>
                         <td class="cff-context"><?php _e('Used when truncating the post text'); ?></td>
+                    </tr>
+
+                    <tr class="cff-table-header"><th colspan="3"><?php _e('Post Action Links'); ?></th></tr>
+                    <tr>
+                        <td><label for="cff_facebook_link_text" class="bump-left"><?php _e('View on Facebook'); ?></label></td>
+                        <td><input name="cff_facebook_link_text" type="text" value="<?php echo stripslashes( esc_attr( $cff_facebook_link_text ) ); ?>" /></td>
+                        <td class="cff-context"><?php _e('Used for the link to the post on Facebook'); ?></td>
+                    </tr>
+                    <tr>
+                        <td><label for="cff_facebook_share_text" class="bump-left"><?php _e('Share'); ?></label></td>
+                        <td><input name="cff_facebook_share_text" type="text" value="<?php echo stripslashes( esc_attr( $cff_facebook_share_text ) ); ?>" /></td>
+                        <td class="cff-context"><?php _e('Used for sharing the Facebook post via Social Media'); ?></td>
                     </tr>
 
                     <tr>
                         <td><label for="cff_translate_photos_text" class="bump-left"><?php _e('photos'); ?></label></td>
-                        <td><input name="cff_translate_photos_text" type="text" value="<?php esc_attr_e( $cff_translate_photos_text ); ?>" /></td>
+                        <td><input name="cff_translate_photos_text" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_photos_text ) ); ?>" /></td>
                         <td class="cff-context"><?php _e('Added to the end of an album name. Eg. (6 photos)'); ?></td>
                     </tr>
-
-                    <tr class="cff-table-header"><th colspan="3"><?php _e('Link to Facebook'); ?></th></tr>
-                    <tr>
-                        <td><label for="cff_facebook_link_text" class="bump-left"><?php _e('View on Facebook'); ?></label></td>
-                        <td><input name="cff_facebook_link_text" type="text" value="<?php esc_attr_e( $cff_facebook_link_text ); ?>" /></td>
-                        <td class="cff-context"><?php _e('Links to the post on Facebook'); ?></td>
-                    </tr>
-
                     
                     <tr class="cff-table-header"><th colspan="3"><?php _e('Date'); ?></th></tr>
                     <tr>
@@ -2460,49 +2729,49 @@ function cff_style_page() {
                         <td class="cff-translate-date">
 
                             <label for="cff_translate_second"><?php _e("second"); ?></label>
-                            <input name="cff_translate_second" type="text" value="<?php esc_attr_e( $cff_translate_second ); ?>" size="20" />
+                            <input name="cff_translate_second" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_second ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_seconds"><?php _e("seconds"); ?></label>
-                            <input name="cff_translate_seconds" type="text" value="<?php esc_attr_e( $cff_translate_seconds ); ?>" size="20" />
+                            <input name="cff_translate_seconds" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_seconds ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_minute"><?php _e("minute"); ?></label>
-                            <input name="cff_translate_minute" type="text" value="<?php esc_attr_e( $cff_translate_minute ); ?>" size="20" />
+                            <input name="cff_translate_minute" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_minute ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_minutes"><?php _e("minutes"); ?></label>
-                            <input name="cff_translate_minutes" type="text" value="<?php esc_attr_e( $cff_translate_minutes ); ?>" size="20" />
+                            <input name="cff_translate_minutes" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_minutes ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_hour"><?php _e("hour"); ?></label>
-                            <input name="cff_translate_hour" type="text" value="<?php esc_attr_e( $cff_translate_hour ); ?>" size="20" />
+                            <input name="cff_translate_hour" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_hour ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_hours"><?php _e("hours"); ?></label>
-                            <input name="cff_translate_hours" type="text" value="<?php esc_attr_e( $cff_translate_hours ); ?>" size="20" />
+                            <input name="cff_translate_hours" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_hours ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_day"><?php _e("day"); ?></label>
-                            <input name="cff_translate_day" type="text" value="<?php esc_attr_e( $cff_translate_day ); ?>" size="20" />
+                            <input name="cff_translate_day" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_day ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_days"><?php _e("days"); ?></label>
-                            <input name="cff_translate_days" type="text" value="<?php esc_attr_e( $cff_translate_days ); ?>" size="20" />
+                            <input name="cff_translate_days" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_days ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_week"><?php _e("week"); ?></label>
-                            <input name="cff_translate_week" type="text" value="<?php esc_attr_e( $cff_translate_week ); ?>" size="20" />
+                            <input name="cff_translate_week" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_week ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_weeks"><?php _e("weeks"); ?></label>
-                            <input name="cff_translate_weeks" type="text" value="<?php esc_attr_e( $cff_translate_weeks ); ?>" size="20" />
+                            <input name="cff_translate_weeks" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_weeks ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_month"><?php _e("month"); ?></label>
-                            <input name="cff_translate_month" type="text" value="<?php esc_attr_e( $cff_translate_month ); ?>" size="20" />
+                            <input name="cff_translate_month" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_month ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_months"><?php _e("months"); ?></label>
-                            <input name="cff_translate_months" type="text" value="<?php esc_attr_e( $cff_translate_months ); ?>" size="20" />
+                            <input name="cff_translate_months" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_months ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_year"><?php _e("year"); ?></label>
-                            <input name="cff_translate_year" type="text" value="<?php esc_attr_e( $cff_translate_year ); ?>" size="20" />
+                            <input name="cff_translate_year" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_year ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_years"><?php _e("years"); ?></label>
-                            <input name="cff_translate_years" type="text" value="<?php esc_attr_e( $cff_translate_years ); ?>" size="20" />
+                            <input name="cff_translate_years" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_years ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_ago"><?php _e("ago"); ?></label>
-                            <input name="cff_translate_ago" type="text" value="<?php esc_attr_e( $cff_translate_ago ); ?>" size="20" />
+                            <input name="cff_translate_ago" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_ago ) ); ?>" size="20" />
                         </td>
                         <td class="cff-context"><?php _e('Used to translate the "Posted _ days ago" date text'); ?></td>
                     </tr>
@@ -2511,9 +2780,43 @@ function cff_style_page() {
             </table>
             
             <?php submit_button(); ?>
+            <a href="https://smashballoon.com/custom-facebook-feed/demo" target="_blank"><img src="<?php echo plugins_url( 'img/pro.png' , __FILE__ ) ?>" /></a>
             <?php } //End Custom Text tab ?>
 
         </form>
+
+        <hr />
+        <h3><?php _e('Like the plugin? Help spread the word!'); ?></h3>
+
+        <!-- TWITTER -->
+        <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://wordpress.org/plugins/custom-facebook-feed/" data-text="Display your Facebook posts on your site your way using the Custom Facebook Feed WordPress plugin!" data-via="smashballoon" data-dnt="true">Tweet</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <style type="text/css">
+        #twitter-widget-0{ float: left; width: 100px !important; }
+        .IN-widget{ margin-right: 20px; }
+        </style>
+
+        <!-- FACEBOOK -->
+        <div id="fb-root" style="display: none;"></div>
+        <script>(function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&appId=640861236031365&version=v2.0";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+        <div class="fb-like" data-href="https://wordpress.org/plugins/custom-facebook-feed/" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true" style="display: block; float: left; margin-right: 20px;"></div>
+
+        <!-- LINKEDIN -->
+        <script src="//platform.linkedin.com/in.js" type="text/javascript">
+          lang: en_US
+        </script>
+        <script type="IN/Share" data-url="https://wordpress.org/plugins/custom-facebook-feed/"></script>
+
+        <!-- GOOGLE + -->
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <div class="g-plusone" data-size="medium" data-href="https://wordpress.org/plugins/custom-facebook-feed/"></div>
+
 <?php 
 } //End Style_Page
 //Enqueue admin styles

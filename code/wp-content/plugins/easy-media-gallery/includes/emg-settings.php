@@ -318,13 +318,14 @@ if ( isset( $_REQUEST['reset'] ) ) { echo '<script type="text/javascript">
     <div id="header">
       <div class="logo">
       <div class="emg-icon-option-left"></div>
-        <div class="emg-cp-title"><h2><?php echo $emgplugname . "  LITE (v " . easymedia_get_plugin_version() . ")"; ?></h2></div>
+        <div class="emg-cp-title"><h2><?php echo EASYMEDIA_NAME . " (v " . EASYMEDIA_VERSION . ")"; ?></h2></div>
       </div>
       <div class="emg-icon-option-right"> </div>
       <div style="clear: both;"></div>
     </div>
 
 <div id="main">
+<div class="infoboxdemo"><a target='_blank' href='http://demo.ghozylab.com/content/pro.html'>See Amazing Pro Version Features Here</a></div>
 <div class="infoboxsaveorreset"><?php echo $saveresmsg; ?></div>
 <form method="post">
 <div class="sps_wrap">
@@ -523,8 +524,6 @@ $i++;
 
 <?php
 }
-?>
-<?php
 //add_action('admin_init', 'add_cp_stylesheet');
 add_action('admin_menu', 'spg_add_admin');
 

@@ -667,4 +667,9 @@ div.jp-jplayer {
 	text-align:center;
 	font-weight:bold;
 }
+
+.jp-audio {
+    -moz-box-sizing: content-box;
+}
+
 /* @end */

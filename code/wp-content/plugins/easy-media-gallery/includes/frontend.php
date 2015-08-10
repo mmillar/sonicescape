@@ -12,14 +12,7 @@ function easymedia_frontend_stylesheet() {
 add_action( 'wp_print_styles', 'easymedia_frontend_stylesheet' );
 
 
-function easymedia_frontend_script() {
-	
-	wp_enqueue_script( 'fittext' );	
-	if ( easy_get_option( 'easymedia_plugin_core' ) != 'none' ) {wp_enqueue_script( 'mootools-core' ); }
-	wp_enqueue_script( 'easymedia-core' );	
-	wp_enqueue_script( 'easymedia-frontend' );	
-	
-	if ( EMG_IS_AJAX == '1' ) { wp_enqueue_script( 'easymedia-ajaxfrontend' ); }	
+function easymedia_frontend_script() {	
 	
 	( easy_get_option( 'easymedia_disen_autopl' ) == '1' ) ? $audautoplay = 'true' : $audautoplay = 'false';
 	( easy_get_option( 'easymedia_disen_audio_loop' ) == '1' ) ? $audioloop = 'true' : $audioloop = 'false';
@@ -40,7 +33,8 @@ function easymedia_frontend_script() {
 		'vidautopd' => $autoplayd,	
 		'drclick' => $disenrclck,
 		'ajaxcid' => easy_get_option( 'easymedia_ajax_con_id' ),					
-  		'ajaxpth' => wp_make_link_relative( plugins_url( 'easyloader.php' , __FILE__ ) ),  
+  		'ajaxpth' => admin_url('admin-ajax.php'),  // @since 1.2.9.5
+		'ajaxnonce' => wp_create_nonce( 'medialoader' ), // @since 1.3.29	
   		'ovrlayop' => easy_get_option( 'easymedia_overlay_opcty' ) / 100,   
 		);
 
@@ -53,13 +47,9 @@ add_action( 'wp_enqueue_scripts', 'easymedia_frontend_script' );
 function easymedia_frontend_prop()
 {   
 		$boxstyle = EASYMEDG_PLUGIN_URL . 'css/styles/mediabox';
-		$dinstyle = wp_make_link_relative ( plugins_url('dynamic-style.php' , __FILE__) ); //@since 1.2.29
 		echo "<link rel=\"stylesheet\" type=\"text/css\" media=\"screen,projection\" href=\"$boxstyle/Light.css\" />\n";
-		echo "<link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"$dinstyle\" />\n"; //@since 1.2.29
 		
 ob_start(); ?>
-<!--@since 1.2.29-->
-<!--<link rel="stylesheet" href="<?php /* echo plugins_url('dynamic-style.php' , __FILE__) */?>" type="text/css" media="screen" />-->
 
 <!-- Easy Media Gallery Lite START (version <?php echo EASYMEDIA_VERSION; ?>)-->       
     
@@ -71,7 +61,7 @@ ob_start(); ?>
 jQuery('.da-thumbs a[rel!="easymedia"]').attr('rel', function (i, old) {
     return old ? old + ' ' + add : add; });		
     });
-    /*]]>*/</script>	
+    /*]]>*/</script>
 
     <!--[if lt IE 9]>
 <script src="<?php echo plugins_url( 'js/func/html5.js' , __FILE__ );  ?>" type="text/javascript"></script>

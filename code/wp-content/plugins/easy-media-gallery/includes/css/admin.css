@@ -239,7 +239,16 @@ height:190px; width:300px; margin-top:30px; border: solid 6px #fff; -moz-box-sha
 	}	
 .imgpreviewboxc {margin-top:30px; border: solid 6px #fff; -moz-box-shadow: 1px 1px 3px #3b3a3b; box-shadow: 1px 1px 3px #666666;float:right; }
 .vidpreviewboxc {margin-top:30px; -moz-box-shadow: 1px 1px 3px #3b3a3b; box-shadow: 1px 1px 3px #666666;float:right; }
-.imgthumblist {border: solid 2px #fff; -moz-box-shadow: 1px 1px 3px #3b3a3b; box-shadow: 1px 1px 3px #666666; }
+.imgthumblist {
+    border: 2px solid #FFF;
+    box-shadow: 1px 1px 3px #666;
+    border-radius: 50%;
+}
+
+.imgpreviewboxc {
+	-moz-box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+	}
 
 
 /* Video Preview */
@@ -588,9 +597,9 @@ span.noty_text p {
 }
 
 .emgnotyclosepermanent{	
-float:left;display:inline-block; text-decoration:none; outline:none; cursor:pointer; font:normal 10px/1em Arial, sans-serif; margin: 10px 0 0 0; color: #A8A8A8; text-shadow:0 1px 0 #fff; background:none;border:none;}
+float:left;display:inline-block; text-decoration:none; outline:none; cursor:pointer; font:normal 10px/1em Arial, sans-serif; margin: 10px 0 0 0; color: #333; text-shadow:0 1px 0 #fff; background:none;border:none;}
 .emgnotyclosepermanent:hover{
-	color:#8D8D8D
+	color:#8D8D8D;
 	}	
 	
 /* Admin Bar Notify */	
@@ -642,7 +651,166 @@ float:left;display:inline-block; text-decoration:none; outline:none; cursor:poin
 #emgbuydiv a:focus {
 	box-shadow:none !important; 
 	}
+	
+/* Image Picker @since 1.2.79 */	
 
+#emg_images_container {
+	margin-top: 15px;
+	}
+	
+#emg_images_container li {	
+	float: left;
+	position:relative;
+	padding: 2px;
+	background-color: #FFF;
+	box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
+	margin: 5px;
+	height: 94px;
+	width: 94px;
+	}
+
+.emgthumbhandler img {
+	max-width:90px !important;
+	max-height:90px !important;
+	cursor: move;
+	}
+	
+#emg_images_container li span {
+    display: inline-block;
+    width: 23px;
+    height: 23px;
+    background: url('../images/delmedia.png') no-repeat scroll left top transparent;
+    cursor: pointer;
+    position: relative;
+    top: -105px;
+    right: -10px;
+    float: right;
+}
+
+.emg-sortable-placeholder { 
+	border-radius:5px; 
+    border: 1px dashed #CACACA;  
+    height: 60px;  
+    width: 94px;  
+    background: #F3F3F3;  
+	}
+	
+.gtips {
+    width: 21px;
+    height: 21px;
+    background: url('../images/tips.png') no-repeat scroll left top transparent;
+	padding-left:23px;
+	}
+.gtipslist {
+	padding-left:10px;
+	list-style:circle;
+	}
+	
+.easmedia_metabox_media_gallery td {
+	vertical-align:top;
+	}
+	
+	
+/* Featured Plugin Styles
+-------------------------------------------------------------- */
+#ghozy-featured h2 { margin: 0 0 15px; }
+#ghozy-featured .ghozy-extension { float: left; margin: 0 15px 15px 0; background: #FFF; border: 1px solid #DEDEDE; width: 320px; height: auto; position: relative; }
+#ghozy-featured .ghozy-extension h3 { margin: 0 0 8px; font-size: 13px;  }
+#ghozy-featured .ghozy-extension .button-secondary { position: relative; left: 0px; margin-bottom: 5px; }
+#ghozy-featured .ghozy-browse-all { clear:both; width:100%; }
+#ghozy-featured .ghozy-extension .third-party { display: none; }
+#ghozy-featured .ghozy-extension .feedtop { padding: 8px; }
+#ghozy-featured .feedbottom {clear: both; background-color: #FAFAFA; border-top: 1px solid #DEDEDE; overflow: hidden; }
+#ghozy-featured .feeddesc { margin-bottom: 25px; padding: 0px 8px 8px 8px; }
+#ghozy-featured .getitfeed { margin-left: 8px; bottom: 8px;}
+
+.infoboxdemo {
+	margin-bottom: 20px;
+	color:#0469BB;
+	padding: 16px;
+	margin: 0px 0px 15px 0px;
+	-moz-border-radius: 7px;
+	-webkit-border-radius: 7px;
+	-khtml-border-radius: 10px;
+	border-radius: 7px;
+	padding-left: 55px;
+	background: #eee;
+	font-style: italic;
+	font-weight:bold;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 14px;
+	background: #fffadb url(../images/Info.png) no-repeat scroll 10px 15px;
+	border: 1px solid #f5d145;
+	color: #9e660d;
+	width: 320px;
+	line-height:1.5em;
+	}
+.infoboxdemo a{	
+	color:#0469BB;
+	text-decoration:none !important;
+	}
+	
+.infoboxdemo a:hover{	
+	color: #1694FA;
+	text-decoration:none !important;
+	}
+	
+.emgwarning {
+	padding-left: 45px;
+	display: block;
+	background-image: url('../images/warning_red.png');
+	background-repeat: no-repeat;
+	background-position: left;
+	background-size: 36px 36px;
+	}
+	
+.emgttlimage {
+	font-size:12px !important;
+	font-style:italic !important;
+	color:#999 !important;
+	}
+	
+/* Button ( add image ) */
+.emg_add_images {
+	-moz-box-shadow:inset 0px 1px 0px 0px #9acc85;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #9acc85;
+	box-shadow:inset 0px 1px 0px 0px #9acc85;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #74ad5a), color-stop(1, #68a54b));
+	background:-moz-linear-gradient(top, #74ad5a 5%, #68a54b 100%);
+	background:-webkit-linear-gradient(top, #74ad5a 5%, #68a54b 100%);
+	background:-o-linear-gradient(top, #74ad5a 5%, #68a54b 100%);
+	background:-ms-linear-gradient(top, #74ad5a 5%, #68a54b 100%);
+	background:linear-gradient(to bottom, #74ad5a 5%, #68a54b 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#74ad5a', endColorstr='#68a54b',GradientType=0);
+	background-color:#74ad5a;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	border:1px solid #788f6d;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:arial;
+	font-size:13px;
+	font-weight:bold;
+	padding:7px 22px;
+	text-decoration:none;
+}
+.emg_add_images:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #68a54b), color-stop(1, #74ad5a));
+	background:-moz-linear-gradient(top, #68a54b 5%, #74ad5a 100%);
+	background:-webkit-linear-gradient(top, #68a54b 5%, #74ad5a 100%);
+	background:-o-linear-gradient(top, #68a54b 5%, #74ad5a 100%);
+	background:-ms-linear-gradient(top, #68a54b 5%, #74ad5a 100%);
+	background:linear-gradient(to bottom, #68a54b 5%, #74ad5a 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#68a54b', endColorstr='#74ad5a',GradientType=0);
+	background-color:#68a54b;
+}
+.emg_add_images:active {
+	position:relative;
+	top:1px;
+}
+		
 @media only screen and (max-width: 768px) {
     .noty_buttons {
        text-align: center !important;

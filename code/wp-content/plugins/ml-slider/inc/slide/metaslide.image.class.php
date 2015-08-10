@@ -1,4 +1,9 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit; // disable direct access
+}
+
 /**
  * Generic Slider super class. Extended by library specific classes.
  */
@@ -8,10 +13,14 @@ class MetaImageSlide extends MetaSlide {
      * Register slide type
      */
     public function __construct() {
+
+        parent::__construct();
+        
         add_filter( 'metaslider_get_image_slide', array( $this, 'get_slide' ), 10, 2 );
         add_action( 'metaslider_save_image_slide', array( $this, 'save_slide' ), 5, 3 );
         add_action( 'wp_ajax_create_image_slide', array( $this, 'ajax_create_slide' ) );
         add_action( 'wp_ajax_resize_image_slide', array( $this, 'ajax_resize_slide' ) );
+
     }
 
     /**
@@ -38,9 +47,13 @@ class MetaImageSlide extends MetaSlide {
                     
                     echo "<tr><td colspan='2'>ID: {$slide_id} \"" . get_the_title( $slide_id ) . "\" - " . __( "Failed to add slide. Slide already exists in slideshow.", 'metaslider' ) . "</td></tr>";
                 
-                } else if ( !$this->slide_is_unassigned_or_image_slide( $slider_id, $slide_id ) ) {
+                } else if ( ! $this->slide_is_unassigned_or_image_slide( $slider_id, $slide_id ) ) {
                     
                     echo "<tr><td colspan='2'>ID: {$slide_id} \"" . get_the_title( $slide_id ) . "\" - " . __( "Failed to add slide. Slide is not of type 'image'.", 'metaslider' ) . "</td></tr>";
+                
+                } else if ( ! wp_attachment_is_image( $slide_id ) ) {
+                    
+                    echo "<tr><td colspan='2'>ID: {$slide_id} \"" . get_the_title( $slide_id ) . "\" - " . __( "Failed to add slide. Slide is not an image.", 'metaslider' ) . "</td></tr>";
                 
                 } else {
 
@@ -111,6 +124,7 @@ class MetaImageSlide extends MetaSlide {
                     <td class='col-1'>
                         <div class='thumb' style='background-image: url({$thumb})'>
                             " . $this->get_delete_button_html() . "
+                            " . $this->get_change_image_button_html() . "
                             <span class='slide-details'>{$slide_label}</span>
                         </div>
                     </td>
@@ -211,8 +225,10 @@ class MetaImageSlide extends MetaSlide {
     public function is_valid_image() {
 
         $meta = wp_get_attachment_metadata( $this->slide->ID );
-        return isset( $meta['width'], $meta['height'] );
 
+        $is_valid = isset( $meta['width'], $meta['height'] );
+
+        return apply_filters( 'metaslider_is_valid_image', $is_valid, $this->slide );
     }
 
 
@@ -223,7 +239,7 @@ class MetaImageSlide extends MetaSlide {
      */
     public function use_wp_image_editor() {
 
-        return apply_filters( 'metaslider_use_image_editor', $this->is_valid_image() );
+        return apply_filters( 'metaslider_use_image_editor', $this->is_valid_image(), $this->slide );
 
     }
 
@@ -328,15 +344,23 @@ class MetaImageSlide extends MetaSlide {
      */
     private function get_flex_slider_markup( $slide ) {
 
-        $attributes = apply_filters( 'metaslider_flex_slider_image_attributes', array(
-                'src' => $slide['src'],
-                'height' => $slide['height'],
-                'width' => $slide['width'],
-                'alt' => $slide['alt'],
-                'rel' => $slide['rel'],
-                'class' => $slide['class'],
-                'title' => $slide['title']
-            ), $slide, $this->slider->ID );
+        $image_attributes = array(
+            'src' => $slide['src'],
+            'height' => $slide['height'],
+            'width' => $slide['width'],
+            'alt' => $slide['alt'],
+            'rel' => $slide['rel'],
+            'class' => $slide['class'],
+            'title' => $slide['title']
+        );
+
+        if ( $this->settings['smartCrop'] == 'disabled_pad') {
+
+            $image_attributes['style'] = $this->flex_smart_pad( $image_attributes, $slide );
+
+        }
+
+        $attributes = apply_filters( 'metaslider_flex_slider_image_attributes', $image_attributes, $slide, $this->slider->ID );
 
         $html = $this->build_image_tag( $attributes );
 
@@ -354,13 +378,66 @@ class MetaImageSlide extends MetaSlide {
             $html .= '<div class="caption-wrap"><div class="caption">' . $slide['caption'] . '</div></div>';
         }
 
-        $thumb = isset( $slide['data-thumb'] ) && strlen( $slide['data-thumb'] ) ? " data-thumb=\"{$slide['data-thumb']}\"" : "";
+        $attributes = apply_filters( 'metaslider_flex_slider_list_item_attributes', array(
+                'data-thumb' => isset($slide['data-thumb']) ? $slide['data-thumb'] : "",
+                'style' => "display: none; width: 100%;",
+                'class' => "slide-{$this->slide->ID} ms-image"
+            ), $slide, $this->slider->ID );
 
-        $html = '<li style="display: none; width: 100%;"' . $thumb . '>' . $html . '</li>';
+        $li = "<li";
+
+        foreach ( $attributes as $att => $val ) {
+            if ( strlen( $val ) ) {
+                $li .= " " . $att . '="' . esc_attr( $val ) . '"';
+            }
+        }
+
+        $li .= ">" . $html . "</li>";
+
+        $html = $li;
+
 
         return apply_filters( 'metaslider_image_flex_slider_markup', $html, $slide, $this->settings );
 
     }
+
+    /**
+     * Calculate the correct width (for vertical alignment) or top margin (for horizontal alignment)
+     * so that images are never stretched above the height set in the slideshow settings
+     */
+    private function flex_smart_pad( $atts, $slide ) {
+
+        $meta = wp_get_attachment_metadata( $slide['id'] );
+
+        if ( isset( $meta['width'], $meta['height'] ) ) {
+
+            $image_width = $meta['width'];
+            $image_height = $meta['height'];
+            $container_width = $this->settings['width'];
+            $container_height = $this->settings['height'];
+
+            $new_image_height = $image_height * ( $container_width / $image_width );
+
+            if ( $new_image_height < $container_height ) {
+
+                $margin_top_in_px = ( $container_height - $new_image_height ) / 2;
+
+                $margin_top_in_percent = ( $margin_top_in_px / $container_width ) * 100;
+
+                return 'margin-top: ' . $margin_top_in_percent . '%';
+
+            } else {
+
+                return 'margin: 0 auto; width: ' . ( $container_height / $new_image_height ) * 100 . '%';
+
+            }
+
+        }
+
+        return "";
+
+    }
+
 
     /**
      * Generate coin slider markup
