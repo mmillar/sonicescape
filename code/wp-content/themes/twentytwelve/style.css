@@ -131,7 +131,7 @@ ins {
 	text-decoration: none;
 }
 hr {
-	background-color: #ccc;
+	background-color: ccc;
 	border: 0;
 	height: 1px;
 	margin: 24px;
@@ -989,12 +989,16 @@ img.aligncenter,
 .site-content article {
 	border-bottom: 4px double #ededed;
 	margin-bottom: 10px;
-	padding-bottom: 24px;
+	padding-bottom: 0px;
 	padding-top: 12px;
 	word-wrap: break-word;
 	-webkit-hyphens: auto;
 	-moz-hyphens: auto;
 	hyphens: auto;
+}
+.site-content article .grid-title{
+	height: 46px;
+	display: block;
 }
 .page-links {
 	clear: both;

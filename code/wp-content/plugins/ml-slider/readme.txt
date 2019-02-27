@@ -1,26 +1,28 @@
 === Plugin Name ===
-Contributors: matchalabs
+Contributors: matchalabs, DavidAnderson, dnutbourne
 Tags: wordpress slideshow,seo,slideshow,slider,widget,wordpress slider,image slider,flexslider,flex slider,nivoslider,nivo slider,responsive,responsive slides,coinslider,coin slider,slideshow,carousel,responsive slider,vertical slides
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CQ84KC4X8YKW8
+Donate link: https://david.dw-perspective.org.uk/donate
 Requires at least: 3.5
-Tested up to: 4.2.2
-Stable tag: 3.3.4
+Tested up to: 4.8
+Stable tag: 3.5.1
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Easy to use WordPress slider plugin. Create SEO optimised responsive slideshows with Nivo Slider, Flex Slider, Coin Slider and Responsive Slides.
 
 == Description ==
 
-http://www.youtube.com/watch?v=o0f3uAvL6Ic
+With Metaslider, you can create your own unique, SEO-optimized slideshow in a matter of seconds!
 
-The most popular WordPress slider plugin. Creating slideshows with [Meta Slider](http://www.metaslider.com/) is fast and easy. Simply select images from your WordPress Media Library, drag and drop them into place, set slide captions, links and SEO fields all from one page. You can choose from 4 different slideshow types (Flex Slider, Nivo Slider, Responsive Slides & Coin Slider) and use the provided shortcode or template include to easily embed slideshows in your blog.
+With WordPress’ most popular slider plugin, enhancing your blog or website couldn’t be easier: simply select images from your WordPress Media Library, drag and drop them into place, and then set the slide captions, links and SEO fields all from one page.
 
-**Includes**
+Choose one of 4 different slideshow types, and use our provided short-code or template to embed the slideshows.
 
-* **Flex Slider 2** - Responsive, 2 transition effects, carousel mode
-* **Nivo Slider** - Responsive, 16 transition effects, 4 themes
-* **Responsive Slides** - Responsive & incredibly light weight
+**Included slideshow types:**
+
+* **Flex Slider 2** - responsive, 2 transition effects, carousel mode
+* **Nivo Slider** - responsive, 16 transition effects, 4 themes
+* **Responsive Slides** - responsive & incredibly light weight
 * **Coin Slider** - 4 transition effects
 
 **Features**
@@ -41,9 +43,30 @@ The most popular WordPress slider plugin. Creating slideshows with [Meta Slider]
 * Extensive Developer API (hooks & filters)
 * Fast - only the minimum JavaScript/CSS is included on your page
 * Free basic support (covering installation issues and theme/plugin conflicts)
-* Lightbox support with the [Meta Slider Lightbox](http://wordpress.org/plugins/ml-slider-lightbox/) addon
+* Lightbox support with the [Meta Slider Lightbox](https://wordpress.org/plugins/ml-slider-lightbox/) addon
 
-Upgrade to [Meta Slider Pro](http://www.metaslider.com/upgrade) to add support for:
+**General:**
+* Simple and intuitive interface – perfect for individual users, developers & clients!
+* Fast – requires only the minimum JavaScript/CSS on your page
+* Creatively responsive
+	
+**Creative:**
+* Unrestricted full-width support for image slides, including captions, links, title texts and alt. texts.
+* Includes drag and drop slide reordering, intelligent image cropping, set image crop position. 
+* Multiple slideshow configuration options (e.g. for speed, 
+* Has Admin Preview
+
+**Other:**
+* Includes Admin preview, plus built-in Widget and Short-code
+* Fully localised
+* WordPress Multi-site compatible, and 
+* compatible with translation plugins (WPML, PolyLang & qTranslate)
+* Developer Friendly, with extensive hooks & filters
+
+**Support:**
+* Includes free basic support (covering installation issues and theme/plugin conflicts).
+
+The <a href="https://www.metaslider.com/upgrade">Meta Slider Pro</a> includes added support for:
 
 * YouTube & Vimeo slides
 * HTML slides
@@ -53,25 +76,6 @@ Upgrade to [Meta Slider Pro](http://www.metaslider.com/upgrade) to add support f
 * Thumbnail Navigation
 * Premium Support
 
-**Translations**
-
-* French (thanks to fb-graphiklab)
-* Spanish (thanks to eltipografico)
-* German (thanks to Rewolve44)
-* Polish (thanks to gordon34)
-* Chinese (thanks to 断青丝 and mamsds)
-* Taiwanese (thanks to 断青丝)
-* Norwegian (thanks to Dreamsoft)
-* Romanian (thanks to Octav Madalin Stanoaia)
-* Japanese (thanks to Dorrie)
-* Persian (thanks to aliamini)
-* Hungarian (thanks to szripio)
-* Croatian
-* Hebrew (thanks to Ahrale)
-* Portuguese (thanks to mauro.mascarenhas)
-* Russian (thanks to asidoryak)
-* Ukrainian (thanks to mister_r)
-
 Read more and thanks to:
 
 * [Flex Slider](http://flexslider.woothemes.com/)
@@ -79,7 +83,7 @@ Read more and thanks to:
 * [Coin Slider](http://workshop.rs/projects/coin-slider/)
 * [Nivo Slider](http://dev7studios.com/nivo-slider/)
 
-Find out more at http://www.metaslider.com
+Find out more at https://www.metaslider.com
 
 Follow us on Twitter: [@wpmetaslider](https://twitter.com/wpmetaslider)
 
@@ -99,13 +103,13 @@ The not so easy way:
 
 == Frequently Asked Questions ==
 
-http://www.metaslider.com/documentation/
+https://www.metaslider.com/documentation/
 
 = How do I include a slideshow in the header of my site? =
 
 Video Guide:
 
-http://www.youtube.com/watch?v=gSsWgd66Jjk
+https://www.youtube.com/watch?v=gSsWgd66Jjk
 
 Text Guide:
 
@@ -124,21 +128,21 @@ Add the 'restrict_to' parameter to the shortcode, eg:
 
 Theme specific instructions:
 
-http://www.metaslider.com/documentation/theme-integration/
+https://www.metaslider.com/documentation/theme-integration/
 
 = It's not working - what can I do? =
 
 Check out the troubleshooting page here:
 
-http://www.metaslider.com/documentation/troubleshooting/
+https://www.metaslider.com/documentation/troubleshooting/
 
 = Meta Slider is cropping my images in the wrong place - what can I do? =
 
-See www.metaslider.com/documentation/image-cropping/
+See https://www.metaslider.com/documentation/image-cropping/
 
 == Screenshots ==
 
-1. Meta Slider - for live demos see http://www.metaslider.com/examples/
+1. Meta Slider - for live demos see https://www.metaslider.com/examples/
 2. Nivo Slider example
 3. Coin Slider example
 4. Flex Slider example
@@ -146,6 +150,50 @@ See www.metaslider.com/documentation/image-cropping/
 6. Administration panel - selecting slides
 
 == Changelog ==
+
+= 3.5.1 [01/05/17] =
+
+* Fix: Pre-populate caption and alt text fields for new image slides (based on original media file data)
+* Fix: When a media file is deleted from the media library, also remove it from the slideshow
+* Fix: Update _wp_attachment_metadata when creating new image sizes
+
+= 3.5 [13/03/17] =
+
+* New slides will now be added as a new post type (ml-slide) (existing slideshows and slides will be unaffected)
+* Workaround/Fix: Don't use WP_Image_Editor to load slide images that are missing metadata (invalid images)
+* Fix: Load admin JavaScript in footer
+* New: Add "metaslider_after_resize_image" action
+
+= 3.4.2 [16/01/17] =
+
+* Workaround/Fix: Don't use WP_Image_Editor to load admin slide thumbnails, use wp_get_attachment_image_src instead. Attempts to fix white screen issues affecting some users. Related: https://core.trac.wordpress.org/ticket/36534
+* Fix: Load admin JavaScript in footer
+
+= 3.4 [04/01/17] =
+
+This is the first in a series of small updates which will eventually allow us to remove restrictions in the plugin which prevent us from implementing certain functionality, including:
+
+- Changing a slide image
+- Using unique captions when the same slide has been added to more than one slideshow
+- Adding the same slide to a slideshow multiple times
+- Duplicating slides and sliders
+- Drafting slides
+- Scheduling slides
+
+We are releasing this update in a number of small stages due to the number of users Meta Slider has. We are being overly cautious to ensure it's a smooth transition. This update does not make any major changes to the current plugin functionality, but it does put in place the "scaffolding" code which we will rely on to implement further updates.
+
+= 3.3.7 [06/05/16] =
+
+* Fix: "Maximum level reached" error when inserting the shortcode for a slideshow into it's own caption. Thanks to Zhouyuan @ Fortinet for reporting this.
+
+= 3.3.6 [14/12/15] =
+
+* Fix: Save Spinner
+
+= 3.3.5 [22/09/15] =
+
+* Prepare plugin for WordPress.org translation project (rename textdomain from 'metaslider' to 'ml-slider')
+* Small styling fix
 
 = 3.3.4.1 [29/07/15] =
 

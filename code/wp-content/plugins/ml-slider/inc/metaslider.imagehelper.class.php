@@ -16,6 +16,7 @@ class MetaSliderImageHelper {
     private $url;
     private $path; // path to attachment on server
     private $use_image_editor;
+    private $slide_id;
 
     /**
      * Constructor
@@ -29,13 +30,28 @@ class MetaSliderImageHelper {
 
         $upload_dir = wp_upload_dir();
 
-        $this->id = $slide_id;
-        $this->url = apply_filters("metaslider_attachment_url", $upload_dir['baseurl'] . "/" . get_post_meta( $slide_id, '_wp_attached_file', true ), $slide_id);
-        $this->path = get_attached_file( $slide_id );
+        if ( get_post_type( $slide_id ) === 'attachment' ) {
+            $this->id = $slide_id;
+            $this->slide_id = $slide_id;
+        } else {
+            $this->id = get_post_thumbnail_id( $slide_id );
+            $this->slide_id = $slide_id;
+        }
+
+        $this->url = apply_filters("metaslider_attachment_url", $upload_dir['baseurl'] . "/" . get_post_meta( $this->id, '_wp_attached_file', true ), $this->id);
+        $this->path = get_attached_file( $this->id );
         $this->container_width = $width;
         $this->container_height = $height;
         $this->use_image_editor = $use_image_editor;
         $this->set_crop_type($crop_type);
+
+        $meta = wp_get_attachment_metadata( $this->id );
+
+        $is_valid = isset( $meta['width'], $meta['height'] );
+
+        if ( ! $is_valid ) {
+            $this->use_image_editor = false;
+        }
     }
 
 
@@ -303,15 +319,6 @@ class MetaSliderImageHelper {
 
         // editor will return an error if the path is invalid
         if ( is_wp_error( $image ) ) {
-
-            $capability = apply_filters( 'metaslider_capability', 'edit_others_posts' );
-
-            if ( is_admin() && current_user_can( $capability ) ) {
-                echo '<div id="message" class="error">';
-                echo "<p><strong>ERROR</strong> Slide ID: {$this->id} - <i>" . $image->get_error_message() . "</i></p>";
-                echo "</div>";
-            }
-
             return $this->url;
         }
 
@@ -340,7 +347,21 @@ class MetaSliderImageHelper {
         $backup_sizes["resized-{$dest_size['width']}x{$dest_size['height']}"] = $saved;
         update_post_meta( $this->id, '_wp_attachment_backup_sizes', $backup_sizes );
 
+        // Update recorded image sizes in the metadata
+        $meta_sizes = get_post_meta( $this->id, '_wp_attachment_metadata', true );
+
+        if ( ! is_array( $meta_sizes ) ) {
+            $meta_sizes = array();
+        }
+
+        $temp_saved = $saved;  // working copy of $saved
+        unset( $temp_saved['path'] ); // path does not belong in the meta data
+        $meta_sizes['sizes']["meta-slider-resized-{$dest_size['width']}x{$dest_size['height']}"] = $temp_saved;
+        update_post_meta( $this->id, '_wp_attachment_metadata', $meta_sizes );
+
         $url = str_replace( basename( $this->url ), basename( $saved['path'] ), $this->url );
+
+        do_action( "metaslider_after_resize_image", $this->id, $dest_size['width'], $dest_size['height'], $url );
 
         return $url;
     }
@@ -352,11 +373,9 @@ class MetaSliderImageHelper {
      * @return array
      */
     private function get_crop_position() {
-
-        $crop_position = get_post_meta( $this->id, 'ml-slider_crop_position', true );
+        $crop_position = get_post_meta( $this->slide_id, 'ml-slider_crop_position', true );
 
         if ( $crop_position ) {
-
             $parts = explode( "-", $crop_position );
 
             if ( isset( $parts[0], $parts[1] ) ) {
@@ -364,8 +383,6 @@ class MetaSliderImageHelper {
             }
         }
 
-        // default
         return array('center', 'center');
-
     }
 }

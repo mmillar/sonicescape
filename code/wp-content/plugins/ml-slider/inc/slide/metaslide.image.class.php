@@ -15,7 +15,7 @@ class MetaImageSlide extends MetaSlide {
     public function __construct() {
 
         parent::__construct();
-        
+
         add_filter( 'metaslider_get_image_slide', array( $this, 'get_slide' ), 10, 2 );
         add_action( 'metaslider_save_image_slide', array( $this, 'save_slide' ), 5, 3 );
         add_action( 'wp_ajax_create_image_slide', array( $this, 'ajax_create_slide' ) );
@@ -23,13 +23,14 @@ class MetaImageSlide extends MetaSlide {
 
     }
 
+
     /**
      * Create a new slide and echo the admin HTML
      */
     public function ajax_create_slide() {
         // security check
         if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'metaslider_addslide' ) ) {
-            echo "<tr><td colspan='2'>" . __( "Security check failed. Refresh page and try again.", 'metaslider' ) . "</td></tr>";
+            echo "<tr><td colspan='2'>" . __( "Security check failed. Refresh page and try again.", 'ml-slider' ) . "</td></tr>";
             wp_die();
         }
 
@@ -38,27 +39,19 @@ class MetaImageSlide extends MetaSlide {
 
         if ( is_array( $selection ) && count( $selection ) && $slider_id > 0 ) {
 
-            foreach ( $selection as $slide_id ) {
+            foreach ( $selection as $attachment_id ) {
 
-                $this->set_slide( $slide_id );
-                $this->set_slider( $slider_id );
+                if ( ! wp_attachment_is_image( $attachment_id ) ) {
 
-                if ( $this->slide_exists_in_slideshow( $slider_id, $slide_id ) ) {
-                    
-                    echo "<tr><td colspan='2'>ID: {$slide_id} \"" . get_the_title( $slide_id ) . "\" - " . __( "Failed to add slide. Slide already exists in slideshow.", 'metaslider' ) . "</td></tr>";
-                
-                } else if ( ! $this->slide_is_unassigned_or_image_slide( $slider_id, $slide_id ) ) {
-                    
-                    echo "<tr><td colspan='2'>ID: {$slide_id} \"" . get_the_title( $slide_id ) . "\" - " . __( "Failed to add slide. Slide is not of type 'image'.", 'metaslider' ) . "</td></tr>";
-                
-                } else if ( ! wp_attachment_is_image( $slide_id ) ) {
-                    
-                    echo "<tr><td colspan='2'>ID: {$slide_id} \"" . get_the_title( $slide_id ) . "\" - " . __( "Failed to add slide. Slide is not an image.", 'metaslider' ) . "</td></tr>";
-                
+                    echo "<tr><td colspan='2'>ID: {$slide_id} \"" . get_the_title( $slide_id ) . "\" - " . __( "Failed to add slide. Slide is not an image.", 'ml-slider' ) . "</td></tr>";
+
                 } else {
 
+                    $new_slide_id = $this->insert_slide( $attachment_id, 'image', $slider_id );
+
+                    $this->set_slide( $new_slide_id );
+                    $this->set_slider( $slider_id );
                     $this->tag_slide_to_slider();
-                    $this->add_or_update_or_delete_meta( $slide_id, 'type', 'image' );
 
                     // override the width and height to kick off the AJAX image resizing on save
                     $this->settings['width'] = 0;
@@ -115,9 +108,8 @@ class MetaImageSlide extends MetaSlide {
     protected function get_admin_slide() {
 
         // get some slide settings
-        $imageHelper = new MetaSliderImageHelper( $this->slide->ID, 150, 150, 'false', $this->use_wp_image_editor() );
-        $thumb       = $imageHelper->get_image_url();
-        $slide_label = apply_filters( "metaslider_image_slide_label", __( "Image Slide", "metaslider" ), $this->slide, $this->settings );
+        $thumb       = $this->get_thumb();
+        $slide_label = apply_filters( "metaslider_image_slide_label", __( "Image Slide", "ml-slider" ), $this->slide, $this->settings );
 
         // slide row HTML
         $row  = "<tr class='slide image flex responsive nivo coin'>
@@ -128,7 +120,7 @@ class MetaImageSlide extends MetaSlide {
                             <span class='slide-details'>{$slide_label}</span>
                         </div>
                     </td>
-                    <td class='col-2'> 
+                    <td class='col-2'>
                         " . $this->get_admin_slide_tabs_html() . "
                         <input type='hidden' name='attachment[{$this->slide->ID}][type]' value='image' />
                         <input type='hidden' class='menu_order' name='attachment[{$this->slide->ID}][menu_order]' value='{$this->slide->menu_order}' />
@@ -152,30 +144,30 @@ class MetaImageSlide extends MetaSlide {
         $target = get_post_meta( $slide_id, 'ml-slider_new_window', true ) ? 'checked=checked' : '';
         $caption = esc_textarea( $this->slide->post_excerpt );
 
-        $general_tab = "<textarea name='attachment[{$slide_id}][post_excerpt]' placeholder='" . __( "Caption", "metaslider" ) . "'>{$caption}</textarea>
-                        <input class='url' type='text' name='attachment[{$slide_id}][url]' placeholder='" . __( "URL", "metaslider" ) . "' value='{$url}' />
+        $general_tab = "<textarea name='attachment[{$slide_id}][post_excerpt]' placeholder='" . __( "Caption", "ml-slider" ) . "'>{$caption}</textarea>
+                        <input class='url' type='text' name='attachment[{$slide_id}][url]' placeholder='" . __( "URL", "ml-slider" ) . "' value='{$url}' />
                         <div class='new_window'>
-                        <label>" . __( "New Window", "metaslider" ) . "<input type='checkbox' name='attachment[{$slide_id}][new_window]' {$target} /></label>
+                        <label>" . __( "New Window", "ml-slider" ) . "<input type='checkbox' name='attachment[{$slide_id}][new_window]' {$target} /></label>
                         </div>";
 
         if ( ! $this->is_valid_image() ) {
-            $message = __( "Warning: Image data does not exist. Please re-upload the image.", "metaslider" );
+            $message = __( "Warning: Image data does not exist. Please re-upload the image.", "ml-slider" );
 
             $general_tab = "<div class='warning'>{$message}</div>" . $general_tab;
         }
 
-        $seo_tab = "<div class='row'><label>" . __( "Image Title Text", "metaslider" ) . "</label></div>
+        $seo_tab = "<div class='row'><label>" . __( "Image Title Text", "ml-slider" ) . "</label></div>
                     <div class='row'><input type='text' size='50' name='attachment[{$slide_id}][title]' value='{$title}' /></div>
-                    <div class='row'><label>" . __( "Image Alt Text", "metaslider" ) . "</label></div>
+                    <div class='row'><label>" . __( "Image Alt Text", "ml-slider" ) . "</label></div>
                     <div class='row'><input type='text' size='50' name='attachment[{$slide_id}][alt]' value='{$alt}' /></div>";
 
         $tabs = array(
             'general' => array(
-                'title' => __( "General", "metaslider" ),
+                'title' => __( "General", "ml-slider" ),
                 'content' => $general_tab
             ),
             'seo' => array(
-                'title' => __( "SEO", "metaslider" ),
+                'title' => __( "SEO", "ml-slider" ),
                 'content' => $seo_tab
             )
         );
@@ -187,27 +179,27 @@ class MetaImageSlide extends MetaSlide {
             if ( ! $crop_position ) {
                 $crop_position = 'center-center';
             }
-        
-            $crop_tab = "<div class='row'><label>" . __( "Crop Position", "metaslider" ) . "</label></div>
+
+            $crop_tab = "<div class='row'><label>" . __( "Crop Position", "ml-slider" ) . "</label></div>
                         <div class='row'>
                             <select class='crop_position' name='attachment[{$slide_id}][crop_position]'>
-                                <option value='left-top' " . selected( $crop_position, 'left-top', false ) . ">" . __( "Top Left", "metaslider" ) . "</option>
-                                <option value='center-top' " . selected( $crop_position, 'center-top', false ) . ">" . __( "Top Center", "metaslider" ) . "</option>
-                                <option value='right-top' " . selected( $crop_position, 'right-top', false ) . ">" . __( "Top Right", "metaslider" ) . "</option>
-                                <option value='left-center' " . selected( $crop_position, 'left-center', false ) . ">" . __( "Center Left", "metaslider" ) . "</option>
-                                <option value='center-center' " . selected( $crop_position, 'center-center', false ) . ">" . __( "Center Center", "metaslider" ) . "</option>
-                                <option value='right-center' " . selected( $crop_position, 'right-center', false ) . ">" . __( "Center Right", "metaslider" ) . "</option>
-                                <option value='left-bottom' " . selected( $crop_position, 'left-bottom', false ) . ">" . __( "Bottom Left", "metaslider" ) . "</option>
-                                <option value='center-bottom' " . selected( $crop_position, 'center-bottom', false ) . ">" . __( "Bottom Center", "metaslider" ) . "</option>
-                                <option value='right-bottom' " . selected( $crop_position, 'right-bottom', false ) . ">" . __( "Bottom Right", "metaslider" ) . "</option>
+                                <option value='left-top' " . selected( $crop_position, 'left-top', false ) . ">" . __( "Top Left", "ml-slider" ) . "</option>
+                                <option value='center-top' " . selected( $crop_position, 'center-top', false ) . ">" . __( "Top Center", "ml-slider" ) . "</option>
+                                <option value='right-top' " . selected( $crop_position, 'right-top', false ) . ">" . __( "Top Right", "ml-slider" ) . "</option>
+                                <option value='left-center' " . selected( $crop_position, 'left-center', false ) . ">" . __( "Center Left", "ml-slider" ) . "</option>
+                                <option value='center-center' " . selected( $crop_position, 'center-center', false ) . ">" . __( "Center Center", "ml-slider" ) . "</option>
+                                <option value='right-center' " . selected( $crop_position, 'right-center', false ) . ">" . __( "Center Right", "ml-slider" ) . "</option>
+                                <option value='left-bottom' " . selected( $crop_position, 'left-bottom', false ) . ">" . __( "Bottom Left", "ml-slider" ) . "</option>
+                                <option value='center-bottom' " . selected( $crop_position, 'center-bottom', false ) . ">" . __( "Bottom Center", "ml-slider" ) . "</option>
+                                <option value='right-bottom' " . selected( $crop_position, 'right-bottom', false ) . ">" . __( "Bottom Right", "ml-slider" ) . "</option>
                             </select>
                         </div>";
 
             $tabs['crop'] = array(
-                'title' => __( "Crop", "metaslider" ),
+                'title' => __( "Crop", "ml-slider" ),
                 'content' => $crop_tab
             );
-            
+
         }
 
         return apply_filters("metaslider_image_slide_tabs", $tabs, $this->slide, $this->slider, $this->settings);
@@ -224,7 +216,13 @@ class MetaImageSlide extends MetaSlide {
      */
     public function is_valid_image() {
 
-        $meta = wp_get_attachment_metadata( $this->slide->ID );
+        if ( get_post_type( $this->slide->ID ) === 'attachment' ) {
+            $image_id = $this->slide->ID;
+        } else {
+            $image_id = get_post_thumbnail_id( $this->slide->ID );
+        }
+
+        $meta = wp_get_attachment_metadata( $image_id );
 
         $is_valid = isset( $meta['width'], $meta['height'] );
 
@@ -242,6 +240,7 @@ class MetaImageSlide extends MetaSlide {
         return apply_filters( 'metaslider_use_image_editor', $this->is_valid_image(), $this->slide );
 
     }
+
 
     /**
      * Returns the HTML for the public slide
@@ -262,6 +261,12 @@ class MetaImageSlide extends MetaSlide {
 
         $thumb = $imageHelper->get_image_url();
 
+        if ( $this->detect_self_metaslider_shortcode( $this->slide->post_excerpt ) ) {
+            $caption = str_replace( array( "[metaslider", "[ml-slider" ), "[metaslider-disabled", $this->slide->post_excerpt );
+        } else {
+            $caption = $this->slide->post_excerpt;
+        }
+
         // store the slide details
         $slide = array(
             'id' => $this->slide->ID,
@@ -273,8 +278,8 @@ class MetaImageSlide extends MetaSlide {
             'width' => $this->settings['width'],
             'height' => $this->settings['height'],
             'alt' => __( get_post_meta( $this->slide->ID, '_wp_attachment_image_alt', true ) ),
-            'caption' => __( html_entity_decode( do_shortcode( $this->slide->post_excerpt ), ENT_NOQUOTES, 'UTF-8' ) ),
-            'caption_raw' => __( do_shortcode( $this->slide->post_excerpt ) ),
+            'caption' => __( html_entity_decode( do_shortcode( $caption ), ENT_NOQUOTES, 'UTF-8' ) ),
+            'caption_raw' => __( do_shortcode( $caption ) ),
             'class' => "slider-{$this->slider->ID} slide-{$this->slide->ID}",
             'rel' => "",
             'data-thumb' => ""
@@ -407,7 +412,13 @@ class MetaImageSlide extends MetaSlide {
      */
     private function flex_smart_pad( $atts, $slide ) {
 
-        $meta = wp_get_attachment_metadata( $slide['id'] );
+        if ( get_post_type( $slide['id'] ) === 'attachment' ) {
+            $slide_id = $slide['id'];
+        } else {
+            $slide_id = get_post_thumbnail_id( $slide['id'] );
+        }
+
+        $meta = wp_get_attachment_metadata( $slide_id );
 
         if ( isset( $meta['width'], $meta['height'] ) ) {
 
@@ -419,17 +430,11 @@ class MetaImageSlide extends MetaSlide {
             $new_image_height = $image_height * ( $container_width / $image_width );
 
             if ( $new_image_height < $container_height ) {
-
                 $margin_top_in_px = ( $container_height - $new_image_height ) / 2;
-
                 $margin_top_in_percent = ( $margin_top_in_px / $container_width ) * 100;
-
                 return 'margin-top: ' . $margin_top_in_percent . '%';
-
             } else {
-
                 return 'margin: 0 auto; width: ' . ( $container_height / $new_image_height ) * 100 . '%';
-
             }
 
         }

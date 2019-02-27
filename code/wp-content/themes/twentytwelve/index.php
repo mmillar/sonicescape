@@ -31,7 +31,7 @@ query_posts(array('category_name' => "main", 'posts_per_page' => -1));
 
 			<article class="post-748 post type-post status-publish format-standard hentry category-news">
 			<div class="entry-content">
-			<p><i>Sonic Escape</i> features Maria Millar (violin) and Shawn Wyckoff (flute), a pair of Juilliard graduates whose blend of hyper-instrumentals, stories, dance moves and original works is "wonderfully imaginative... with a wide-ranging, anything-goes sense of fun.” (The Washington Post)</p>
+			<p><i>Sonic Escape</i> features Maria Kaneko Millar (violin) and Shawn Wyckoff (flute), a pair of Juilliard graduates whose blend of hyper-instrumentals, stories, moves and original works is "wonderfully imaginative... with a wide-ranging, anything-goes sense of fun.” (The Washington Post)</p>
 			</div></article>
 
 			<?php while ( have_posts() ) : the_post(); ?>

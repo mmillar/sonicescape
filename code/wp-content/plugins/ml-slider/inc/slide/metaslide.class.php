@@ -73,7 +73,7 @@ class MetaSlide {
         if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'metaslider_changeslide' ) ) {
             wp_die( json_encode( array(
                     'status' => 'fail',
-                    'msg' => __( "Security check failed. Refresh page and try again.", "metaslider" )
+                    'msg' => __( "Security check failed. Refresh page and try again.", "ml-slider" )
                 )
             ));
         }
@@ -118,7 +118,7 @@ class MetaSlide {
 
         wp_die( json_encode( array(
                 'status' => 'fail',
-                'msg' => __( "File copy failed. Please check upload directory permissions.", "metaslider" )
+                'msg' => __( "File copy failed. Please check upload directory permissions.", "ml-slider" )
             )
         ));
     }
@@ -222,6 +222,48 @@ class MetaSlide {
 
 
     /**
+     * Create a new post for a slide. Tag a featured image to it.
+     *
+     * @since 3.4
+     * @param string $attachment_id - Media File ID to use for the slide
+     * @param string $type - the slide type identifier
+     * @param int $slider_id - the parent slideshow ID
+     * @return int $id - the ID of the newly created slide
+     */
+    public function insert_slide($attachment_id, $type, $slider_id) {
+
+        $id = wp_insert_post( array(
+                'post_title' => __( "Slider {$slider_id} - {$type}", "ml-slider" ),
+                'post_status' => 'publish',
+                'post_type' => 'ml-slide'
+            )
+        );
+
+        if ( $attachment_id ) {
+            set_post_thumbnail( $id, $attachment_id );
+        }
+
+        if ( $type === 'image' ) {
+            // copy across alt text
+            $alt = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
+            add_post_meta( $id, '_wp_attachment_image_alt', $alt );
+
+            // copy across caption
+            $caption = get_the_excerpt( $attachment_id );
+
+            wp_update_post( array(
+                'ID' => $id,
+                'post_excerpt' => $caption
+            ) );
+        }
+
+        $this->add_or_update_or_delete_meta( $id, 'type', $type );
+
+        return $id;
+
+    }
+
+    /**
      * Tag the slide attachment to the slider tax category
      */
     public function tag_slide_to_slider() {
@@ -283,8 +325,8 @@ class MetaSlide {
 
         $url = wp_nonce_url( admin_url( "admin-post.php?action=metaslider_delete_slide&slider_id={$this->slider->ID}&slide_id={$this->slide->ID}" ), "metaslider_delete_slide" );
 
-        return "<a title='" . __("Delete slide", "metaslider") . "' class='tipsy-tooltip-top delete-slide dashicons dashicons-trash' href='{$url}'>" . __("Delete slide", "metaslider") . "</a>";
-    
+        return "<a title='" . __("Delete slide", "ml-slider") . "' class='tipsy-tooltip-top delete-slide dashicons dashicons-trash' href='{$url}'>" . __("Delete slide", "ml-slider") . "</a>";
+
     }
 
     /**
@@ -294,7 +336,7 @@ class MetaSlide {
 
         return apply_filters("metaslider_change_image_button_html", "", $this->slide);
 
-        //return "<a title='" . __("Change slide image", "metaslider") . "' class='tipsy-tooltip-top change-image dashicons dashicons-edit' data-button-text='" . __("Change slide image", "metaslider") . "' data-slide-id='{$this->slide->ID}'>" . __("Change slide image", "metaslider") . "</a>";
+        //return "<a title='" . __("Change slide image", "ml-slider") . "' class='tipsy-tooltip-top change-image dashicons dashicons-edit' data-button-text='" . __("Change slide image", "ml-slider") . "' data-slide-id='{$this->slide->ID}'>" . __("Change slide image", "ml-slider") . "</a>";
     }
 
     /**
@@ -337,8 +379,8 @@ class MetaSlide {
             'force_no_custom_order' => true,
             'orderby' => 'menu_order',
             'order' => 'DESC',
-            'post_type' => 'attachment',
-            'post_status' => 'inherit',
+            'post_type' => array('attachment', 'ml-slide'),
+            'post_status' => array('inherit', 'publish'),
             'lang' => '', // polylang, ingore language filter
             'suppress_filters' => 1, // wpml, ignore language filter
             'posts_per_page' => 1,
@@ -367,7 +409,7 @@ class MetaSlide {
         wp_update_post( array(
                 'ID' => $this->slide->ID,
                 'menu_order' => $menu_order
-            ) 
+            )
         );
 
     }
@@ -396,13 +438,47 @@ class MetaSlide {
 
     }
 
+
+    /**
+     * Detect a [metaslider] or [ml-slider] shortcode in the slide caption, which has an ID that matches the current slideshow ID
+     *
+     * @param $content string
+     */
+    protected function detect_self_metaslider_shortcode( $content ) {
+        $pattern = get_shortcode_regex();
+
+        if ( preg_match_all( '/'. $pattern .'/s', $content, $matches ) && array_key_exists( 2, $matches ) && ( in_array( 'metaslider', $matches[2] ) || in_array( 'ml-slider', $matches[2] ) ) ) {
+            // caption contains [metaslider] shortcode
+            if ( array_key_exists( 3, $matches ) && array_key_exists( 0, $matches[3] ) ) {
+                // [metaslider] shortcode has attributes
+                $attributes = shortcode_parse_atts( $matches[3][0] );
+
+                if ( isset( $attributes['id'] ) && $attributes['id'] == $this->slider->ID ) {
+                    // shortcode has ID attribute that matches the current slideshow ID
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+
     /**
      * Get the thumbnail for the slide
      */
     public function get_thumb() {
 
-        $imageHelper = new MetaSliderImageHelper( $this->slide->ID, 150, 150, 'false' );
-        return $imageHelper->get_image_url();
+        if ( get_post_type( $this->slide->ID ) == 'attachment' ) {
+            $image = wp_get_attachment_image_src( $this->slide->ID, 'thumbnail');
+        } else {
+            $image = wp_get_attachment_image_src( get_post_thumbnail_id( $this->slide->ID ) , 'thumbnail');
+        }
 
+        if ( isset( $image[0] ) ) {
+            return $image[0];
+        }
+
+        return "";
     }
 }
