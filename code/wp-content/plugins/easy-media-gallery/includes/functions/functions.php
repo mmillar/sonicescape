@@ -46,8 +46,8 @@ function easymedia_reg_script() {
 	wp_register_script( 'emg-bootstrap-js', plugins_url( 'js/bootstrap/bootstrap.min.js' , dirname(__FILE__) ) );	
 	wp_register_script( 'cpscript', plugins_url( 'functions/funcscript.js' , dirname(__FILE__) ) );	
 	wp_register_script( 'emg-tabs', plugins_url( 'js/jquery/responsivetabs/jquery.responsiveTabs.min.js' , dirname(__FILE__) ) );		
-		
-	
+	wp_register_script( 'emg-wnew', plugins_url( 'js/func/emg-affiliate.js' , dirname(__FILE__) ) );
+	wp_register_script( 'emg-youtube-subscribe', 'https://apis.google.com/js/platform.js', array(), false, false );
 		
 }
 add_action( 'admin_init', 'easymedia_reg_script' );
@@ -166,7 +166,7 @@ add_action( 'wp_ajax_emg_cp_reset', 'emg_cp_reset' );
 function emg_load_media_list() {
 	
 	if ( !isset( $_POST['taxo'] ) ) {
-		echo '<p>Ajax request failed, please try again.</p>';
+		echo '<p>Ajax request failed, please refresh your browser window and try again.</p>';
 		wp_die();
 		}
 		else {
@@ -360,12 +360,12 @@ add_action('init', 'easmedia_add_thumbnail_support');
 /*-------------------------------------------------------------------------------*/
 /* Add credits in admin page
 /*-------------------------------------------------------------------------------*/
-function easymediagallery_add_footer_credits( $text ) {
+function easymedia_add_footer_credits( $text ) {
 	$t = '';
 	if ( get_post_type() === 'easymediagallery' ) {
 		$t .= "<div id=\"credits\" style=\"line-height: 22px;\">";
-		$t .= "<p>Easy Media Gallery plugin Lite is created by <a href=\"http://ghozylab.com/plugins/\" target=\"_blank\">GhozyLab, Inc</a>.</p>";
-		$t .= "<p>If you have some support issue, don't hesitate to <a href=\"http://ghozylab.com/plugins/submit-support-request/\" target=\"_blank\">contact us here</a>. The GhozyLab team will be happy to support you on any issue.</p>";
+		$t .= "<p>Easy Media Gallery plugin Lite is created by <a href=\"https://ghozylab.com/plugins/\" target=\"_blank\">GHOZY LAB LLC</a>.</p>";
+		$t .= "<p>If you have some support issue, do not hesitate to <a href=\"https://ghozy.link/bctnd\" target=\"_blank\">contact us here</a>. The GhozyLab Teams will be happy to support you on any issue.</p>";
 		$t .= "</div>";
 	}else{
 		$t = $text;
@@ -373,14 +373,14 @@ function easymediagallery_add_footer_credits( $text ) {
 
 	return $t;
 }
-add_filter( 'admin_footer_text', 'easymediagallery_add_footer_credits' );
+add_filter( 'admin_footer_text', 'easymedia_add_footer_credits' );
 
 /*-------------------------------------------------------------------------------*/
 /*  Get the patterns list 
 /*-------------------------------------------------------------------------------*/
 function easmedia_patterns_ls() {
 	$patterns = array();
-	$patterns_list = scandir( EMG_DIR."/css/images/patterns" );
+	$patterns_list = scandir( EMG_DIR."css/images/patterns" );
 	
 	foreach( $patterns_list as $pattern_name ) {
 		if ( $pattern_name != '.' && $pattern_name != '..' ) {
@@ -452,10 +452,14 @@ return $finaldata;
 /*-------------------------------------------------------------------------------*/
 /*  Get attachment image id 
 /*-------------------------------------------------------------------------------*/
-function emg_get_attachment_id_from_src ($link) {
-    global $wpdb;
-        $link = preg_replace('/-\d+x\d+(?=\.(jpg|jpeg|png|gif)$)/i', '', $link);
-        return $wpdb->get_var("SELECT ID FROM {$wpdb->posts} WHERE guid='$link'");
+function emg_get_attachment_id_from_src($link) {
+	
+	$url = wp_make_link_relative( $link );
+		
+	global $wpdb;
+	$query = "SELECT ID FROM {$wpdb->posts} WHERE guid RLIKE '$url'";
+	return $wpdb->get_var($query);
+		
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -494,7 +498,7 @@ function easymedia_imgresize_ajax() {
 	check_ajax_referer( 'easymedia-thumb', 'security' );
 	
 	if ( !isset( $_POST['imgurl'] ) || !isset( $_POST['limiter'] ) || $_POST['imgurl'] == '' || $_POST['limiter'] == '' ) {
-		echo '<p>Ajax request failed, please refresh your browser window.</p>';
+		echo '<p>Ajax request failed, please refresh your browser window and try again.</p>';
 		wp_die();
 		}
 		else {
@@ -570,12 +574,13 @@ $getwpinfo[0] = "- Site URL : " .get_site_url();
 // Get Multisite status
 if ( is_multisite() ) { $getwpinfo[1] = '- WP Multisite : YES'; } else { $getwpinfo[1] = '- WP Multisite : NO'; }
 
-global $wp_version, $emgmemory;		
-echo "- WP Version : ".$wp_version."\n";
+global $emgmemory;		
+echo "- WP Version : ".EMG_WPVER."\n";
 echo  "- EMG-Lite Version : ".EASYMEDIA_VERSION."\n";	
 echo $getwpinfo[0]."\n";
 echo $getwpinfo[1]."\n";
 echo "- Memory Limit : ".$emgmemory."\n";
+echo '- PHP Curl : '.( function_exists('curl_version') ? 'Enabled' : 'Disabled' )."\n";
 $theme_name = wp_get_theme();
 echo "- Active Theme : ".$theme_name->get('Name')."\n";
 echo "- Active Plugins : \n";
@@ -602,7 +607,7 @@ if ( is_multisite() ) {
 /*  Get Plugin Version (@return string Plugin version)
 /*-------------------------------------------------------------------------------*/
 function easymedia_get_plugin_version() {
-    $plugin_data = get_plugin_data( EMG_DIR . '/easy-media-gallery.php' );
+    $plugin_data = get_plugin_data( EMG_DIR . 'easy-media-gallery.php' );
     $plugin_version = $plugin_data['Version'];
     return $plugin_version;
 }
@@ -611,58 +616,67 @@ function easymedia_get_plugin_version() {
 /*  Enable Sorting of the Media 
 /*-------------------------------------------------------------------------------*/
 function easmedia_create_easymedia_sort_page() {
-    $easmedia_sort_page = add_submenu_page('edit.php?post_type=easymediagallery', 'Sorter', __('Sorter', 'easmedia'), 'edit_posts', 'easymedia-order', 'easmedia_easymedia_sort');
+    $easmedia_sort_page = add_submenu_page('edit.php?post_type=easymediagallery', 'Sorter', __('Sorter', 'easy-media-gallery'), 'edit_posts', 'easymedia-order', 'easmedia_easymedia_sort');
     
     add_action('admin_print_styles-' . $easmedia_sort_page, 'easmedia_print_sort_styles');
     add_action('admin_print_scripts-' . $easmedia_sort_page, 'easmedia_print_sort_scripts');
 }
 add_action( 'admin_menu', 'easmedia_create_easymedia_sort_page' );
 
-
 function easmedia_easymedia_sort() {
-    $easymedias = new WP_Query('post_type=easymediagallery&posts_per_page=-1&orderby=menu_order&order=ASC'); 
-	if (  $easymedias->have_posts() ) :
+	
+	wp_reset_postdata();
+	
+	global $post;
+			
+	$args = array(
+  		'post_type' => 'easymediagallery',
+  		'order' => 'ASC',
+		'orderby' => 'menu_order',
+  		'post_status' => 'publish',
+  		'posts_per_page' => -1,
+	);
+
+	$posttitle = get_posts( $args );
+	
 	?>
     <div class="wrap">
         <div id="icon-edit" class="icon32 icon32-posts-easymedia"><br /></div>
-        <h2><?php _e('Sorter', 'easmedia'); ?></h2>
-        <p><?php _e('Simply drag the Media up or down and they will be saved in that order. Media at the top will appear first.', 'easmedia'); ?></p>
+        <h2><?php _e('Sorter', 'easy-media-gallery'); ?></h2>
+        <p><?php _e('Simply drag the Media up or down and they will be saved in that order. Media at the top will appear first.', 'easy-media-gallery'); ?></p>
 
 		<div class="metabox-holder">
 			<div class="postbox">
-				<h3><?php _e( 'Sort Media', 'easmedia' ); ?>:</h3>
-
-
+				<h3><?php _e( 'Sort Media', 'easy-media-gallery' ); ?>:</h3>
         <ul id="easymedia_list" style="padding-left:10px !important;">
-            <?php while( $easymedias->have_posts() ) : $easymedias->the_post(); ?>        
-                    <li id="<?php the_id(); ?>" class="menu-item">
+        
+        	<?php if( !empty ( $posttitle ) ) {
+            foreach( $posttitle as $post ) : setup_postdata( $post ); ?>        
+                    <li id="<?php esc_attr( the_id() ); ?>" class="menu-item">
                         <dl class="menu-item-bar">
                             <dt class="menu-item-handle">
-                                <img style="float:left; vertical-align:middle;padding-top: 4px; margin-right:10px;" src="<?php echo plugins_url( 'images/sort.png' , dirname(__FILE__) ) ?>" height="28px;" width="28px;"/><span class="item-title"><?php echo esc_html(esc_js(the_title(NULL, NULL, FALSE))); ?></span>
+                                <img style="float:left; vertical-align:middle;padding-top: 4px; margin-right:10px;" src="<?php echo esc_url( plugins_url( 'images/sort.png' , dirname(__FILE__) ) ) ?>" height="28px;" width="28px;"/><span style="line-height: 32px;" class="item-title"><?php echo esc_html(esc_js(the_title(NULL, NULL, FALSE))); ?></span>
                             </dt>
                         </dl>
                         <ul class="menu-item-transport"></ul>
                     </li>
-            <?php endwhile; 
+            <?php endforeach; 
 /*
 Thanks to Kevin Falcoz (aka 0pc0deFR) for this discovery and this patch.
 ::: esc_html(esc_js(the_title(NULL, NULL, FALSE))); :::
 */ 
 ?>
-
-				<?php else: ?>
+				<?php } else { ?>
 <div class="wrap">
 <div id="icon-edit" class="icon32 icon32-posts-easymedia"><br /></div>  
-<h2><?php _e('Sorter', 'easmedia'); ?></h2> 
+<h2><?php _e('Sorter', 'easy-media-gallery'); ?></h2> 
 		<div class="metabox-holder">
 			<div class="postbox">
-				<h3><?php _e( 'Sort Media', 'easmedia' ); ?>:</h3>             
-<p style="padding:10px;"><?php printf( __('No items found, why not %screate one%s?	', 'easmedia'), '<a href="post-new.php?post_type=easymediagallery">', '</a>'); ?> </p></div></div></div>				
-<?php endif; ?>            
-            
-            <?php wp_reset_postdata(); ?>
+				<h3><?php _e( 'Sort Media', 'easy-media-gallery' ); ?>:</h3>             
+<p style="padding:10px;"><?php printf( __('No items found, why not %screate one%s?	', 'easy-media-gallery'), '<a href="'.esc_url( 'post-new.php?post_type=easymediagallery' ).'">', '</a>'); ?> </p></div></div></div>				
+<?php } ?>
         </ul>
-    </div><div style="padding-left:33px; margin-bottom:30px"><img src="<?php echo plugins_url( 'images/dragdrop.png' , dirname(__FILE__) ) ?>" height="23px;" width="161px;"/></div>
+    </div><div style="padding-left:33px; margin-bottom:30px"><img src="<?php echo esc_url( plugins_url( 'images/dragdrop.png' , dirname(__FILE__) ) ) ?>" height="23px;" width="161px;"/></div>
   </div>
  </div>  
 	<?php 
@@ -712,28 +726,66 @@ function emg_download_count() {
 if ( easy_get_option( 'easymedia_disen_dasnews' ) == '1' ) {
 function emg_register_dashboard_widgets() {
 	if ( current_user_can( apply_filters( 'emg_dashboard_stats_cap', 'edit_pages' ) ) ) {
-		wp_add_dashboard_widget( 'emg_dashboard_stat', __('Easy Media Gallery (Lite) '.emg_download_count().'', 'easmedia'), 'emg_dashboard_widget' );
+		wp_add_dashboard_widget( 'emg_dashboard_stat', __('Easy Media Gallery (Lite) '.emg_download_count().'', 'easy-media-gallery'), 'emg_dashboard_widget' );
 	}
 }
 add_action('wp_dashboard_setup', 'emg_register_dashboard_widgets' );
 
 function emg_dashboard_widget() {
 ?>
+<style>
+.ghozyaffjoin {
+	margin: 10px 0px 10px 0px;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #446bb3), color-stop(1, #3874bd));
+	background:-moz-linear-gradient(top, #446bb3 5%, #3874bd 100%);
+	background:-webkit-linear-gradient(top, #446bb3 5%, #3874bd 100%);
+	background:-o-linear-gradient(top, #446bb3 5%, #3874bd 100%);
+	background:-ms-linear-gradient(top, #446bb3 5%, #3874bd 100%);
+	background:linear-gradient(to bottom, #446bb3 5%, #3874bd 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#446bb3', endColorstr='#3874bd',GradientType=0);
+	background-color:#446bb3;
+	border:1px solid #7b8cad;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:19px;
+	padding:5px 25px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #283c66;
+}
+.ghozyaffjoin:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3874bd), color-stop(1, #446bb3));
+	background:-moz-linear-gradient(top, #3874bd 5%, #446bb3 100%);
+	background:-webkit-linear-gradient(top, #3874bd 5%, #446bb3 100%);
+	background:-o-linear-gradient(top, #3874bd 5%, #446bb3 100%);
+	background:-ms-linear-gradient(top, #3874bd 5%, #446bb3 100%);
+	background:linear-gradient(to bottom, #3874bd 5%, #446bb3 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#3874bd', endColorstr='#446bb3',GradientType=0);
+	background-color:#3874bd;
+	color:#ffffff;
+}
+.ghozyaffjoin:active {
+	position:relative;
+	top:1px;
+}
+
+</style>
     <div class="emg_dashboard_widget">
-<p class="sub">GhozyLab partners with 6,000 affiliates and pays out over $200,000 per year!<br />Earn <span style="color: red;">EXTRA MONEY</span> and get 30% affiliate share from every sale you make!<br /><a target="_blank" href="http://ghozylab.com/plugins/affiliate-program/"><img style="cursor:pointer; margin-top: 7px;" src="<?php echo plugins_url( 'images/btn-joinnow.png' , dirname(__FILE__) ); ?>" width="170" height="49" alt="Join Now!" ></a></p>	
+<p class="sub">GhozyLab partners with 8,000 affiliates and pays out over $200,000 per year!<br />Earn <span style="color: red;">EXTRA MONEY</span> and get 30% affiliate share from every sale you make!<br /><a target="_blank" class="ghozyaffjoin" href="https://ghozylab.com/plugins/affiliate-program/">JOIN NOW &#10095;</a></p>	
 <div style="position:relative;">
 <ul class='easymedia-social' id='easymedia-cssanime'>
 <li class='easymedia-facebook'>
-<a onclick="window.open('http://www.facebook.com/sharer.php?s=100&amp;p[title]=Check out the Best Wordpress Portfolio and Gallery plugin&amp;p[summary]=Easy Media Gallery for WordPress that is powerful and so easy to create portfolio or media gallery&amp;p[url]=http://ghozylab.com/plugins/&amp;p[images][0]=<?php echo plugins_url( 'images/easymediabox.png' , dirname(__FILE__) ) ?>', 'sharer', 'toolbar=0,status=0,width=548,height=325');" href="javascript: void(0)" title="Share"><strong>Facebook</strong></a>
+<a onclick="window.open('http://www.facebook.com/sharer.php?s=100&amp;p[title]=Check out the Best Portfolio and Gallery Wordpress plugin&amp;p[summary]=Easy Media Gallery for WordPress that is powerful and so easy to create portfolio or media gallery&amp;p[url]=https://ghozylab.com/plugins/&amp;p[images][0]=<?php echo plugins_url( 'images/easymediabox.png' , dirname(__FILE__) ) ?>', 'sharer', 'toolbar=0,status=0,width=548,height=325');" href="javascript: void(0)" title="Share"><strong>Facebook</strong></a>
 </li>
 <li class='easymedia-twitter'>
-<a onclick="window.open('https://twitter.com/share?text=Check out the Best Wordpress Portfolio and Gallery Plugin &url=http://ghozylab.com/plugins/', 'sharer', 'toolbar=0,status=0,width=548,height=325');" title="Twitter" class="circle"><strong>Twitter</strong></a>
+<a onclick="window.open('https://twitter.com/share?text=Check out the Best Portfolio and Gallery Wordpress Plugin &url=https://ghozylab.com/plugins/', 'sharer', 'toolbar=0,status=0,width=548,height=325');" title="Twitter" class="circle"><strong>Twitter</strong></a>
 </li>
 <li class='easymedia-googleplus'>
-<a onclick="window.open('https://plus.google.com/share?url=http://ghozylab.com/plugins/','','width=415,height=450');"><strong>Google+</strong></a>
+<a onclick="window.open('https://plus.google.com/share?url=https://ghozylab.com/plugins/','','width=415,height=450');"><strong>Google+</strong></a>
 </li>
 <li class='easymedia-pinterest'>
-<a onclick="window.open('http://pinterest.com/pin/create/button/?url=http://ghozylab.com/plugins/;media=<?php echo plugins_url( 'images/easymediabox.png' , dirname(__FILE__) ) ?>;description=Easy Media Gallery for WordPress that is powerful and so easy to create portfolio or media gallery','','width=600,height=300');"><strong>Pinterest</strong></a>
+<a onclick="window.open('http://pinterest.com/pin/create/button/?url=https://ghozylab.com/plugins/;media=<?php echo plugins_url( 'images/easymediabox.png' , dirname(__FILE__) ) ?>;description=Best plugin for WordPress that is powerful and so easy to create portfolio or media gallery','','width=600,height=300');"><strong>Pinterest</strong></a>
 </li>
 </ul>
 </div></div>
@@ -747,16 +799,16 @@ function emg_share() {
 <div style="position:relative; margin-top:6px;">
 <ul class='easymedia-social' id='easymedia-cssanime'>
 <li class='easymedia-facebook'>
-<a onclick="window.open('http://www.facebook.com/sharer.php?s=100&amp;p[title]=Check out the Best Wordpress Portfolio and Gallery plugin&amp;p[summary]=Easy Media Gallery for WordPress that is powerful and so easy to create portfolio or media gallery&amp;p[url]=http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-grid-galleries-plugin/&amp;p[images][0]=<?php echo plugins_url( 'images/easymediabox.png' , dirname(__FILE__) ) ?>', 'sharer', 'toolbar=0,status=0,width=548,height=325');" href="javascript: void(0)" title="Share"><strong>Facebook</strong></a>
+<a onclick="window.open('http://www.facebook.com/sharer.php?s=100&amp;p[title]=Check out the Best Wordpress Portfolio and Gallery plugin&amp;p[summary]=Easy Media Gallery for WordPress that is powerful and so easy to create portfolio or media gallery&amp;p[url]=https://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-grid-galleries-plugin/&amp;p[images][0]=<?php echo plugins_url( 'images/easymediabox.png' , dirname(__FILE__) ) ?>', 'sharer', 'toolbar=0,status=0,width=548,height=325');" href="javascript: void(0)" title="Share"><strong>Facebook</strong></a>
 </li>
 <li class='easymedia-twitter'>
-<a onclick="window.open('https://twitter.com/share?text=Check out the Best Wordpress Portfolio and Gallery Plugin &url=http://ghozylab.com/', 'sharer', 'toolbar=0,status=0,width=548,height=325');" title="Twitter" class="circle"><strong>Twitter</strong></a>
+<a onclick="window.open('https://twitter.com/share?text=Check out the Best Wordpress Portfolio and Gallery Plugin &url=https://ghozylab.com/plugins/', 'sharer', 'toolbar=0,status=0,width=548,height=325');" title="Twitter" class="circle"><strong>Twitter</strong></a>
 </li>
 <li class='easymedia-googleplus'>
-<a onclick="window.open('https://plus.google.com/share?url=http://ghozylab.com/','','width=415,height=450');"><strong>Google+</strong></a>
+<a onclick="window.open('https://plus.google.com/share?url=https://ghozylab.com/plugins/','','width=415,height=450');"><strong>Google+</strong></a>
 </li>
 <li class='easymedia-pinterest'>
-<a onclick="window.open('http://pinterest.com/pin/create/button/?url=http://ghozylab.com/;media=<?php echo plugins_url( 'images/easymediabox.png' , dirname(__FILE__) ) ?>;description=Easy Media Gallery for WordPress that is powerful and so easy to create portfolio or media gallery','','width=600,height=300');"><strong>Pinterest</strong></a>
+<a onclick="window.open('http://pinterest.com/pin/create/button/?url=https://ghozylab.com/plugins/;media=<?php echo plugins_url( 'images/easymediabox.png' , dirname(__FILE__) ) ?>;description=Easy Media Gallery for WordPress that is powerful and so easy to create portfolio or media gallery','','width=600,height=300');"><strong>Pinterest</strong></a>
 </li>
 </ul>
 </div>
@@ -795,7 +847,7 @@ add_action( 'wp_ajax_emg_hide_noty', 'emg_hide_noty' );
 /*-------------------------------------------------------------------------------*/
 function emg_prodemo_metabox () {
 	$emgdm = '<div style="text-align:center;">';
-	$emgdm .= '<a id="emgdemotableclr" style="outline: none !important;" target="_blank" href="http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-and-photo-albums-demo/?utm_source=mediaeditor&utm_medium=rightside&utm_campaign=editor-right"><img style="cursor:pointer; margin-top: 7px;" src="'.plugins_url( 'images/view-demo-button.jpg' , dirname(__FILE__) ).'" width="232" height="60" alt="Pro Version Demo" ></a>';
+	$emgdm .= '<a id="emgdemotableclr" style="outline: none !important;" target="_blank" href="https://ghozy.link/wfn46"><img class="emghvrbutton" style="cursor:pointer; margin-top: 7px;" src="'.plugins_url( 'images/view-demo-button.jpg' , dirname(__FILE__) ).'" width="232" height="60" alt="Pro Version Demo" ></a>';
 	$emgdm .= '</div>';
 echo $emgdm;	
 }
@@ -804,9 +856,14 @@ echo $emgdm;
 /*  Create Upgrade Metabox @since 1.2.61
 /*-------------------------------------------------------------------------------*/
 function emg_upgrade_metabox () {
+	/*
 	$emgbuy = '<div style="text-align:center;">';
-	$emgbuy .= '<a id="prcngtableclr" style="outline: none !important;" href="#"><img style="cursor:pointer; margin-top: 7px;" src="'.plugins_url( 'images/buy-now.png' , dirname(__FILE__) ).'" width="241" height="95" alt="Buy Now!" ></a>';
+	$emgbuy .= '<a id="prcngtableclr" style="outline: none !important;" href="#"><img class="emghvrbutton" style="cursor:pointer; margin-top: 7px;" src="'.plugins_url( 'images/buy-now.png' , dirname(__FILE__) ).'" width="241" height="95" alt="Buy Now!" ></a>';
 	$emgbuy .= '</div>';
+	*/
+	$emgbuy = '<div style="text-align:center;">';
+	$emgbuy .= '<a id="promote_plugins" style="outline: none !important;" href="https://ghozy.link/emgwpcedtrr" target="_blank"><img style="cursor:pointer; margin-top: 7px;" src="'.plugins_url( 'images/new-release.png' , dirname(__FILE__) ).'" width="241" height="231" alt="WordPress Page Builder Plugin" ></a>';
+	$emgbuy .= '</div>';	
 echo $emgbuy;	
 }
 
@@ -815,7 +872,7 @@ echo $emgbuy;
 /*-------------------------------------------------------------------------------*/
 function emg_new_info_metabox () {
 	$emgnew = '<div style="text-align:center;">';
-	$emgnew .= '<a style="outline: none !important;" href="http://goo.gl/divK5t" target="_blank"><img style="cursor:pointer; margin-top: 7px;" src="'.plugins_url( 'images/new-plugin.png' , dirname(__FILE__) ).'" width="241" height="151" alt="New Plugin" ></a>';
+	$emgnew .= '<a style="outline: none !important;" href="https://ghozy.link/qtnrb" target="_blank"><img style="cursor:pointer; margin-top: 7px;" src="'.plugins_url( 'images/new-plugin.png' , dirname(__FILE__) ).'" width="241" height="151" alt="New Plugin" ></a>';
 	$emgnew .= '</div>';
 echo $emgnew;	
 }
@@ -854,9 +911,9 @@ function emg_admin_bar_menu(){
             /* Add the main siteadmin menu item */
                 $wp_admin_bar->add_menu( array(
                     'id'     => 'emg-upgrade-bar',
-                    'href' => 'http://ghozylab.com/plugins/easy-media-gallery-pro/pricing/?utm_source=lite&utm_medium=topbar&utm_campaign=orderfromadminbar',
+                    'href' => 'https://ghozylab.com/plugins/ordernow.php?order=proplus&utm_source=lite&utm_medium=topbar&utm_campaign=orderfromtopbar',
                     'parent' => 'top-secondary',
-					'title' => __('<img src="'.plugins_url( 'images/easymedia-cp-icon.png' , dirname(__FILE__) ).'" style="vertical-align:middle;margin-right:5px" alt="Upgrade Now!" title="Upgrade Now!" />Upgrade Easy Media Gallery to PRO Version', 'easmedia' ),
+					'title' => __('<img src="'.plugins_url( 'images/emg-dash-icon.png' , dirname(__FILE__) ).'" style="vertical-align:middle;margin-right:5px" alt="Upgrade Now!" title="Upgrade Now!" />Upgrade Easy Media Gallery to PRO Version', 'easy-media-gallery' ),
                     'meta'   => array('class' => 'emg-upgrade-to-pro', 'target' => '_blank' ),
                 ) );
 }
@@ -904,10 +961,10 @@ theme:"defaultTheme",
 template:'<div class="noty_message"><div id="emg_noty_container"><div id="emg_noty_images"><img id="emg_hero" src="<?php echo plugins_url('images/emg_hero.png' , dirname(__FILE__) ); ?>" width="100%" height="auto"/></div><div id="emg_noty_content"><h2>'+emgNews[0]+'</h2><span class="noty_text"></span></div></div><div class="noty_close"></div></div>',buttons:[{
 	addClass:"emgnotyclosepermanent",text:"Disable notifications",onClick:function(e){
 		e.close()}},
-	{addClass:"tsc_buttons2 green",text:"UPGRADE NOW",onClick:function(e){e.close();noty({layout:"top",modal:true,text:'<span style="display:none;" id="emgordernote">Please click order button below and you will be redirected to order page shortly.</span><br /><a id="emgordrnow" style="display:none; margin: 15px 0 15px 0; "class="tsc_buttons2 green" href="http://ghozylab.com/plugins/ordernow.php?order=proplus&utm_source=lite&utm_medium=popup&utm_campaign=orderfrompopup" target="_blank">ORDER NOW</a><img id="emgorderspin" src="<?php echo plugins_url('images/ajax-loader.gif' , dirname(__FILE__) ); ?>" width="32" height="32"/><br /><p>Great! Please wait a moment...</p>',type:"success"});setTimeout(function(){jQuery("#emgorderspin").hide();jQuery("#emgordernote").fadeIn("slow");jQuery("#emgordrnow").fadeIn("slow");jQuery(".noty_text p").hide()},5e3)}},{addClass:"tsc_buttons2 blue",text:"DEMO",onClick:function(e){window.location.href="http://ghozylab.com/plugins/easy-media-gallery-pro/demo/";e.close()}},{addClass:"tsc_buttons2 orange",text:"Learn More",onClick:function(e){window.location.href="edit.php?post_type=easymediagallery&page=comparison";e.close()}},{addClass:"tsc_buttons2 red",text:"Close",onClick:function(e){e.close()}}],callback:{onShow:function(){jQuery("#ux_buy_pro").hide();jQuery("#emgadminnotice").hide()}}})}function generateAll(){generate("alert")}jQuery(document).ready(function(){
+	{addClass:"tsc_buttons2 green",text:"UPGRADE NOW",onClick:function(e){e.close();noty({layout:"top",modal:true,text:'<span style="display:none;" id="emgordernote">Please click order button below and you will be redirected to order page shortly.</span><br /><a id="emgordrnow" style="display:none; margin: 15px 0 15px 0; "class="tsc_buttons2 green" href="https://ghozylab.com/plugins/ordernow.php?order=proplus&utm_source=lite&utm_medium=popup&utm_campaign=orderfrompopup" target="_blank">ORDER NOW</a><img id="emgorderspin" src="<?php echo plugins_url('images/ajax-loader.gif' , dirname(__FILE__) ); ?>" width="32" height="32"/><br /><p>Great! Please wait a moment...</p>',type:"success"});setTimeout(function(){jQuery("#emgorderspin").hide();jQuery("#emgordernote").fadeIn("slow");jQuery("#emgordrnow").fadeIn("slow");jQuery(".noty_text p").hide()},5e3)}},{addClass:"tsc_buttons2 blue",text:"DEMO",onClick:function(e){window.location.href="https://ghozylab.com/plugins/easy-media-gallery-pro/demo/";e.close()}},{addClass:"tsc_buttons2 orange",text:"Learn More",onClick:function(e){window.location.href="edit.php?post_type=easymediagallery&page=comparison";e.close()}},{addClass:"tsc_buttons2 red",text:"Close",onClick:function(e){e.close()}}],callback:{onShow:function(){jQuery("#ux_buy_pro").hide();jQuery("#emgadminnotice").hide()}}})}function generateAll(){generate("alert")}jQuery(document).ready(function(){
 <?php if ( isset( $_GET['page'] ) && $_GET['page'] == 'comparison' ) { ?>
 setTimeout(function() { jQuery.noty.closeAll(); }, 100); <?php } ?>	generateAll();jQuery('.emgnotyclosepermanent').click(function(){var clickcmd = 'hide';
-emg_hide_noty(clickcmd);});	function emg_hide_noty(clickcmd) {var data = {action: 'emg_hide_noty',hidesecurity: '<?php echo wp_create_nonce( "easymedia-lite-nonce-button"); ?>',clickcmd: clickcmd,};jQuery.post(ajaxurl, data, function(response) {if (response == 0) {alert('Ajax request failed, please refresh your browser window.');return false;}});}})	
+emg_hide_noty(clickcmd);});	function emg_hide_noty(clickcmd) {var data = {action: 'emg_hide_noty',hidesecurity: '<?php echo wp_create_nonce( "easymedia-lite-nonce-button"); ?>',clickcmd: clickcmd,};jQuery.post(ajaxurl, data, function(response) {if (response == 0) {alert('Ajax request failed, please refresh your browser window and try again.');return false;}});}})	
 /*]]>*/</script>	
     
 <?php
@@ -921,7 +978,7 @@ emg_hide_noty(clickcmd);});	function emg_hide_noty(clickcmd) {var data = {action
 function easmedia_update_notify () {
     ?>
     <div class="error emg-setupdate">
-        <p><?php _e( 'We recommend you to enable plugin Auto Update so you\'ll get the latest features and other important updates from <strong>'.EASYMEDIA_NAME.'</strong>.<br />Click <a href="#"><strong><span id="doautoupdate">here</span></strong></a> to enable Auto Update.', 'easmedia' ); ?></p>
+        <p><?php _e( 'We recommend you to enable plugin Auto Update so you will get the latest features and other important updates of Easy Media Gallery.<br />Click <a href="#"><strong><span id="doautoupdate">here</span></strong></a> to enable Auto Update.', 'easy-media-gallery' ); ?></p>
     </div>
     
 <script type="text/javascript">
@@ -942,11 +999,11 @@ function emg_enable_auto_update(act) {
 		
 		jQuery.post(ajaxurl, data, function(response) {
 			if (response == 1) {
-				alert('Great! Auto Update successfully activated.');
+				alert('Awesome! Auto Update successfully activated.');
 				jQuery('.emg-setupdate').fadeOut('3000');
 				}
 				else {
-				alert('Ajax request failed, please refresh your browser window.');
+				alert('Ajax request failed, please refresh your browser window and try again.');
 				}
 				
 			});
@@ -985,7 +1042,7 @@ add_action( 'wp_ajax_emg_enable_auto_update', 'emg_enable_auto_update' );
 /*-------------------------------------------------------------------------------*/
 function easmedia_news_metabox () {
 	$new = '<div style="text-align:center;">';
-	$new .= '<a style="outline: none !important;" href="http://ghozylab.com/plugins/easy-notify-pro/" target="_blank"><img style="cursor:pointer; margin-top: 7px; margin-bottom: 7px;" src="'.plugins_url( 'images/new-release.png' , dirname(__FILE__) ).'" width="241" height="500" alt="New Release!" ></a>';
+	$new .= '<a style="outline: none !important;" href="https://ghozy.link/73fkh" target="_blank"><img style="cursor:pointer; margin-top: 7px; margin-bottom: 7px;" src="'.plugins_url( 'images/new-release.png' , dirname(__FILE__) ).'" width="241" height="231" alt="New Release!" ></a>';
 	$new .= '</div>';
 echo $new;	
 }
@@ -1054,7 +1111,7 @@ if ( current_user_can( 'install_plugins' ) ) {
 function add_toolbar_items($admin_bar){
 	$admin_bar->add_menu( array(
 		'id'    => 'emg-item',
-		'title' => '<img src="'.plugins_url( 'images/easymedia-cp-icon.png' , dirname(__FILE__) ).'" style="vertical-align:middle;margin-right:5px" alt="Easy Media" title="Easy Media" />Easy Media Gallery',
+		'title' => '<img src="'.plugins_url( 'images/emg-dash-icon.png' , dirname(__FILE__) ).'" style="vertical-align:middle;margin-right:5px" alt="Easy Media" title="Easy Media Gallery" />Easy Media Gallery',
 		'href'  => '#',	
 		'meta'  => array(
 			'title' => __('Easy Media Gallery'),			
@@ -1141,14 +1198,14 @@ function add_toolbar_items($admin_bar){
 	$admin_bar->add_menu( array(
 		'id'    => 'emg-preplug-item',
 		'parent' => 'emg-item',
-		'title' => '<span style="color:rgba(61, 170, 222, 1);">Premium Plugins</span>',
+		'title' => '<span>Premium Plugins</span>',
 		'href'  => ''.admin_url( 'edit.php?post_type=easymediagallery&page=emg-premium-plugins' ).'',
 		'meta'  => array(
 			'title' => __('Premium Plugin'),
 			'class' => 'emg_menu_item_class'
 		),
 	));
-	
+	/*
 	$admin_bar->add_menu( array(
 		'id'    => 'emg-pricing-item',
 		'parent' => 'emg-item',
@@ -1158,12 +1215,23 @@ function add_toolbar_items($admin_bar){
 			'title' => __('UPGRADE PRO VERSION'),
 			'class' => 'emg_menu_item_class'
 		),
-	));	
+	));
+
+	$admin_bar->add_menu( array(
+		'id'    => 'emg-extra-item',
+		'parent' => 'emg-item',
+		'title' => '<span>Earn EXTRA MONEY</span>',
+		'href'  => ''.admin_url( 'edit.php?post_type=easymediagallery&page=emg-earn-xtra-money' ).'',
+		'meta'  => array(
+			'title' => __('Earn EXTRA MONEY'),
+			'class' => 'emg_menu_item_class'
+		),
+	));	 */
 	
 	$admin_bar->add_menu( array(
 		'id'    => 'emg-whatsnew-item',
 		'parent' => 'emg-item',
-		'title' => 'What\'s New<span style="font-weight: bold;font-size:9px;color:#fff; border: solid 1px #fff; padding: 0 5px 0 5px; border-radius: 15px; -moz-border-radius: 15px;-webkit-border-radius: 15px; background: red; margin-left: 7px;">NEW</span>',
+		'title' => 'What\'s New<span style="padding:0px 6px 0px 6px;background-color: #E74C3C; border-radius:9px;-moz-border-radius: 9px;-webkit-border-radius: 9px;margin-left:7px;color:#fff;font-size:10px !important;">NEW</span>',
 		'href'  => ''.admin_url( 'edit.php?post_type=easymediagallery&page=emg-whats-new' ).'',
 		'meta'  => array(
 			'title' => __('UPGRADE PRO VERSION'),
@@ -1198,10 +1266,235 @@ function emg_lite_get_news() {
 				set_transient( 'emg_whats_new', $cache, 60 );
 			}
 		} else {
-			$cache = '<div class="error"><p>' . __( 'There was an error retrieving the list from the server. Please try again later.', 'easmedia' ) . '</div>';
+			$cache = '<div class="error"><p>' . __( 'There was an error retrieving the list from the server. Please try again later.', 'easy-media-gallery' ) . '</div>';
 		}
 	}
 	echo $cache;
+}
+
+
+
+
+/*-------------------------------------------------------------------------------*/
+/* Generate EXTRA Page
+/*-------------------------------------------------------------------------------*/
+function emg_earn_xtra_money() {
+	
+	wp_enqueue_script( 'emg-wnew' );
+	
+	$aff_id 	= emg_get_aff_option( 'emg_affiliate_info', 'emg_aff_id', '' );
+	$aff_name 	= emg_get_aff_option( 'emg_affiliate_info', 'emg_aff_name', '' );
+	$aff_email 	= emg_get_aff_option( 'emg_affiliate_info', 'emg_aff_email', '' );
+	
+		if( $aff_id != '' ) {
+			
+			$iscon = 'style="display:none;"'; $isdis = ''; $ists = 'Connected'; $intext = 'Disconnect'; $dnonce = 'data-nonce="'.wp_create_nonce( 'emgaffiliate' ).'"'; $dcmd = 'data-cmd="emg_affiliate_dis"';
+		
+		} else {
+			
+			$iscon = ''; $isdis = 'display:none;'; $ists = ''; $intext = 'Connect'; $dnonce = 'data-nonce="'.wp_create_nonce( 'emgaffiliate' ).'"'; $dcmd = 'data-cmd="emg_affiliate_con"';
+			
+			}
+	
+	
+	ob_start(); ?>
+
+		<div id="emg-not-yet" <?php echo $iscon; ?>>
+		<h3>If you don't have a GhozyLab Affiliate account, you can sign up today for free <a href="https://ghozy.link/lqydz" target="_blank">here</a></h3>
+        <h4 style="font-style:italic; color: #666;">Hurry Up! Join with GhozyLab Affiliate with 8,000 affiliates and pays out over $200,000 per year! Earn EXTRA MONEY and get 30% affiliate share from every sale you make!</h4>
+		<p class="emg-iscon" style="font-style:italic; color:#666; border-bottom: 1px dotted #CCC; margin-top: 35px; padding-bottom: 5px;"><?php _e( 'Fill your Affiliate Account Email or Payment Email and press Connect button to start earn extra Money with us!', 'easy-media-gallery' ); ?></p>
+        </div>
+        
+		<div id="emg-aff-registered" style="width: auto;<?php echo $isdis; ?>">
+		<h3 id="emg-aff-holder">Hi, <?php echo $aff_name.' ( '.$aff_email. ' )'; ?></h3>
+        <hr />
+        </div>
+        
+		<form method="post">
+
+			<?php settings_fields('emg_aff_section'); ?>
+
+			<table class="form-table">
+				<tbody>
+					<tr valign="top">
+						<th style="width:155px !important;" scope="row" valign="top">
+							<?php _e( 'Account Email or Payment Email', 'easy-media-gallery' ); ?>
+						</th>
+						<td>
+							<input id="emg_aff_email" name="emg_aff_email" type="text" class="regular-text" value="<?php esc_attr_e( $aff_email ); ?>" />
+							<label id="is-status" style="color:green; font-style:italic;" class="description" for="emg_aff_section_email"><?php echo $ists; ?></label>
+
+					<?php if( false !== $aff_id ) { ?>
+									<?php wp_nonce_field( 'emg_aff_section_nonce', 'emg_aff_section_nonce' ); ?>
+									<br /><input style="margin-top: 10px;" <?php echo $dnonce; ?> <?php echo $dcmd; ?> type="submit" class="button-secondary" id="emg-aff" name="emg-aff" value="<?php echo $intext; ?>"/><span id="loader"></span><br /><br />
+                                    <span class="emg-aff-note">NOTE: To respect <a href="https://wordpress.org/plugins/about/guidelines/" target="_blank">Plugin Guidelines</a> ( point 10 ) so by pressing the connect button that means you are agree to displaying <strong>Powered by</strong> link in your gallery footer</span>
+					<?php } ?>
+                    
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+		</form>	
+        
+         <hr style="margin-bottom:20px;">   
+            
+				<div class="feature-section">
+
+					<img src="<?php echo EASYMEDG_PLUGIN_URL . 'includes/images/aff-sc.jpg'; ?>" class="emg-affiliate-screenshots"/>
+
+					<h4><?php _e( 'How does it work?', 'easy-media-gallery' );?></h4>
+					<ul style="margin-left: 30px;list-style-type: circle;">
+                    <p><?php _e( 'After successfully registered with our Affiliate program what you have to do just :', 'easy-media-gallery' );?></p>
+                    <li><?php _e( 'Fill your Affiliate Account Email or Payment Email in field above and Hit Connect button', 'easy-media-gallery' );?></li>
+                    <li><?php _e( 'After connected you will see green connected status', 'easy-media-gallery' );?></li>
+                    <li><?php _e( 'Check your gallery and you will find your affiliate link in the bottom of your gallery like in the right side screenshot', 'easy-media-gallery' );?></li>
+                    <li><?php _e( 'Now when individuals follow that link and subsequently make a purchase, you will be credited for the transaction and you will receive a payout', 'easy-media-gallery' );?></li>
+                    <li><?php _e( 'Congratulations! You are ready to start to earn extra money with us :)', 'easy-media-gallery' );?></li>
+					</ul>
+
+                    </div>
+    
+<?php        
+echo ob_get_clean();
+	
+}
+
+
+/*-------------------------------------------------------------------------------*/
+/* Get Affiliate data
+/*-------------------------------------------------------------------------------*/
+function emg_get_aff_option( $option_name, $key, $default = false ) {
+	
+	$options = get_option( $option_name );
+
+	if ( $options ) {
+		return (array_key_exists( $key, $options )) ? $options[$key] : $default;
+	}
+
+	return $default;
+}
+
+
+/*-------------------------------------------------------------------------------*/
+/* Update Affiliate data
+/*-------------------------------------------------------------------------------*/
+function emg_update_aff_info( $aff_data, $email ) {
+	$aff = array(
+	"emg_aff_id" => trim( $aff_data->aff_id ),
+	"emg_aff_name" => trim( $aff_data->aff_name ),
+	"emg_aff_email" => trim( $email ),
+	
+		);
+		
+		update_option('emg_affiliate_info', $aff);	
+			
+}
+
+
+/*-------------------------------------------------------------------------------*/
+/* Get Affiliate data ( API )
+/*-------------------------------------------------------------------------------*/
+function emg_get_aff_data() {
+	
+	// run a quick security check
+	 if( ! check_ajax_referer( 'emgaffiliate', 'security' ) )
+		return;
+
+	switch( $_POST['command'] ){
+		
+		case 'emg_affiliate_con':
+		
+			// listen for aff button to be clicked
+			if( isset( $_POST['eml'] ) ) {
+				
+				$affemail = $_POST['eml'];
+				
+				$api_params = array(
+					'ghozy_action' => 'get_aff_data',
+					'email' 	=> $affemail
+					);
+
+				// Call the custom API.
+				$response = _emgaffiliateFetchmode( $api_params );
+
+				if ( isset( $response ) && $response->status == true ) {
+		
+					emg_update_aff_info( $response, $affemail );
+					echo json_encode( $response );
+		
+				} else {
+					
+					$response = array(
+						"status" => false,
+						"aff_id" => false,
+						"aff_name" => false,
+						);
+					
+					echo json_encode( $response );
+					
+					}
+		
+			}
+		
+		break; 
+		
+		case 'emg_affiliate_dis':
+		
+		delete_option( 'emg_affiliate_info' );
+		
+					$response = array(
+						"status" => 'disconnected',
+						"aff_id" => false,
+						"aff_name" => false,
+						);
+					
+					echo json_encode( $response );
+					  
+		break;
+		
+		default:
+		break;	
+		
+	}
+	
+	wp_die();
+
+}
+
+add_action('wp_ajax_emg_get_aff_data', 'emg_get_aff_data');
+
+
+/*-------------------------------------------------------------------------------*/
+/* Defined for using CURL or Not
+/*-------------------------------------------------------------------------------*/
+function _emgaffiliateFetchmode( $api_params ) {
+	
+    if(function_exists('curl_version')){
+		
+		$response = wp_remote_get( add_query_arg( $api_params, EMG_API_URLCURL ), array( 'timeout' => 15, 'sslverify' => false ) );
+		
+		if ( is_wp_error( $response ) )
+			return false;
+
+			$dat = json_decode( wp_remote_retrieve_body( $response ) );
+			
+			}
+  		
+		else {
+			
+			$json_url = add_query_arg( $api_params, EMG_API_URL );
+			$json = file_get_contents( $json_url );
+			
+			if ( is_wp_error( $json_url ) )
+			return false;
+
+			$dat = json_decode( $json );		
+					
+			}							
+						
+		return $dat;
+			
 }
 
 

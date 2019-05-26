@@ -176,6 +176,7 @@ echo '<div class="pfwrpr"><div id="alignstyle" class="easymedia_'.$cus_align.'">
 	if ( $curimgnmane == 'no-image-available.jpg' ) {
 		$image = $image;
 		} else {
+			$globalsize = wp_get_attachment_image_src( emg_get_attachment_id_from_src( $image ), 'full' );
 			$image = easymedia_resizer( $image, $globalsize[1], $globalsize[2], $imwidth, $imheight, true );
 			}
 			
@@ -212,7 +213,17 @@ else:
 endif;
 wp_reset_postdata();
 echo '<div style="clear:both;"></div>';
-echo '</div></div>';
+echo '</div>';
+
+	// @since 1.3.75
+	if ( emg_get_aff_option( 'emg_affiliate_info', 'emg_aff_id', '' ) ) {
+		
+		echo '<span class="emg-aff-link">Powered by <a href="https://secure.ghozylab.com/demo/?ref='.emg_get_aff_option( 'emg_affiliate_info', 'emg_aff_id', '' ).'&goto=emg" target="_blank">Easy Media Gallery Plugin</a></span>';
+            
+           }
+
+echo '</div>';
+
 
 // JS
 emg_put_script();
@@ -295,7 +306,7 @@ while ( $emg_query->have_posts() ) : $emg_query->the_post();
 						$thumbttl = get_post_meta( get_the_id(), 'easmedia_metabox_title', true );
 						}		
 						
-						emg_gallery_markup( $imwidth, $imheight, get_the_id().'-'.$img_id, $img_url[0], $emgthumbimg, $filenm, $thumbttl );	
+						emg_gallery_markup( $imwidth, $imheight, get_the_id().'-'.$img_id, $img_url[0], $emgthumbimg, $filenm, stripslashes ( $thumbttl ) );	
 								
 				}  }
 				else {
@@ -315,8 +326,16 @@ return $contnt;
 endif;
 wp_reset_postdata();
 echo '<div style="clear:both;"></div>';
-echo '</div></div></div>';
+echo '</div></div>';
+	// @since 1.3.75
+	if ( emg_get_aff_option( 'emg_affiliate_info', 'emg_aff_id', '' ) ) {
+		
+		echo '<span class="emg-aff-link">Powered by <a href="https://secure.ghozylab.com/demo/?ref='.emg_get_aff_option( 'emg_affiliate_info', 'emg_aff_id', '' ).'&goto=emg" target="_blank">Easy Media Gallery Plugin</a></span>';
+            
+           }
+echo '</div>';
 
+		   
 // JS
 emg_put_script();
 

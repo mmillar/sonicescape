@@ -1,17 +1,17 @@
 === Custom Facebook Feed ===
 Contributors: smashballoon
-Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook events, Facebook page, Facebook group, Facebook groups, Facebook fans, Facebook likes, Facebook followers, Facebooks, Face book, posts, Facebook postings, Facebook feeds, Facebook pages, Facebook Like Box, Facebook plugin, Facebook plug-in, Facebook walls, Facebook hashtag, Facebook embed, Customizable Facebook Feed, custom, customizable, seo, responsive, mobile, social media
+Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook page
 Requires at least: 3.0
-Tested up to: 4.2.2
-Stable tag: 2.3.6
+Tested up to: 5.1
+Stable tag: 2.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The Custom Facebook Feed allows you to display completely customizable Facebook feeds of any public Facebook page or group on your website
+The Custom Facebook Feed allows you to display completely customizable Facebook feeds of any public Facebook page on your website
 
 == Description ==
 
-Display a **completely customizable**, **responsive** and **search engine crawlable** version of your Facebook feed on your website. Completely match the look and feel of the site with tons of customization options!
+Display **completely customizable**, **responsive** and **search engine crawlable** Facebook feeds on your website. Display **multiple feeds** from **any public Facebook page**, and completely match the look and feel of the site with tons of customization options!
 
 *"The perfect plugin with amazing support! What else do you want? Get it!"* - [JoeJeffries](http://wordpress.org/support/topic/you-dont-already-have-this)
 
@@ -21,14 +21,14 @@ Display a **completely customizable**, **responsive** and **search engine crawla
 
 = Features =
 
+* **Super simple to set up** - 1 minute quick setup with no Facebook Developer App required
+* **Display feeds from ANY Facebook page** - even ones you aren't an admin of
 * **Completely Customizable** - By default the Facebook feed will adopt the style of your website, but can be completely customized to look however you like - with tons of styling and customization options!
 * Facebook feed content is **crawlable by search engines** adding SEO value to your site - other Facebook plugins embed the feed using iframes which are not crawlable
 * Completely **responsive** and mobile optimized - layout looks great on any screen size and in any container width
-* Display **feeds from multiple different Facebook pages/groups** and use the shortcode to embed them into a page, post or widget anywhere on your site
-* Show **events** from your Facebook feed with name, date/time, location and description
+* Display **feeds from multiple different Facebook pages** and use the shortcode to embed them into a page, post or widget anywhere on your site
 * Add your own **custom CSS**
 * **Caching** means that your Facebook posts load lightning fast. Set your own caching time - check for new posts on Facebook every few seconds, minutes, hours or days. You decide.
-* **Super simple to set up**. Just enter your Facebook page ID and you're done.
 * Show and hide certain parts of each Facebook post
 * Show or hide the Facebook profile picture and name of the author above each post
 * Display Facebook posts by just the page owner, everyone who posts on your Facebook page, or only other people
@@ -45,20 +45,24 @@ Display a **completely customizable**, **responsive** and **search engine crawla
 * Create a customizable header with a range of icons for your Custom Facebook Feed
 * Localization/i18n support to allow every part of the feed to be displayed in your language
 
-To display photos, videos, the number of likes, shares and comments for each Facebook post, multiple layout options, post filtering by type or #hashtag/string and more then [upgrade to the Pro version](https://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro"). Try out the [Pro demo](https://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo").
+= Pro Version =
 
-= Benefits =
+In order to maintain the free version of the plugin on an ongoing basis, and to provide quick and effective support for free, we offer a Pro version of the plugin. The Pro version allows you to display photos, videos, the number of likes, shares, reactions and comments for each Facebook post, choose from multiple layout options, filter posts by type or #hashtag/string, load more posts into your feed, and more. [Click here](https://smashballoon.com/differences-between-the-free-version-and-pro-version-of-the-custom-facebook-feed-plugin/ "Differences between free and Pro version of Custom Facebook Feed plugin") for a full list of all differences between the free version and Pro version.
 
-* **Increase social engagement** between you and your users, customers, fans or group members
+* [Find out more about the Pro version](https://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro")
+* [Try out the Pro demo](https://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Pro Demo").
+
+= Benefits of the Custom Facebook Feed plugin =
+
+* **Increase social engagement** between you and your users, customers, or fans
 * **Save time** by using the Custom Facebook Feed to generate dynamic, search engine crawlable content on your website
 * **Get more likes** by displaying your Facebook content directly on your site
 * **Improve your SEO** as all of that quality keyword-rich Facebook content from posts and comments is directly embedded into your website
 * Display your Facebook content your way to perfectly match your website's style
+* **No Coding Required** - choose from tons of built-in customization options to create a truly unique feed of your Facebook content.
 * The plugin is **updated regularly** with new features, bug-fixes and Facebook API changes
 * Support is quick and effective
 * We're dedicated to providing the **most customizable**, **robust** and **well supported** Facebook feed plugin in the world!
-
-[View the reviews](http://wordpress.org/support/view/plugin-reviews/custom-facebook-feed) to see what other users are saying about the Custom Facebook Feed plugin.
 
 == Installation ==
 
@@ -72,29 +76,29 @@ To display photos, videos, the number of likes, shares and comments for each Fac
 
 For a full list of FAQs and help with troubleshooting please visit the **[FAQ & Troubleshooting](https://smashballoon.com/custom-facebook-feed/faq/)** section of the Smash Balloon website
 
-= How do I find the Page ID of my Facebook page or group? =
+= How do I find the Page ID of my Facebook page? =
 
 If you have a Facebook **page** with a URL like this: `https://www.facebook.com/smashballoon` then the Page ID is just `smashballoon`. If your page URL is structured like this: `https://www.facebook.com/pages/smashballoon/123654123654123` then the Page ID is actually the number at the end, so in this case `123654123654123`.
 
-If you have a Facebook **group** then use [this tool](http://lookup-id.com/ "Look Up my ID") to find your Group ID.
+Due to [recent changes](https://smashballoon.com/facebook-api-changes-april-4-2018/) to the Facebook API it is unfortunately no longer possible to display a feed from a Facebook Group.
 
 Copy and paste the ID into the [Pro demo](https://smashballoon.com/custom-facebook-feed/demo/) to test it.
 
 = Are there any limitations on which Facebook page or group feeds I can display? =
 
-The Facebook feed you're trying to display has to be from a publicly accessible Facebook page or group. This means that you can't display the feed from your own personal Facebook profile or private Facebook group. This is to do with Facebook's privacy policies. You can't display a non-public Facebook feed publicly.
+The Facebook feed you're trying to display has to be from a publicly accessible Facebook page. This means that you can't display the feed from your own personal Facebook profile or Facebook group. This is to do with Facebook's privacy policies. You can't display a non-public Facebook feed publicly.
 
 If your Facebook page has any restrictions on it (age, for example) then it means that people have to be signed into Facebook in order to view your page. This isn't desirable for most Facebook pages as it means that it isn't accessible by people who don't have a Facebook account and that your Facebook page can't be crawled and indexed by search engines.
 
 An easy way to determine whether your Facebook page is set to public is to sign out of your Facebook account and try to visit your page. If Facebook forces you to sign in to view your page then it isn't public. You can change your Facebook page to public in your Facebook page settings simply by removing any age or location restrictions you have on it ([screenshot](https://smashballoon.com/wp-content/uploads/2013/06/facebook-page-restrictions.png)), which will then allow the Custom Facebook Feed plugin to access and display your feed.
 
-= Can I display feeds from multiple Facebook pages or groups? =
+= Can I display feeds from multiple Facebook pages? =
 
 You can set your default Facebook Page ID on the Custom Facebook Feed settings page within the WordPress admin, you can then define different page IDs in the shortcodes you use to show multiple feeds from different Facebook pages. Just use the id option in your shortcode like so: [custom-facebook-feed id=another_page_id]. You can use as many shortcodes as you like with as many different IDs as you like.
 
 = Can I display the feed from a personal Facebook profile? =
 
-Due to Facebook's privacy policy you're not able to use the plugin to display all of your posts from a personal profile, only from a public page or group, as posts from a personal profile are protected for privacy reasons. You may have limited success in displaying certain posts from a personal profile but most posts are not able to be displayed.
+Due to Facebook's privacy policy you're not able to use the plugin to display all of your posts from a personal profile, only from a public page, as posts from a personal profile are protected for privacy reasons. You may have limited success in displaying certain posts from a personal profile but most posts are not able to be displayed.
 
 If you're using the profile to represent a business, organization, product, public figure or the like, then we'd advise converting your profile to a page per [Facebook's recommendation](http://www.facebook.com/help/175644189234902/), as there are many advantages to using pages over profiles.
 
@@ -102,7 +106,7 @@ Once you've done so, the plugin will be able to retrieve and display all of your
 
 = Can I show photos and videos in my Custom Facebook feed? =
 
-This free plugin only allows you to display text from your Facebook posts. To display photos and videos in your feed you would need to upgrade to the Pro version of the plugin. Try out a demo of the Pro version on the [Custom Facebook Feed website](https://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo"), and find out more about the Pro version [here](https://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro").
+This free plugin only allows you to display text from your Facebook posts. To display photos and videos in your feed you would need to upgrade to the Pro version of the plugin. Try out a demo of the Pro version on the [Custom Facebook Feed website](https://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo"), and find out more about the Pro version [here](https://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro"). [Click here](https://smashballoon.com/differences-between-the-free-version-and-pro-version-of-the-custom-facebook-feed-plugin/ "Differences between free and Pro version of Custom Facebook Feed plugin") for a full list of all differences between the free version and Pro version.
 
 = Can I show the comments, shares and likes associated with each Facebook post? =
 
@@ -206,35 +210,6 @@ Ensure that there aren't any spelling errors in the shortcode options that you'r
 
 The most common reason for this is that an add-on or extension you have installed in your web browser is blocking the pictures being loaded from Facebook. Try checking to see whether you have any add-ons or extensions installed in your browser and, if so, try disabling them to see whether that solves the problem and displays the pictures from Facebook.
 
-== Other Notes ==
-
-**"The best dang Facebook plugin this side of the Mississippi!"**
-
-= At Smash Balloon we have two goals: =
-
-1. Creating and maintaining the most useful, functional, customizable, robust and down-right awesomist Facebook feed plugin your website has ever seen.
-2. To provide the quickest, friendliest and most mind-blowingly amazing product support you have ever experienced.
-
-= Why do I need the Custom Facebook Feed plugin? =
-
-**Increase Social Engagement**
-Increase engagement between you and your users, customers, fans or group members. Get more Facebook likes by displaying your Facebook content directly on your site.
-
-**Save Time**
-Don't have time to blog? Save time by using the Custom Facebook Feed instead to generate dynamic content for your website.
-
-**Display Your Facebook Content Your Way**
-Tailor your Facebook feeds to display whatever types of content you like. Integrate your Facebook content into your website to completely match the look and feel of the site. No more uncustomizable Facebook iframes.
-
-**Add Dynamic SEO Facebook Content to Your Site**
-All of that quality keyword-rich Facebook content from Facebook posts is directly embedded into your website.
-
-**No Coding Required**
-Choose from tons of built-in customization options to create a truly unique feed of your Facebook content.
-
-**Mind-blowing Customer Support**
-We understand that sometimes you need help, have issues or just have questions. We love our customers and strive to provide the best support experience in the business. If you need support then just let us know and we'll get back to you right away.
-
 = How to get a Facebook Access Token =
 
 **For step-by-step instructions and screenshots on how to get a Facebook Access Token just follow the [Facebook Access Token instructions](https://smashballoon.com/custom-facebook-feed/access-token/ "Facebook Access Token instructions") on the Smash Balloon website.**
@@ -243,7 +218,7 @@ You no longer need your own Access Token to use the Custom Facebook Feed Plugin,
 
 **1)** Go to [developers.facebook.com](http://developers.facebook.com "Facebook developers website") and click on Log In in the top right.  Log in using your personal Facebook credentials.
 
-**Note:** The personal Facebook account that you use to register as a Facebook developer does not need to be associated in any way with the Facebook page or Facebook group whose posts you want to display. You can use the Facebook Access Token you receive to display the Facebook posts from any public Facebook page or open Facebook group.
+**Note:** The personal Facebook account that you use to register as a Facebook developer does not need to be associated in any way with the Facebook page whose posts you want to display. You can use the Facebook Access Token you receive to display the Facebook posts from any public Facebook page.
 
 **Note:** You cannot log in to the Facebook Developer site using a Facebook Page or Facebook Business account. You must use the username and password from your personal Facebook profile. Facebook doesn't allow businesses to register as Facebook developers, only individuals.
 
@@ -269,84 +244,12 @@ You no longer need your own Access Token to use the Custom Facebook Feed Plugin,
 
 **12)** Your Facebook App should now be set up. Copy and paste your Facebook App ID and Facebook App Secret into the fields in the last step of the [Access Token instructions](https://smashballoon.com/custom-facebook-feed/access-token/ "How to get a Facebook Access Token") to retrieve your Facebook Access Token.
 
-= What some of our users think =
+== Other Notes ==
 
-**See all of the reviews [here](https://smashballoon.com/custom-facebook-feed/#support "Custom Facebook Feed customer reviews")**
+= At Smash Balloon we have two goals: =
 
-"Loving the Facebook feed plugin from @smashballoon. It's gonna transform my work's website! Great customer service too :)" - Grace Snow
-
-"Love the style and functionality of the @smashballoon facebook feed plugin. AMAZING support!" - Bella Guzman
-
-"Hands down the BEST Facebook feed plugin for WP - @smashballoon #prettysureivetriedthemall" - Jacob Ajjarapu
-
-"@smashballoon Custom Facebook Feed plugin for WordPress is excellent and support couldn't have been easier or faster.  Thx!" - Scott Whittier
-
-"@smashballoon Love your Facebook plugin, and fantastic back-up support - good work" - Mike Harwood
-
-"Very smooth purchase process. After getting the Facebook access key, the plugin worked perfectly. Needed some questions answered, and received the best personal support i've ever had. Can't recommend this plugin highly enough." - jondennis
-
-"I am not by any means an experienced web designer or programmer. Normally upon seeking tech support for anything I am met with a support tech that either talks over my head and answers me as shortly as possible. The short answers would not normally bother me if the response time was under 6-8 hours if not 3 days for a response. I found Smash Balloon by absolute luck in my search for a Facebook Plugin for my blog site that had a better look than the Facebook widget that my site came with. In fear that I would receive the aforementioned type of "help," I spent almost 2 days trying to save myself the frustration of the technicians by thinking that I could do it myself. Well, I couldn't do it myself and finally I submitted a support request from Smash Balloon. It was the fastest response that I have ever experienced with any tech that I have ever contacted in my life and I didn't feel as if I was talking to a robot whos creator forgot to program the part where they liked their job. Furthermore, I trusted the SmashTeam to go into my site and fix what my limited amount of knowledge would allow me to do on my own. I sat at my computer hitting refresh watching it come to life.
-I'm now sitting here playing with the very simple and highly extensive custom Facebook feed customization options and my stress has been removed. I recommend this product and this company to anyone and I will continue to do so. Thank you SmashTeam" - Chris West
-
-"I can't tell you how many plugins I struggle with because of poor documentation. I'm not a developer, I am a user who needs (fairly quick) responses.
-The Custom Facebook Feed plugin doesn't fit into that category at all! I handled 90% of the install by myself, and got immediate and accurate support from the developer when it came to slight customizations.
-Bottom line: this is the best tool for implementing a Facebook feed into a WordPress page - and the people behind it are simply awesome!" - kairostcheck
-
-"This is THE plugin to use if you want to get realtime postings from your Facebook page onto your WordPress Site. I was up and running in no time. I had a few settings wrong but was able to receive VERY quick responses from Smash Ballon's tech support team (Thanks John!)." - kevymars
-
-"This plugin is great. Pull in as little or as much content from a Facebook page into your WordPress site. Fantastic for keeping content on your WordPress pages dynamic with no more effort other than using your Facebook page as per normal. I had some issues in getting the plugin to work at first, so I contacted support at SmashBalloon. John was immensely helpful, considering I was only using the free version of the plugin. He got to the bottom of my problem (which was a hosting server issue), got this fixed and it works a treat. Would highly recommend SmashBalloon for quality of product and refreshingly good support. Well done!" - gluedesign
-
-"Easy to install, took about 5-10 minutes in total. Was able to get 3 facebook feeds showing up on my page which is exactly what I needed as we have 3 facebook pages. Definately the easiest facebook plugin to use that I've tried." - susiep
-
-"I got it working pretty easily and looks sweet. A lot of customization options for a simple facebook plugin - makes it really easy to get it lookin just right.
-Wish facebook made it easier to get a token but is what it is. The step by step instructions helped so wasn't too bad.
-Cheers, Moz" - mozlover
-
-"Tried a bunch of other facebook plugins but they were either impossible to get working or looked like garbage. This facebook plugin has easy to follow instructions and lets you customize pretty much every aspect of it. Highly recommend." - Samtaray
-
-"You will have a professional touch to a website with this plugin. Total freedom to integrate Facebook in your website - which is of course much nicer than the standard options from Facebook. Have a look at youngfocus.org where you can see the implementation.
-Smashballoon did a great job with this plugin and their service and instructions on their website are very clear! Bravo!
-Paul (Young Focus)" - paulvw
-
-"Easy to set up. Nice to be able to show facebook posts on my site without the ugly facebook social plugin." - B
-
-= The Importance of Facebook for Small Businesses =
-
-**Below is an article indicating the importance of building a Facebook community around your business or product. The Custom Facebook Feed plugin can help you to build a Facebook community more easily and effectively.**
-
-A few years back when Mark Zuckerberg came up with his concept of a social networking site and named it Facebook, he had no idea what it would become in the time to come. Facebook has quite literally revolutionized the way we look at social networking. With over 700 million active Facebook users, it is definitely the biggest platform you can get if you seek to engage with many people simultaneously. Though Facebook is the premiere social networking platform, it also holds a lot of potential for businesses. The fact that Facebook can help businesses in growing and reaching out to a new customer base has added to Facebook's popularity.
-
-Today when you look at Facebook and the Facebook groups or Facebook pages that exist on the site, you will find that every popular brand is there. They are not only there but are active on Facebook on almost a daily basis. For the present generation, who spend a lot more time on the internet than on the TV, brands needed to change their approach. Facebook provides the best possible solution in this scenario. However, it is not only the big brands that make the full use of Facebook's social media power. Even small businesses can benefit greatly from using Facebook if they make optimal use of the various features that Facebook has to offer.
-
-**Why Use Facebook for Your Business?**
-
-When you start your business, many things have to be taken into account. Amongst the tons of seemingly more important things, you might question the need for using Facebook. Often people end up feeling that Facebook is too trivial a task and can be accomplished at anytime. Here are some reasons why you should have your presence on a social networking giant like Facebook and take it very seriously:
-
-Customer Interaction: Having your business on Facebook through a Facebook fanpage or a Facebook group is a great way to learn more about your customers. Through Facebook comments or Facebook posts, you get to have direct feedback and conversations with your target audience on Facebook. The people who like your Facebook fanpage or join your Facebook group are only there because they want to be. They are there to know what they can about you and you can do the same thing.
-
-Give a personal touch to your business: Being well connected is important for any business, especially for a small one. You need to be able to communicate with people and grow your contacts. The best possible way to do that is through direct involvement. Facebook allows you to give your business an image and then you can actually have live conversations with people who matter, making communicating through Facebook a more personal experience then what you get on a TV.
-
-Develop a loyal fan base: Facebook allows you to develop your very own Facebook community. All you need to do is, post links and content that is both relevant and useful. You can even have promotional Facebook campaigns and Facebook contests through your Facebook page and offer incentives as well. If done correctly, you will find that you can develop a loyal community for your business on Facebook.
-
-SEO: Search Engine Optimization is a key aspect for anyone who wants to build a significant presence on the web. Having a Facebook page for your business can help you in your SEO efforts as well. All the links and Facebook posts on the page are indexed by search engines. So having a Facebook page flowing with continuous relevant content will definitely give you a jump in search engine rankings.
-
-Beat your competition: One of the biggest reasons for you to make sure that you are on Facebook is that your competition might already be there. In this cut throat environment, lagging behind will make it really hard for your business to succeed.
-
-Viral promotion: If someone ends up liking your page then it appears in their Facebook news feed. This makes it possible for your business to be in their eyes on a regular basis through Facebook status updates or content posting. What's more, if they comment on your Facebook post, their Facebook friends will also see your Facebook post and this will help in viral promotion of your business.
-
-Facebook Ads: Your business at Facebook is not just limited to a Facebook page or Facebook group. Facebook also offers you a chance to put up Facebook advertising campaigns. You can build your Facebook advertisements, and as per your budget requirements, go for a Facebook campaign suitable for your business. You can also choose the set of people to whom these Facebook ads will be visible. You can target your Facebook ads on the basis of demographics, educational level, interests etc. It is also up to you to decide how often these Facebook ads will appear.
-
-Save money: Apart from these facts, Facebook is free. You do not need to spend anything for promoting your company through a Facebook page. Facebook already has people addicted to it. This means you do not have to look for customers – they are already there on Facebook.
-
-**How to Make the Best Use of Facebook?**
-
-Many people feel that simply having a Facebook page or Facebook group is enough to help their company. It cannot be further from the truth. In fact, if you are not going to use it properly, then it can be more disadvantageous than not being on Facebook.
-
-Make sure that you do not leave your Facebook page or Facebook group after a few days. It reduces participation and gives your business a bad name. Do not spam through your Facebook pages, it is the simplest way to lose customers. Make sure that your Facebook fans and members are rewarded for being there in your Facebook group or Facebook page. You could give them free coupons via Facebook or something similar.
-
-Facebook has really changed the way people go about promoting their business. With so many people with varied interests available on a single platform, there is something for everyone. All you need to do is find the right target audience and then market your business to them. Facebook provides you all the tools required to reach these people.
-
-Credit iMarketing Factory - "The Importance of Facebook for Small Businesses"
+1. Creating and maintaining the most useful, functional, customizable, robust and down-right awesomist Facebook feed plugin your website has ever seen.
+2. To provide the quickest, friendliest and most mind-blowingly amazing product support you have ever experienced.
 
 == Screenshots ==
 
@@ -361,6 +264,139 @@ Credit iMarketing Factory - "The Importance of Facebook for Small Businesses"
 9. It's super easy to display your Facebook feed in any page or post
 
 == Changelog ==
+
+= 2.8 =
+* New: Added support for Notes in timeline feeds. If your timeline feed contains a note then the plugin will now get the content from the note and display it within the post.
+* New: Facebook call-to-action buttons - such as "Learn More", "Shop Now", and "Message Page" - are now supported in your posts. These text strings can be translated using the settings at: Facebook Feed > Customize > Custom Text/Translate
+* New: Added a setting that you can enable if you are displaying posts from a restricted (non-public) Facebook page. This will allow the page avatar to be displayed, and is located at: Facebook Feed > Customize > Misc > Misc Settings > Is Facebook Page restricted?
+* New: If a visitor posts to your page then their avatar will now be displayed and cached for 6 months. To clear the cache of these avatar images use the button located at: Facebook Feed > Customize > Misc > Misc Settings > Clear Avatar Cache
+* Tweak: The Timezone setting can now be set in the shortcode. Eg: `timezone="America/Los_Angeles"`
+* Tweak: Minor UI changes to the admin pages
+* Tweak: Reduced some of the data in the System Info
+* Fix: If you backdate a post it will now be ordered correctly in your feed
+* Fix: Fixed a theme conflict related to the Color Picker in the admins section
+* Verified compatibility with WordPress 5.0 and Gutenburg
+
+= 2.7.2 =
+* **Important:** If you are displaying a feed from a Facebook page which you are *not* an admin of then it is advised that you obtain a new Access Token in the plugin using the "Log in and get my Access Token" button. This will switch you from using the "SlickRemix" app to using our own "Smash Balloon" Facebook app which was recently approved by Facebook, and will prevent you from experiencing any potential interuptions in your feeds going forward. This will be the final time this is required.
+* Fix: Fixed a rare issue caused by some themes including the JavaScript file incorrectly
+
+= 2.7.1 =
+* Tweak: Made some adjustments to the Facebook Access Token login process
+
+= 2.7 =
+* New: Now easily get your own Facebook Access Token to avoid any Facebook connection issues. Simply click the blue Facebook "Log in and get my Access Token" button on the Custom Facebook Feed settings page and connect your Facebook account to get your token. The Access Token will work to get posts from ANY Facebook page. Thanks to our friends at SlickRemix for powering our new login and getting the plugin back up and running again!
+* Tweak: Removed the minimum caching time if you're using your own Facebook Page Access Token
+
+= 2.6.4 =
+* **Important:** If you are displaying Facebook posts from a Facebook page that **you are an admin of** then it is now highly recommended that you retrieve your own Facebook Access Token for that Facebook page to avoid any Facebook API rate limit errors. Simply follow these [step-by-step](https://smashballoon.com/custom-facebook-feed/page-token/) instructions to obtain one.
+
+= 2.6.3 =
+* Fix: Fixed an issue where Facebook API errors were being cached
+
+= 2.6.2 =
+* Fix: Replaced all HTTP links with HTTPS
+* Fix: Fixed a rare issue which affected the layout of other Facebook widgets
+* Fix: Automatically remove slashes at the end of the Facebook Page ID as it caused an error
+* Fix: The API response test in the System Info now only tests with your Facebook token if you have the "Use my own Access Token" setting enabled
+* Fix: Fixed an issue which caused an occasional Facebook API rate limit error
+
+= 2.6.1 =
+* Fix: Removed an unnecessary Facebook API call
+* Fix: Removed a PHP notice which was displayed under rare circumstances
+* Fix: Minor bug fixes
+
+= 2.6 =
+* Fix: Fixed an issue connecting to the Facebook API caused by a recent Facebook platform change
+* Tweak: Increased the minimum caching time to be 15 minutes to reduce Facebook API requests
+
+= 2.5.2 =
+* Important: Due to sudden changes in the Facebook API it is no longer possible to display posts from a Facebook Group. Please [see here](https://smashballoon.com/facebook-api-changes-april-4-2018/) for more information. We apologize for any frustration or inconvenience this has caused.
+* Removed: Due to Facebook API restrictions, it is no longer possible to display information about an event when it is posted or shared to your Facebook Page timeline.
+
+= 2.5.1 =
+* Fix: Prevented a PHP notice which would be displayed under rare circumstances
+* Fix: Replaced a function due to a deprecation in PHP 7.2
+
+= 2.5 =
+* New: Added the post story as part of the page/author name at the top of the post
+* New: Added an option to use minified versions of the plugin CSS and JavaScript files: `Facebook Feed > Customize > Misc > Misc Settings > Minify CSS and JavaScript files`
+* New: Added support for clearing the cache of major caching plugins when the Facebook feed cache is cleared. You can enable this by setting the following setting to be "Yes": `Facebook Feed > Customize > Misc > Misc Settings > Force cache to clear on interval`
+* Tweak: Improved the text truncation so that it applies to both the post text and description as one block of text and accounts for HTML link tags
+* Tweak: Added an "Auto" option to the Post Limit setting where it will automatically adjust the post limit based on the number of posts you choose to display
+* Tweak: Reorganized the settings pages to be more intuitive
+* Tweak: Added aria-hidden=true to icons to help improve accessibility
+* Tweak: The icon font stylesheet handle has been renamed so it will only be loaded once if another of our plugins is installed
+* Tweak: Error messages are now only shown to admins
+* Tweak: Added a setting to workaround a theme issue that affects the shortening of the post text. If you're experiencing an issue with the shortening of post text then you can enable the following setting: `Facebook Feed > Customize > Misc > Misc Settings > Fix text shortening issue`
+* Fix: Included a fallback in case the author name and avatar aren't available in visitor posts
+* Fix: Fixed an issue with apostrophes in the header not being escaped correctly
+* Fix: Fixed an issue with the icon font when Font Awesome 5 was added to a site
+* Fix: Added support for the @[ID:page-name] tagging format
+* Fix: The post description is now able to be displayed even if the post text is hidden
+
+= 2.4.6 =
+* Compatible with WordPress 4.8
+
+= 2.4.5 =
+* Tweak: Updated plugin links for new WordPress.org repo
+* Fix: Minor bug fixes
+
+= 2.4.4 =
+* New: If your Facebook posts have been created in more than one language on Facebook then it's now possible to display each language by using the `locale` setting in the shortcode. Eg: English: `[custom-facebook-feed locale=en_EN]`, German: `[custom-facebook-feed locale=de_DE]`
+* Fix: Fixed an issue with the order of group posts in some feeds
+
+= 2.4.3 =
+* Fix: Fixed a potential security vulnerability
+* Tested with upcoming WordPress 4.6 update
+
+= 2.4.2 =
+* Tweak: Group wall feed posts are now ordered based on recent activity, rather than by the date they were created, to better reflect the order on the Facebook Group wall.
+* Tweak: The "5 hours ago" date text strings can now be translated directly in the shortcode if you're displaying different feeds in different languages. See the bottom of the [Shortcode Options table](https://smashballoon.com/custom-facebook-feed/docs/shortcodes/) for more information.
+* Tweak: Created some specific [setup directions](https://smashballoon.com/custom-facebook-feed/docs/free/) for the free version.
+* Fix: Minor bug fixes
+
+= 2.4.1.2 =
+* Updated to be compatible with Facebook API version 2.6
+
+= 2.4.1.1 =
+* Fix: Fixed a JavaScript error in the admin area when using WordPress 4.5
+
+= 2.4.1 =
+* New: If a post contains either a photo or video then an icon and link are now added to view it on Facebook. You can disable this by unchecking the "Media Link" option in the following location: Customize > Post Layout > Show/Hide. You can also remove it by using the "exclude" shortcode option: exclude="medialink". You can translate or change the text for this link on the "Custom Text / Translate" settings page.
+* Tweak: Tested with WordPress 4.5
+* Fix: Fixed an issue where the "Share" button in the plugin Like Box wasn't working correctly
+* Fix: Added support for wp-config proxy settings. Credit to [@usrlocaldick](https://wordpress.org/support/topic/proxy-support-1) for the patch.
+
+= 2.4 =
+* New: Added a setting to allow you to use a fixed pixel width for the Facebook feed on desktop but switch to a 100% width responsive layout on mobile
+* New: You can now click on the name of a setting on the admin pages to reveal the corresponding shortcode for that setting
+* New: Added quick links to the top of the Customize settings pages to make it easier to find certain settings
+* New: Added a setting to allow you to disable the default plugin text and link styles (Customize > Misc > Disable default styles)
+* New: Added a setting which allows you to manually change the request method used to fetch Facebook posts which is necessary for some server setups
+* Tweak: Updated the Font Awesome icon font to version 4.5
+* Tweak: Moved the 'Show Header' setting to the 'General' tab on the Customize page
+* Fix: Hashtag linking now works with all languages and character sets
+* Fix: Fixed an error that occurred when trying to activate the Pro version with the free version still activated
+* Fix: Fixed a rare error which occurred when the Facebook post contained no text and no story
+* Fix: Fixed an issue when trying to display Facebook posts by only visitors to your Facebook page caused by a recent Facebook API update
+
+= 2.3.10 =
+* Fix: If you're experiencing an issue with your Facebook feed not automatically updating successfully then please update the plugin and enable the following setting: Custom Facebook Feed > Customize > Misc > Misc Settings > Force cache to clear on interval. If you set this setting to 'Yes' then it should force your plugin cache to clear either every hour, 12 hours, or 24 hours, depending on how often you have the plugin set to check Facebook for new posts.
+
+= 2.3.9 =
+* Fix: Fixed an issue caused by the recent Facebook API 2.5 update where the posts wouldn't display when using a brand new Access Token
+
+= 2.3.8 =
+* Fix: Fixed a positioning issue with the Facebook "Like Box / Page Plugin" widget caused by a recent Facebook update which was causing it to overlap on top of other content
+* Fix: Hashtags containing Chinese characters are now linked
+* Fix: Fixed a minor issue in shared link posts where the post text linked to the shared link URL instead of the post on Facebook
+* Tweak: Added a timezone for Sydney, Australia
+
+= 2.3.7 =
+* Fix: Fixed an issue caused by the WordPress 4.3 update where feeds from very long page IDs wouldn't update correctly due to the cache not clearing when expired
+* Fix: Removed specific encoding parameters from the cURL request method to prevent encoding issues on some servers
+
 = 2.3.6 =
 * New: Added a couple of new customization options for the Facebook Like Box/Page Plugin which allow you to select a small/slim header for the Like Box and hide the call-to-action button (if available)
 * Fix: The plugin now works with Access Tokens which use the new recently-released version 2.4 of the Facebook API

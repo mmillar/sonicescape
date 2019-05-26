@@ -1,8 +1,8 @@
 /*!
- * Collapse-O-Matic JavaSctipt v1.5.16
+ * Collapse-O-Matic JavaSctipt v1.6.17
  * http://plugins.twinpictures.de/plugins/collapse-o-matic/
  *
- * Copyright 2015, Twinpictures
+ * Copyright 2018, Twinpictures
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -48,27 +48,59 @@ function collapse_init() {
 }
 
 function swapTitle(origObj, swapObj){
-	var orightml = jQuery(origObj).html();
-	var swaphtml = jQuery(swapObj).html();
+	if(jQuery(origObj).prop("tagName") == 'IMG'){
+		var origsrc = jQuery(origObj).prop('src');
+		var swapsrc = jQuery(swapObj).prop('src');
 
-	jQuery(origObj).html(swaphtml);
-	jQuery(swapObj).html(orightml);
+		jQuery(origObj).prop('src',swapsrc);
+		jQuery(swapObj).prop('src',origsrc);
+	}
+	else{
+		var orightml = jQuery(origObj).html();
+		var swaphtml = jQuery(swapObj).html();
 
-	//is cufon involved? if so, do that thing
-	if(swaphtml.indexOf("<cufon") != -1){
-		var trigelem = jQuery(this).get(0).tagName;
-		Cufon.replace(trigelem);
+		jQuery(origObj).html(swaphtml);
+		jQuery(swapObj).html(orightml);
+
+		//is cufon involved? if so, do that thing
+		if(swaphtml.indexOf("<cufon") != -1){
+			var trigelem = jQuery(this).get(0).tagName;
+			Cufon.replace(trigelem);
+		}
 	}
 }
 
 function toggleState (obj, id, maptastic, trig_id) {
+	//toggletarget class
+	//jQuery('[id^=target][id$='+id+']').toggleClass('colomat-targ-visable');
+
 	if (maptastic && jQuery('[id^=target][id$='+id+']').hasClass('maptastic') ) {
 		jQuery('[id^=target][id$='+id+']').removeClass('maptastic');
 	}
 
+	//reset effect and duration to default
+	com_effect = colomatslideEffect;
+	com_duration = colomatduration;
+
+	//effect override
+	if( obj.attr('data-animation_effect') ){
+		com_effect = obj.attr('data-animation_effect');
+	}
+
+	//duration override
+	if( obj.attr('data-duration') ){
+		com_duration = obj.attr('data-duration');
+	}
+
+	//if durration is a number, make it a number
+	if( isFinite(com_duration) ){
+		com_duration = parseFloat(com_duration);
+	}
+
 	//slideToggle
-	if(colomatslideEffect == 'slideToggle'){
-		jQuery('[id^=target][id$='+id+']').slideToggle(colomatduration, function() {
+	if(com_effect == 'slideToggle'){
+		//jQuery('[id^=target][id$='+id+']').slideToggle(com_duration, function() {
+		jQuery('#target-'+id).slideToggle(com_duration, function() {
 			// Animation complete.
 			if( jQuery(this).hasClass('colomat-inline') && jQuery(this).is(':visible') ){
 				jQuery(this).css('display', 'inline');
@@ -76,8 +108,10 @@ function toggleState (obj, id, maptastic, trig_id) {
 
 			//deal with any findme links
 			if(trig_id && jQuery('#'+trig_id).is('.find-me.colomat-close')){
-				offset_top = jQuery('#find-'+trig_id).attr('name');
-				if(!offset_top){
+				//offset_top = jQuery('#find-'+trig_id).attr('name');
+				offset_top = jQuery('#'+trig_id).attr('data-findme');
+
+				if(!offset_top || offset_top == 'auto'){
 					target_offset = jQuery('#'+trig_id).offset();
 					offset_top = target_offset.top;
 				}
@@ -86,11 +120,11 @@ function toggleState (obj, id, maptastic, trig_id) {
 		});
 	}
 	//slideFade
-	else if(colomatslideEffect == 'slideFade'){
-		jQuery('[id^=target][id$='+id+']').animate({
+	else if(com_effect == 'slideFade'){
+		jQuery('#target-'+id).animate({
 			height: "toggle",
 			opacity: "toggle"
-		}, colomatduration, function (){
+		}, com_duration, function (){
 			//Animation complete
 			if( jQuery(this).hasClass('colomat-inline') && jQuery(this).is(':visible') ){
 				jQuery(this).css('display', 'inline');
@@ -98,14 +132,29 @@ function toggleState (obj, id, maptastic, trig_id) {
 
 			//deal with any findme links
 			if(trig_id && jQuery('#'+trig_id).is('.find-me.colomat-close')){
-				offset_top = jQuery('#find-'+trig_id).attr('name');
-				if(!offset_top){
+				//offset_top = jQuery('#find-'+trig_id).attr('name');
+				offset_top = jQuery('#'+trig_id).attr('data-findme');
+
+				if(!offset_top || offset_top == 'auto'){
 					target_offset = jQuery('#'+trig_id).offset();
 					offset_top = target_offset.top;
 				}
 				jQuery('html, body').animate({scrollTop:offset_top}, 500);
 			}
 		});
+	}
+
+	//deal with google maps builder resize
+	if(jQuery('#'+id).hasClass('colomat-close')){
+		jQuery('.google-maps-builder').each(function(index) {
+			map = jQuery(".google-maps-builder")[index];
+			google.maps.event.trigger(map, 'resize');
+		});
+	}
+
+	//callback
+	if ( typeof colomat_callback != 'undefined' ) {
+		colomat_callback();
 	}
 }
 
@@ -279,8 +328,18 @@ function colomat_collapseall(loop_items){
 
 
 jQuery(document).ready(function() {
-	//console.log(colomatduration, colomatslideEffect);
-	collapse_init();
+	//console.log(colomatduration, colomatslideEffect, colomatpauseInit);
+	com_binding = 'click';
+	if (typeof colomattouchstart !== 'undefined' && colomattouchstart) {
+		com_binding = 'click touchstart';
+	}
+
+	if (typeof colomatpauseInit !== 'undefined' && colomatpauseInit) {
+		init_pause = setTimeout(collapse_init, colomatpauseInit);
+	}
+	else{
+		collapse_init();
+	}
 
 	//jetpack infinite scroll catch-all
 	jQuery( document.body ).on( 'post-load', function () {
@@ -320,13 +379,19 @@ jQuery(document).ready(function() {
 	});
 
 	//the main collapse/expand function
-	jQuery(document).on('click', '.collapseomatic', function(event) {
+	jQuery(document.body).on(com_binding, '.collapseomatic', function(event) {
 		var offset_top;
 
 		//alert('phones ringin dude');
 		if(jQuery(this).hasClass('colomat-expand-only') && jQuery(this).hasClass('colomat-close')){
 			return;
 		}
+
+		//highlander must be one
+		if(jQuery(this).attr('rel') && jQuery(this).attr('rel').indexOf('-highlander') != '-1' && jQuery(this).hasClass('must-be-one') && jQuery(this).hasClass('colomat-close')){
+			return;
+		}
+
 		var id = jQuery(this).attr('id');
 
 		//deal with any scroll to links
@@ -435,10 +500,14 @@ jQuery(document).ready(function() {
 	});
 
 
-	jQuery(document).on('click', '.expandall', function(event) {
+	jQuery(document).on(com_binding, '.expandall', function(event) {
 		if(jQuery(this).attr('rel') !== undefined){
 			var rel = jQuery(this).attr('rel');
 			var loop_items = jQuery('.collapseomatic:not(.colomat-close)[rel="' + rel +'"]');
+		}
+		else if(jQuery(this).attr('data-togglegroup') !== undefined){
+			var toggroup = jQuery(this).attr('data-togglegroup');
+			var loop_items = jQuery('.collapseomatic:not(.colomat-close)[data-togglegroup="' + toggroup +'"]');
 		}
 		else{
 			var loop_items = jQuery('.collapseomatic:not(.colomat-close)');
@@ -447,10 +516,14 @@ jQuery(document).ready(function() {
 		colomat_expandall(loop_items);
 	});
 
-	jQuery(document).on('click', '.collapseall', function(event) {
+	jQuery(document).on(com_binding, '.collapseall', function(event) {
 		if(jQuery(this).attr('rel') !== undefined){
 			var rel = jQuery(this).attr('rel');
 			var loop_items = jQuery('.collapseomatic.colomat-close[rel="' + rel +'"]');
+		}
+		else if(jQuery(this).attr('data-togglegroup') !== undefined){
+			var toggroup = jQuery(this).attr('data-togglegroup');
+			var loop_items = jQuery('.collapseomatic.colomat-close[data-togglegroup="' + toggroup +'"]');
 		}
 		else {
 			var loop_items = jQuery('.collapseomatic.colomat-close');
@@ -460,39 +533,31 @@ jQuery(document).ready(function() {
 	});
 
 	//handle new page loads with anchor
-	var myFile = document.location.toString();
-	if (myFile.match('#')) { // the URL contains an anchor
-		// click the navigation item corresponding to the anchor
-		var anchor_arr = myFile.split('#');
-		if(anchor_arr.length > 1){
-			junk = anchor_arr.splice(0, 1);
-			anchor = anchor_arr.join('#');
-		}
-		else{
-			anchor = anchor_arr[0];
-		}
-
-		if( !jQuery('#' + anchor).hasClass('colomat-close') ){
-			jQuery('#' + anchor).click();
-		}
-		//expand any nested parents
-		jQuery('#' + anchor).parents('.collapseomatic_content, .collapseomatic_content_inline').each(function(index) {
-			parent_arr = jQuery(this).attr('id').split('-');
-			junk = parent_arr.splice(0, 1);
-			parent = parent_arr.join('-');
-			if( !jQuery('#' + parent).hasClass('colomat-close') ){
-				jQuery('#' + parent).click();
-			}
-		})
+	var fullurl = document.location.toString();
+	if (fullurl.match('#(?!\!)')) {
+		hashmaster(fullurl);
 	}
 
-	//handle anchor links within the same page
-	jQuery(document).on('click', 'a.expandanchor', function(event) {
+	//handle no-link triggers within the same page
+	jQuery(document).on('click', 'a.colomat-nolink', function(event) {
 		event.preventDefault();
-		var fullurl = jQuery(this).attr('href');
-		if (fullurl.match('#')) { // the URL contains an anchor
+	});
+
+	//manual hashtag changes in url
+	jQuery(window).on('hashchange', function (e) {
+		fullurl = document.location.toString();
+		if (fullurl.match('#(?!\!)')) {
+			hashmaster(fullurl);
+		}
+	});
+
+	//master url hash funciton
+	function hashmaster(fullurl){
+		// the URL contains an anchor but not a hash-bang
+		if (fullurl.match('#(?!\!)')) {
 			// click the navigation item corresponding to the anchor
-			var anchor_arr = fullurl.split('#');
+			var anchor_arr = fullurl.split(/#(?!\!)/);
+
 			if(anchor_arr.length > 1){
 				junk = anchor_arr.splice(0, 1);
 				anchor = anchor_arr.join('#');
@@ -500,24 +565,29 @@ jQuery(document).ready(function() {
 			else{
 				anchor = anchor_arr[0];
 			}
-			if(!jQuery('#' + anchor).hasClass('colomat-close')){
-				jQuery('#' + anchor).click();
+
+			if( jQuery('#' + anchor).length ){
+				//expand any nested parents
+				jQuery('#' + anchor).parents('.collapseomatic_content').each(function(index) {
+					parent_arr = jQuery(this).attr('id').split('-');
+					junk = parent_arr.splice(0, 1);
+					parent = parent_arr.join('-');
+					if(!jQuery('#' + parent).hasClass('colomat-close')){
+						jQuery('#' + parent).click();
+					}
+				})
+				//now expand the target anchor
+				if(!jQuery('#' + anchor).hasClass('colomat-close')){
+					jQuery('#' + anchor).click();
+				}
 			}
 
-			//expand any nested parents
-			jQuery('#' + anchor).parents('.collapseomatic_content, .collapseomatic_content_inline').each(function(index) {
-				parent_arr = jQuery(this).attr('id').split('-');
-				junk = parent_arr.splice(0, 1);
-				parent = parent_arr.join('-');
-				if(!jQuery('#' + parent).hasClass('colomat-close')){
-					jQuery('#' + parent).click();
-				}
+			if(typeof colomatoffset !== 'undefined'){
+				var anchor_offset = jQuery('#' + anchor).offset();
+				colomatoffset = colomatoffset + anchor_offset.top;
+				jQuery('html, body').animate({scrollTop:colomatoffset}, 50);
+			}
 
-			})
 		}
-	});
-
-	jQuery(document).on('click', 'a.colomat-nolink', function(event) {
-		event.preventDefault();
-	});
+	}
 });

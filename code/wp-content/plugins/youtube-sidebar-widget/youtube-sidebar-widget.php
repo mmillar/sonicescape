@@ -162,9 +162,7 @@
 						}
 						
 						$i++;
-					} else {
-						break;
-					}
+					} 
 					$output .= "</ul>\n\r";
 				} else {
 					$output .= "<p class='ysw-unavailable'>Service Unavailable.</p>";

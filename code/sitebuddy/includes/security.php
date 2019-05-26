@@ -16,7 +16,7 @@ function sanitize($input){
 }
 
 
-mysql_connect('localhost',$username,$password);
+$conn = mysql_connect('localhost',$username,$password);
 @mysql_select_db($database) or die("Unable to select database");
 
 if(isset($_SESSION['login'])){

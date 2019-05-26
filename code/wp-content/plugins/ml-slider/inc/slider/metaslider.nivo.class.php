@@ -1,8 +1,6 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-    exit; // disable direct access
-}
+if (!defined('ABSPATH')) die('No direct access.');
 
 /**
  * Nivo Slider specific markup, javascript, css and settings.
@@ -15,6 +13,9 @@ class MetaNivoSlider extends MetaSlider {
 
     /**
      * Constructor
+     *
+     * @param int   $id                 ID
+     * @param array $shortcode_settings Short Settings
      */
     public function __construct( $id, $shortcode_settings ) {
         parent::__construct( $id, $shortcode_settings );
@@ -26,6 +27,10 @@ class MetaNivoSlider extends MetaSlider {
      * Other slides use "AutoPlay = true" (true autoplays the slideshow)
      * Nivo slider uses "ManualAvance = false" (ie, false autoplays the slideshow)
      * Take care of the manualAdvance parameter here.
+     *
+     * @param array $options   Options for autoplay
+     * @param array $slider_id Slider ID
+     * @param array $settings  Settings
      */
     public function set_autoplay_parameter( $options, $slider_id, $settings ) {
         global $wp_filter;
@@ -48,6 +53,7 @@ class MetaNivoSlider extends MetaSlider {
      * Detect whether thie slide supports the requested setting,
      * and if so, the name to use for the setting in the Javascript parameters
      *
+     * @param  array $param Parameters
      * @return false (parameter not supported) or parameter name (parameter supported)
      */
     protected function get_param( $param ) {
@@ -74,46 +80,30 @@ class MetaNivoSlider extends MetaSlider {
     }
 
     /**
-     *
+     * Enqueue scripts
      */
     public function enqueue_scripts() {
-        parent::enqueue_scripts();
-
-        if ( $this->get_setting( 'printCss' ) == 'true' ) {
-            $theme = $this->get_theme();
-            wp_enqueue_style( 'metaslider-' . $this->get_setting( 'type' ) . '-slider-'.$theme, METASLIDER_ASSETS_URL . "sliders/nivoslider/themes/{$theme}/{$theme}.css", false, METASLIDER_VERSION );
+		parent::enqueue_scripts();
+		
+		// If a theme is set then we need to load the default Nivo theme
+		$theme = get_post_meta($this->id, 'metaslider_slideshow_theme', true);
+        if ('true' === $this->get_setting('printCss') || $theme) {
+			wp_enqueue_style('metaslider-' . $this->get_setting('type') . '-slider-default', METASLIDER_ASSETS_URL . "sliders/nivoslider/themes/default/default.css", false, METASLIDER_VERSION);
         }
-    }
-
-    /**
-     *
-     */
-    private function get_theme() {
-        $theme = $this->get_setting( 'theme' );
-
-        if ( !in_array( $theme, array( 'dark', 'bar', 'light' ) ) ) {
-            $theme = 'default';
-        }
-
-        return $theme;
-    }
-
+	}
+	
     /**
      * Build the HTML for a slider.
      *
      * @return string slider markup.
      */
     protected function get_html() {
-        $return_value  = "<div class='slider-wrapper theme-{$this->get_theme()}'>";
-        $return_value .= "\n            <div class='ribbon'></div>";
-        $return_value .= "\n            <div id='" . $this->get_identifier() . "' class='nivoSlider'>";
 
-        foreach ( $this->slides as $slide ) {
-            $return_value .= "\n                " . $slide;
+        $return_value  = "<div class='slider-wrapper theme-default'><div class='ribbon'></div><div id='" . $this->get_identifier() . "' class='nivoSlider'>";
+        foreach ($this->slides as $slide) {
+            $return_value .= $slide;
         }
-
-        $return_value .= "\n            </div>\n        </div>";
-
-        return apply_filters( 'metaslider_nivo_slider_get_html', $return_value, $this->id, $this->settings );;
+        $return_value .= "</div></div>";
+        return apply_filters('metaslider_nivo_slider_get_html', $return_value, $this->id, $this->settings);
     }
 }

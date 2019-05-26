@@ -3,10 +3,10 @@ Contributors: zourbuth
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=W6D3WAJTVKAFC
 Tags: flickr, widget, badge, feed, photostream, javascript, sidebar, gallery, photo, photo gallery, photography, sidebar, user, group, image, images, recent, random, picture, image-widget
 Requires at least: 4.1.1
-Tested up to: 3.0
-Stable tag: 1.2.7
+Tested up to: 4.7
+Stable tag: 1.3.0
 
-A fast plugin toisplay your Flickr photostream in a sidebar easily without authentication.
+A fast plugin to display your Flickr photostream in a sidebar easily without any authentications.
 
 == Description ==
 
@@ -23,6 +23,8 @@ Just put your Flickr ID and your widget will be ready to lunch.
 <li>Get the image from recent or use random function.</li>
 <li>Displays up to 10 images.</li>
 <li>Optional image sizes.</li>
+<li>Cached system.</li>
+<li>Open image in new window.</li>
 <li>Intro text for additional text before the widget content.</li>
 <li>Outro text for additional text after the widget content.</li>
 <li>Custom scripts and stylesheets for each widget.</li>
@@ -63,6 +65,18 @@ http://goo.gl/PM6rZ
 http://www.ground6.com/wordpress-plugins/flickr-badges-widget/screenshots/
 
 == Changelog ==
+
+= 1.3.0 =
+* Added cached transient
+* Added open image in new window
+* Added widget shortcode and PHP function
+
+= 1.2.9 =
+* Added default widget paramaters
+* Added widget shortcode and PHP function
+
+= 1.2.8 =
+* Fix deprecated WP_Widget for WP 4.3
 
 = 1.2.7 =
 * Added SSL parameter if being used. 

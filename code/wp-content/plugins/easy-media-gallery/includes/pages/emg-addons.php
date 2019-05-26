@@ -32,7 +32,7 @@ function emg_lite_get_addons_feed() {
 				set_transient( 'emglite_addons_feed', $cache, 60 );
 			}
 		} else {
-			$cache = '<div class="error"><p>' . __( 'There was an error retrieving the list from the server. Please try again later.', 'easmedia' ) . '</div>';
+			$cache = '<div class="error"><p>' . __( 'There was an error retrieving the list from the server. Please try again later.', 'easy-media-gallery' ) . '</div>';
 		}
 	}
 	return $cache;

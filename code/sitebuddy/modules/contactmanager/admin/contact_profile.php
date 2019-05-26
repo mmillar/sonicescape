@@ -17,18 +17,18 @@ $close_win = false;
 
 if(ISSET($_REQUEST["submit"])){
 	if($action=="add"){
-		$result = mysql_query("SELECT * FROM sb_contacts LIMIT 1");
+		$result = mysqli_query($conn, "SELECT * FROM sb_contacts LIMIT 1");
 		
 		$insertSQL = "INSERT INTO ".$tableName." (";
 		$dataSQL = "";
 		$i=$j=0;
-		while ($i < mysql_num_fields($result)) {  
-			$fieldObj = mysql_fetch_field($result, $i);         
-			if($fieldObj->primary_key!=1){
+		while ($i < mysqli_num_fields($result)) {  
+			$fieldObj = mysqli_fetch_field($result);         
+			if(!($fieldObj->flags & PRI_KEY_FLAG)){
 				if(!empty($_REQUEST[$fieldObj->name])){
-					$strCatch = ($fieldObj->type=="string" || $fieldObj->type=="blob")?"'":"";
+					$strCatch = ($fieldObj->type==MYSQLI_TYPE_VAR_STRING || $fieldObj->type==MYSQLI_TYPE_BLOB)?"'":"";
 					$insertSQL .= (($j>0)?",":"")."`".$fieldObj->name."`"." ";
-					$dataSQL .= (($j>0)?",":"").$strCatch.mysql_real_escape_string($_REQUEST[$fieldObj->name]).$strCatch;
+					$dataSQL .= (($j>0)?",":"").$strCatch.mysqli_real_escape_string($conn, $_REQUEST[$fieldObj->name]).$strCatch;
 					$j++;
 				}
 			}
@@ -42,19 +42,19 @@ if(ISSET($_REQUEST["submit"])){
 		$dataSQL .= (($j>0)?",":"")."NOW()";
 	
 		$insertSQL .= ") values (".$dataSQL.");";
-		$result = mysql_query($insertSQL);
-		$contactid = mysql_insert_id(); 
+		$result = mysqli_query($conn, $insertSQL);
+		$contactid = mysqli_insert_id($conn); 
 		//echo($insertSQL);
 	} else if($action=="edit"){
-		$result = mysql_query("SELECT * FROM sb_contacts LIMIT 1");
+		$result = mysqli_query($conn, "SELECT * FROM sb_contacts LIMIT 1");
 		
 		$updateSQL = "UPDATE ".$tableName." SET ";
 		$i=$j=0;
-		while ($i < mysql_num_fields($result)) {  
-			$fieldObj = mysql_fetch_field($result, $i);         
-			if($fieldObj->primary_key!=1 && $fieldObj->type!="datetime"){
-				$strCatch = ($fieldObj->type=="string" || $fieldObj->type=="blob")?"'":"";
-				$updateSQL .= (($j>0)?",":"").$fieldObj->name." = ".$strCatch.mysql_real_escape_string($_REQUEST[$fieldObj->name]).$strCatch." ";
+		while ($i < mysqli_num_fields($result)) {  
+			$fieldObj = mysqli_fetch_field($result);         
+			if(!($fieldObj->flags & MYSQLI_PRI_KEY_FLAG) && $fieldObj->type!=MYSQLI_TYPE_DATETIME){
+				$strCatch = ($fieldObj->type==MYSQLI_TYPE_VAR_STRING || $fieldObj->type==MYSQLI_TYPE_BLOB)?"'":"";
+				$updateSQL .= (($j>0)?",":"").$fieldObj->name." = ".$strCatch.mysqli_real_escape_string($conn, $_REQUEST[$fieldObj->name]).$strCatch." ";
 				$j++;
 			}
 			$i++;
@@ -63,8 +63,9 @@ if(ISSET($_REQUEST["submit"])){
 		$updateSQL .= (($j>0)?",":"")."modified=NOW() ";
 	
 		$updateSQL .= "WHERE contactid=".$_REQUEST["contactid"];
-		$result = mysql_query($updateSQL);
+		$result = mysqli_query($conn,$updateSQL);
 		//echo($updateSQL);
+		//echo(fieldObj-type);
 	}
 	if($_REQUEST["submit"]=="Save Contact"){
 		$close_win = true;
@@ -74,13 +75,13 @@ if(ISSET($_REQUEST["submit"])){
 }
 
 $sql = "SELECT * from sb_cnt_fields ORDER BY sequence ASC";
-$field_result = mysql_query($sql);
+$field_result = mysqli_query($conn, $sql);
 
 $contact="";
 if($action=="edit" || (ISSET($_REQUEST["submit"]) && $_REQUEST["submit"]=="Create Duplicate")){
 	$sql = "SELECT * from sb_contacts WHERE contactid=".$contactid;
-	$cnt_result = mysql_query($sql);
-	$contact = mysql_fetch_object($cnt_result);
+	$cnt_result = mysqli_query($conn, $sql);
+	$contact = mysqli_fetch_object($cnt_result);
 }
 ?>
 <html>
@@ -137,7 +138,7 @@ function colorSelect(){
 //List of elements that should be copied over in a duplication
 $dupl_list = array("format","org","email","website","address","city","region","country","zipcode","tag","phone","initial","notes");
 
-while($field=mysql_fetch_object($field_result)){
+while($field=mysqli_fetch_object($field_result)){
 	//clear contact value if duplicate contact
 	if(ISSET($_REQUEST["submit"]) && $_REQUEST["submit"]=="Create Duplicate") {
 		$inList=false;

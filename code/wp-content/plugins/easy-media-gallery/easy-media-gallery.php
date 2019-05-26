@@ -1,11 +1,13 @@
 <?php
 /*
 Plugin Name: Easy Media Gallery
-Plugin URI: http://www.ghozylab.com/plugins/
-Description: Easy Media Gallery (Lite) - Displaying your image, video (MP4, Youtube, Vimeo) and audio mp3 in elegant and fancy lightbox with very easy. Allows you to customize all media to get it looking exactly what you want. <a href="http://ghozylab.com/plugins/easy-media-gallery-pro/pricing/" target="_blank"><strong> Upgrade to Pro Version Now</strong></a> and get a tons of awesome features.
-Author: GhozyLab, Inc.
-Version: 1.3.35
-Author URI: http://www.ghozylab.com/plugins/
+Plugin URI: https://ghozylab.com/plugins/
+Description: Easy Media Gallery (Lite) - Displaying your gallery, video (MP4, Youtube, Vimeo) and audio mp3 in elegant and fancy lightbox with very easy. Allows you to customize all media to get it looking exactly what you want. <a href="https://ghozy.link/q65dp" target="_blank"><strong> Upgrade to Pro Version Now</strong></a> and get a tons of awesome features.
+Author: Gallery Team - GhozyLab
+Text Domain: easy-media-gallery
+Domain Path: /languages
+Version: 1.3.139
+Author URI: https://ghozylab.com/
 */
 
 if ( ! defined('ABSPATH') ) {
@@ -19,7 +21,7 @@ if ( ! defined('ABSPATH') ) {
 |--------------------------------------------------------------------------
 */
 function emg_lang_init() {
-	load_plugin_textdomain( 'easmedia', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+	load_plugin_textdomain( 'easy-media-gallery', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
 add_action( 'init', 'emg_lang_init' );
 
@@ -29,33 +31,14 @@ add_action( 'init', 'emg_lang_init' );
 | Defines
 |--------------------------------------------------------------------------
 */
-if ( !defined( 'EASYMEDG_PLUGIN_BASENAME' ) )
-    define( 'EASYMEDG_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+if ( !defined( 'EASYMEDG_PLUGIN_URL' ) )
+	define( 'EASYMEDG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
-if ( !defined( 'EASYMEDG_PLUGIN_NAME' ) )
-    define( 'EASYMEDG_PLUGIN_NAME', trim( dirname( EASYMEDG_PLUGIN_BASENAME ), '/') );
-
-if ( !defined( 'EASYMEDG_PLUGIN_DIR' ) )
-    define( 'EASYMEDG_PLUGIN_DIR', WP_PLUGIN_DIR . '/' . EASYMEDG_PLUGIN_NAME . '/' );
-
-if ( !defined( 'EASYMEDG_PLUGIN_URL' )) {
-	if (is_ssl()) {
-		if ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] != 'off' ) {
-			define( 'EASYMEDG_PLUGIN_URL', WP_PLUGIN_URL . '/' . EASYMEDG_PLUGIN_NAME . '/' );
-			} else {
-				define( 'EASYMEDG_PLUGIN_URL', str_replace('http', 'https', WP_PLUGIN_URL) . '/' . EASYMEDG_PLUGIN_NAME . '/' );
-				}
-		} else {
-			define( 'EASYMEDG_PLUGIN_URL', WP_PLUGIN_URL . '/' . EASYMEDG_PLUGIN_NAME . '/' );
-			}
-	}
-	
-	
-$wp_plugin_dir = substr(plugin_dir_path(__FILE__), 0, -1);
-define( 'EMG_DIR', $wp_plugin_dir );
+if ( !defined( 'EMG_DIR' ) )
+	define( 'EMG_DIR', plugin_dir_path(__FILE__) );
 
 // WP Version
-if( (float)substr(get_bloginfo('version'), 0, 3) >= 3.5) {
+if( ( float )substr( get_bloginfo( 'version' ), 0, 3 ) >= 3.5 ) {
 	define( 'EMG_WP_VER', "g35" );
 	}
 	else {
@@ -69,7 +52,7 @@ if ( !defined( 'EASYMEDIA_NAME' ) ) {
 
 // Plugin Version
 if ( !defined( 'EASYMEDIA_VERSION' ) ) {
-	define( 'EASYMEDIA_VERSION', '1.3.35' );
+	define( 'EASYMEDIA_VERSION', '1.3.139' );
 }
 
 // Pro Price
@@ -92,6 +75,22 @@ if ( !defined( 'EASYMEDIA_DEV_PRICE' ) ) {
 	define( 'EASYMEDIA_DEV_PRICE', '99' );
 }
 
+// WP Version
+if ( !defined( 'EMG_WPVER' ) ) {
+	define( 'EMG_WPVER', get_bloginfo( 'version' ) );
+}
+
+// PHP Version
+if ( version_compare( PHP_VERSION, '7.1', '>' ) ) {
+	define( 'EMG_PHP7', true );
+} else {
+	define( 'EMG_PHP7', false );
+}
+
+define( 'EASYMEDIA_PLUGIN_SLUG', 'easy-media-gallery/easy-media-gallery.php' );
+define( 'EMG_API_URLCURL', 'https://secure.ghozylab.com/' );
+define( 'EMG_API_URL', 'https://secure.ghozylab.com/' );
+
 
 /*
 |--------------------------------------------------------------------------
@@ -99,13 +98,13 @@ if ( !defined( 'EASYMEDIA_DEV_PRICE' ) ) {
 |--------------------------------------------------------------------------
 */
 function req_wordpress_version() {
-	global $wp_version;
+	
 	$plugin = plugin_basename( __FILE__ );
 
-	if ( version_compare( $wp_version, "3.3", "<" ) ) {
+	if ( version_compare( EMG_WPVER, "3.3", "<" ) ) {
 		if ( is_plugin_active( $plugin ) ) {
 			deactivate_plugins( $plugin );
-			wp_die( "".EASYMEDIA_NAME." requires WordPress 3.3 or higher, and has been deactivated! Please upgrade WordPress and try again.<br /><br />Back to <a href='".admin_url()."'>WordPress admin</a>" );
+			wp_die( "".EASYMEDIA_NAME." requires WordPress 3.3 or higher, this plugin has been deactivated! Please upgrade WordPress and try again.<br /><br />Back to <a href='".admin_url()."'>WordPress admin</a>" );
 		}
 	}
 }
@@ -118,7 +117,7 @@ add_action( 'admin_init', 'req_wordpress_version' );
 |--------------------------------------------------------------------------
 */
 if ( version_compare(PHP_VERSION, '5.2', '<') ) {
-	if ( is_admin() && (!defined('DOING_AJAX') || !DOING_AJAX) ) {
+	if ( is_admin() && ( !defined('DOING_AJAX') || !DOING_AJAX ) ) {
 		require_once ABSPATH.'/wp-admin/includes/plugin.php';
 		deactivate_plugins( __FILE__ );
 	    wp_die( "".EASYMEDIA_NAME." requires PHP 5.2 or higher. The plugin has now disabled itself. Please ask your hosting provider for this issue.<br /><br />Back to <a href='".admin_url()."'>WordPress admin</a>" );
@@ -140,7 +139,7 @@ if ( is_admin() ) {
 	    wp_die( "<strong>GD Library</strong> for PHP is not installed on your server. ".EASYMEDIA_NAME." requires it to function properly. The plugin has now disabled itself. Please ask your hosting provider for this issue.<br /><br />Back to <a href='".admin_url()."'>WordPress admin</a>" );
 		}
 }
-// Learn more here http://www.webassist.com/tutorials/Enabling-the-GD-library-setting
+// Learn more here https://www.webassist.com/tutorials/Enabling-the-GD-library-setting
 
 
 /*-------------------------------------------------------------------------------*/
@@ -150,9 +149,12 @@ add_action( 'admin_notices', 'emg_jetpack_modules_photon' );
 
 function emg_jetpack_modules_photon() {
 	
-if( class_exists( 'Jetpack' ) && in_array( 'photon', Jetpack::get_active_modules() ) ) {
-    echo '<div class="error"><span class="emgwarning"><p class="emgwarningp">'.__( 'You need to deactivate JetPack <strong>Photon Module</strong> to make <strong>'.EASYMEDIA_NAME.'</strong> work!</p><p><a href="'.admin_url().'admin.php?page=jetpack&action=deactivate&module=photon&_wpnonce='.wp_create_nonce( 'jetpack_deactivate-photon' ).'" >Deactivate Now!</a>', 'easmedia' ).'</p></div>';
-	}
+	if( class_exists( 'Jetpack' ) && in_array( 'photon', Jetpack::get_active_modules() ) ) {
+		
+		echo '<div class="error"><span class="emgwarning"><p class="emgwarningp">You need to deactivate JetPack <strong>Photon Module</strong> to make <strong>'.EASYMEDIA_NAME.'</strong> work!</p><p><a href="'.admin_url().'admin.php?page=jetpack&action=deactivate&module=photon&_wpnonce='.wp_create_nonce( 'jetpack_deactivate-photon' ).'" >Deactivate Now!</a>'.'</p></div>';
+		
+		}
+		
 }
 
 
@@ -162,9 +164,12 @@ if( class_exists( 'Jetpack' ) && in_array( 'photon', Jetpack::get_active_modules
 |--------------------------------------------------------------------------
 */
 function easy_get_option( $name ){
+	
     $easymedia_values = get_option( 'easy_media_opt' );
     if ( is_array( $easymedia_values ) && array_key_exists( $name, $easymedia_values ) ) return $easymedia_values[$name];
+	
     return false;
+	
 }
 
 
@@ -174,31 +179,26 @@ function easy_get_option( $name ){
 |--------------------------------------------------------------------------
 */
 function easmedia_enqueue_scripts() {
-	if( !is_admin() )
-		{
-			wp_enqueue_script( 'jquery' );
-			}
+	
+	if ( ! is_admin() ) wp_enqueue_script( 'jquery' );
+		
 }
-
-if ( !is_admin() )
-{
-  add_action( 'init', 'easmedia_enqueue_scripts' );
-}
-
+add_action( 'init', 'easmedia_enqueue_scripts' );
 
 /*
 |--------------------------------------------------------------------------
-| SETTINGS LINK
+| SETTINGS LINK 01
 |--------------------------------------------------------------------------
 */
 function easmedia_settings_link( $link, $file ) {
+	
 	static $this_plugin;
 	
 	if ( !$this_plugin )
 		$this_plugin = plugin_basename( __FILE__ );
 
 	if ( $file == $this_plugin ) {
-		$settings_link = '<a href="' . admin_url( 'edit.php?post_type=easymediagallery&page=emg_settings' ) . '">' . __( 'Settings', 'easmedia' ) . '</a>';
+		$settings_link = '<a href="' . admin_url( 'edit.php?post_type=easymediagallery&page=emg_settings' ) . '"><span class="emg_settings_icon dashicons dashicons-admin-generic"></span>&nbsp;' . __( 'Settings', 'easy-media-gallery' ) . '</a>';
 		array_unshift( $link, $settings_link );
 	}
 	
@@ -209,23 +209,45 @@ add_filter( 'plugin_action_links', 'easmedia_settings_link', 10, 2 );
 
 /*
 |--------------------------------------------------------------------------
+| SETTINGS LINK 02
+|--------------------------------------------------------------------------
+*/
+function easmedia_settings_link_rowmeta( $link, $file ) {
+	static $this_plugin;
+	
+	if ( !$this_plugin )
+		$this_plugin = plugin_basename( __FILE__ );
+
+	if ( $file == $this_plugin ) {
+		$link[] = '<a href="https://ghozy.link/rs3bq" target="_blank"><span class="dashicons dashicons-heart"></span>&nbsp;' . __( 'Donate', 'easy-media-gallery' ) . '</a>';
+		$link[] = '<a href="https://www.youtube.com/GhozyLab" target="_blank"><span class="dashicons dashicons-editor-help"></span>&nbsp;' . __( 'Tutorials', 'easy-media-gallery' ) . '</a>';
+		$link[] = '<a href="https://wordpress.org/support/plugin/easy-media-gallery/reviews/?filter=5" target="_blank"><span class="dashicons dashicons-star-filled"></span>&nbsp;' . __( 'Rate Us', 'easy-media-gallery' ) . '</a>';
+	}
+	
+	return $link;
+}
+add_filter( 'plugin_row_meta', 'easmedia_settings_link_rowmeta', 10, 2 );
+
+
+/*
+|--------------------------------------------------------------------------
 | Registers custom post type
 |--------------------------------------------------------------------------
 */
 function easmedia_post_type() {
 	$labels = array(
-		'name' 				=> _x( ''.EASYMEDIA_NAME.'', 'post type general name' ),
-		'singular_name'		=> _x( ''.EASYMEDIA_NAME.'', 'post type singular name' ),
-		'add_new' 			=> __( 'Add New Media', 'easmedia' ),
-		'add_new_item' 		=> __( 'Easy Media Item', 'easmedia' ),
-		'edit_item' 		=> __( 'Edit Media', 'easmedia' ),
-		'new_item' 			=> __( 'New Media', 'easmedia' ),
-		'view_item' 		=> __( 'View Media', 'easmedia' ),
-		'search_items' 		=> __( 'Search Media', 'easmedia' ),
-		'not_found' 		=> __( 'No Media Found', 'easmedia' ),
-		'not_found_in_trash'=> __( 'No Media Found In Trash', 'easmedia' ),
-		'parent_item_colon' => __( 'Parent Media', 'easmedia' ),
-		'menu_name'			=> __( 'Easy Media', 'easmedia' )
+		'name' 				=> _x( 'Easy Media Gallery Lite', 'post type general name' ),
+		'singular_name'		=> _x( 'Easy Media Gallery Lite', 'post type singular name' ),
+		'add_new' 			=> __( 'Add New Media', 'easy-media-gallery' ),
+		'add_new_item' 		=> __( 'Easy Media Item', 'easy-media-gallery' ),
+		'edit_item' 		=> __( 'Edit Media', 'easy-media-gallery' ),
+		'new_item' 			=> __( 'New Media', 'easy-media-gallery' ),
+		'view_item' 		=> __( 'View Media', 'easy-media-gallery' ),
+		'search_items' 		=> __( 'Search Media', 'easy-media-gallery' ),
+		'not_found' 		=> __( 'No Media Found', 'easy-media-gallery' ),
+		'not_found_in_trash'=> __( 'No Media Found In Trash', 'easy-media-gallery' ),
+		'parent_item_colon' => __( 'Parent Media', 'easy-media-gallery' ),
+		'menu_name'			=> __( 'Easy Media', 'easy-media-gallery' )
 	);
 
 	$taxonomies = array();
@@ -233,7 +255,7 @@ function easmedia_post_type() {
 	
 	$post_type_args = array(
 		'labels' 			=> $labels,
-		'singular_label' 	=> __( 'Easy Media', 'easmedia' ),
+		'singular_label' 	=> __( 'Easy Media', 'easy-media-gallery' ),
 		'public' 			=> false,
 		'show_ui' 			=> true,
 		'publicly_queryable'=> true,
@@ -244,14 +266,14 @@ function easmedia_post_type() {
 		'rewrite' 			=> array( 'slug' => 'easymedia', 'with_front' => false ),
 		'supports' 			=> $supports,
 		'menu_position' 	=> 20,
-		'menu_icon' =>  plugins_url( 'includes/images/easymedia-cp-icon.png' , __FILE__ ),		
+		'menu_icon' =>  plugins_url( 'includes/images/emg-dash-icon.png' , __FILE__ ),		
 		'taxonomies'		=> $taxonomies
 	);
 
 	 register_post_type( 'easymediagallery', $post_type_args );
 }
 
-require_once(ABSPATH . 'wp-includes/pluggable.php');
+require_once( ABSPATH . 'wp-includes/pluggable.php' );
 if ( current_user_can( 'install_plugins' ) ) {
 	add_action( 'init', 'easmedia_post_type' );
 }
@@ -288,17 +310,18 @@ add_action( 'admin_head', 'easmedia_easymediagallery_icons' );
 /*  Add Custom Columns for Portfolios 
 /*--------------------------------------------------------------------------------*/
 add_filter( 'manage_edit-easymediagallery_columns', 'easmedia_edit_columns_easymedia' );
+
 function easmedia_edit_columns_easymedia( $easymedia_columns ){  
 	$easymedia_columns = array(  
 		'cb' => '<input type="checkbox" />',  
-		'title' => _x( 'Title', 'column name', 'easmedia' ),
-		'psg_thumbnail' => __( 'Thumbnails', 'easmedia'),
-		'psg_type' => __( 'Type', 'easmedia'),		
-		'psg_cat' => __( 'Categories', 'easmedia'),
-		'psg_id' => __( 'ID', 'easmedia')		
+		'title' => _x( 'Title', 'column name', 'easy-media-gallery' ),
+		'psg_thumbnail' => __( 'Thumbnails', 'easy-media-gallery' ),
+		'psg_type' => __( 'Type', 'easy-media-gallery' ),		
+		'psg_cat' => __( 'Categories', 'easy-media-gallery' ),
+		'psg_id' => __( 'ID', 'easy-media-gallery' )		
 			
 	);  
-	unset( $columns['Date'] );
+	unset( $easymedia_columns['Date'] );
 	return $easymedia_columns;  
 }  
 
@@ -363,7 +386,7 @@ if ( is_array( get_post_meta( $post_id, 'easmedia_metabox_media_gallery', true )
 					echo $mediatype;
 						}
 	        } else {
-	            echo __( 'None', 'easmedia' );
+	            echo __( 'None', 'easy-media-gallery' );
 	        }
 
 			break;
@@ -372,7 +395,9 @@ if ( is_array( get_post_meta( $post_id, 'easmedia_metabox_media_gallery', true )
 			$cats = get_the_terms( $post_id, 'emediagallery' );
             if ( is_array( $cats ) ) {
 				$item_cats = array();
-				foreach ( $cats as $cat ) { $item_cats[] = $cat->name;}
+				foreach ( $cats as $cat ) {
+					$item_cats[] = $cat->name;
+					}
 				echo implode( ', ', $item_cats );
 			}
 			else {echo 'Uncategorized';}
@@ -389,7 +414,7 @@ add_filter( 'manage_posts_custom_column',  'easmedia_custom_columns_easymedia', 
 function easmedia_save_easymedia_sorted_order() {
     global $wpdb;
     
-    $order = explode(',', $_POST['order']);
+    $order = explode( ',', $_POST['order'] );
     $counter = 0;
     
     foreach ( $order as $easymedia_id ) {
@@ -428,6 +453,7 @@ function easmedia_show_order_column( $name ) {
 
 	switch ( $name ) {
 		case 'emg_menu_order':
+
 			$order = $post->menu_order;
 			echo $order;
 		break;
@@ -481,9 +507,9 @@ if ( is_admin() ) {
 /*-------------------------------------------------------------------------------*/
 /*   Executing shortcode inside the_excerpt() and sidebar/widget
 /*-------------------------------------------------------------------------------*/
-add_filter('widget_text', 'do_shortcode', 11); // <--- comment this to disable media in widget.
-add_filter( 'the_excerpt', 'shortcode_unautop');
-add_filter( 'the_excerpt', 'do_shortcode');  
+add_filter( 'widget_text', 'do_shortcode', 11 ); // <--- comment this to disable media in widget.
+add_filter( 'the_excerpt', 'shortcode_unautop' );
+add_filter( 'the_excerpt', 'do_shortcode' );  
 
 
 /*
@@ -493,7 +519,7 @@ add_filter( 'the_excerpt', 'do_shortcode');
 */
 function emg_rename_submenu() {  
     global $submenu;     
-	$submenu['edit.php?post_type=easymediagallery'][5][0] = __( 'Overview', 'easmedia' );  
+	$submenu['edit.php?post_type=easymediagallery'][5][0] = __( 'Overview', 'easy-media-gallery' );  
 }  
 add_action( 'admin_menu', 'emg_rename_submenu' );  
 
@@ -505,6 +531,7 @@ include_once( dirname( __FILE__ ) . '/includes/functions/functions.php' );
 include_once( dirname( __FILE__ ) . '/includes/class/easymedia_resizer.php' );
 include_once( dirname( __FILE__ ) . '/includes/taxonomy.php' );
 include_once( dirname( __FILE__ ) . '/includes/shortcode.php' );
+include_once( dirname( __FILE__ ) . '/includes/easywidget.php' );
 
 if ( easy_get_option( 'easymedia_disen_plug' ) == '1' ) {	
 	include_once( dirname( __FILE__ ) . '/includes/frontend.php' );
@@ -517,18 +544,17 @@ if ( easy_get_option( 'easymedia_disen_plug' ) == '1' ) {
 /* These files build out the plugin specific options and associated functions. */
 
 if ( is_admin() ) {
-	include_once( dirname( __FILE__ ) . '/includes/options.php');
+	include_once( dirname( __FILE__ ) . '/includes/options.php' );
 	include_once( dirname( __FILE__ ) . '/includes/emg-settings.php' );
-	include_once( dirname( __FILE__ ) . '/includes/pages/emg-pricing.php'); 	
-	include_once( dirname( __FILE__ ) . '/includes/pages/emg-welcome.php');
-	include_once( dirname( __FILE__ ) . '/includes/pages/emg-featured.php');
-	include_once( dirname( __FILE__ ) . '/includes/pages/emg-freeplugins.php');
-	include_once( dirname( __FILE__ ) . '/includes/pages/emg-addons.php');
-	include_once( dirname( __FILE__ ) . '/includes/pages/emg-demo.php');
+	include_once( dirname( __FILE__ ) . '/includes/pages/emg-pricing.php' );
+	include_once( dirname( __FILE__ ) . '/includes/pages/emg-freethemes.php' );
+	include_once( dirname( __FILE__ ) . '/includes/pages/emg-welcome.php' );
+	include_once( dirname( __FILE__ ) . '/includes/pages/emg-featured.php' );
+	include_once( dirname( __FILE__ ) . '/includes/pages/emg-freeplugins.php' );
+	include_once( dirname( __FILE__ ) . '/includes/pages/emg-addons.php' );
+	include_once( dirname( __FILE__ ) . '/includes/pages/emg-demo.php' );
 	include_once( dirname( __FILE__ ) . '/includes/metaboxes.php' ); 
-	include_once( dirname( __FILE__ ) . '/includes/tinymce-dlg.php' ); 
-	include_once( dirname( __FILE__ ) . '/includes/easywidget.php' );
-	//include_once( dirname( __FILE__ ) . '/includes/emg-notice.php' );
+	include_once( dirname( __FILE__ ) . '/includes/tinymce-dlg.php' );
 
 }
 
@@ -574,7 +600,9 @@ function plugin_emg_auto_update() {
 	{
 		require_once( ABSPATH . "wp-admin/includes/class-wp-upgrader.php" );
 		require_once( ABSPATH . "wp-admin/includes/misc.php" );
-		define( "FS_METHOD", "direct" );
+		if ( !defined( 'FS_METHOD' ) ) {
+			define( 'FS_METHOD', 'direct' );
+			}
 		require_once( ABSPATH . "wp-includes/update.php" );
 		require_once( ABSPATH . "wp-admin/includes/file.php" );
 		wp_update_plugins();
@@ -584,11 +612,7 @@ function plugin_emg_auto_update() {
 		$output = @ob_get_contents();
 		@ob_end_clean();
 	}
-	catch(Exception $e)
+	catch( Exception $e )
 	{
 	}
 }
-
-
-
-?>

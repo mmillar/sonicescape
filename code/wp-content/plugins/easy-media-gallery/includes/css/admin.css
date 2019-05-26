@@ -1,26 +1,8 @@
 /*
  * Easy Media Gallery
- * Wordpress Admin Style v.1.0.0
+ * Wordpress Admin Style v.1.3.87
  * Copyright (c) 2012 GhozyLab, Inc. - http://ghozylab.com/
 */
-
-
-
-/*
-Plugin List Style
-*/
-#the-list #easy-media-gallery
-{
-	background: url("../images/plugin_list_bg.png") repeat-x scroll 0 0 #FFFFFF;
-	position:relative;
-}
-
-#the-list #easy-media-gallery .plugin-title
-{
-	height:100px;
-    background: url("../images/plugin_list_icon.png") no-repeat scroll 1% 94% transparent;
-}
-
 
 /*
 Main Style
@@ -248,7 +230,14 @@ height:190px; width:300px; margin-top:30px; border: solid 6px #fff; -moz-box-sha
 .imgpreviewboxc {
 	-moz-box-sizing: content-box;
 	-webkit-box-sizing: content-box;
-	}
+	max-width: 50%;
+}
+
+#imgthumbnailprv {
+	width: 100%;
+    height: auto;
+	display: block;
+}
 
 
 /* Video Preview */
@@ -809,6 +798,43 @@ float:left;display:inline-block; text-decoration:none; outline:none; cursor:poin
 .emg_add_images:active {
 	position:relative;
 	top:1px;
+}
+
+.messivideo {
+	text-decoration:underline;
+	font-weight:bold;
+	cursor:pointer;
+	color:#1A91F2 !important;
+}
+
+.noimgs {
+	border: 4px dashed #CCC;
+	width: 90px;
+	height: 90px;
+	vertical-align: middle;
+	border-radius: 10px;
+	text-align: center;
+	line-height: 80px;
+	font-size: 11px !important;
+	color: #787878;
+}
+
+/* Icon on plugin list */
+.emg_settings_icon:before {
+	font-size: 20px !important;
+	background-color: rgba(0, 0, 0, 0) !important;
+	padding: 0 !important;
+	box-shadow: none !important;
+	width: 20px !important;
+	height: 20px !important;
+}
+
+.emg_settings_icon.dashicons {
+	width: 20px !important;
+	height: 20px !important;
+	padding: 0 !important;
+	position: relative;
+	top: 1.3px;
 }
 		
 @media only screen and (max-width: 768px) {

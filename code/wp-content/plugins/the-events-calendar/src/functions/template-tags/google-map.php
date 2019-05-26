@@ -13,6 +13,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( class_exists( 'Tribe__Events__Main' ) ) {
 
 	/**
+	 * Determines if the current site is using The Events Calendar's default Google Maps API
+	 * Key, in which case only basic Maps Embed API requests are allowed.
+	 *
+	 * See https://developers.google.com/maps/documentation/embed/usage-and-billing#embed for
+	 * more info.
+	 *
+	 * @since 4.6.24
+	 *
+	 * @return boolean
+	 */
+	function tribe_is_using_basic_gmaps_api() {
+		$user_api_key = (string) tribe_get_option( Tribe__Events__Google__Maps_API_Key::$api_key_option_name );
+		$tec_api_key  = (string) Tribe__Events__Google__Maps_API_Key::$default_api_key;
+
+		/**
+		 * Filters whether or not only basic Google Maps Embed API requests are allowed on this site, which happens
+		 * when the site is using The Events Calendar's default Google Maps API key.
+		 *
+		 * @since 4.6.24
+		 *
+		 * @param boolean $using_basic_maps_api Whether basic Google Maps Embed API requests are allowed on this site.
+		 * @param string $user_api_key The value of the Google Maps API Key setting in TEC.
+		 * @param string $tec_api_key The default Google Maps API Key provided by Tge Events Calendar for basic functionality.
+		 */
+		return apply_filters( 'tribe_is_using_basic_gmaps_api', $user_api_key === $tec_api_key, $user_api_key, $tec_api_key );
+	}
+
+	/**
 	 * Google Map Link
 	 *
 	 * Returns a url to google maps for the given event
@@ -21,11 +49,11 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	 *
 	 * @param string $postId
 	 *
-	 * @return string A fully qualified link to http://maps.google.com/ for this event
+	 * @return string A fully qualified link to https://maps.google.com/ for this event
 	 */
 	function tribe_get_map_link( $postId = null ) {
-		$tribe_ecp = Tribe__Events__Main::instance();
-		$output    = esc_url( $tribe_ecp->googleMapLink( $postId ) );
+		$tec    = Tribe__Events__Main::instance();
+		$output = esc_url( $tec->googleMapLink( $postId ) );
 
 		return apply_filters( 'tribe_get_map_link', $output );
 	}
@@ -37,18 +65,23 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	 *
 	 * @param string $postId
 	 *
-	 * @return string A fully qualified link to http://maps.google.com/ for this event
+	 * @return string A fully qualified link to https://maps.google.com/ for this event
 	 */
 	function tribe_get_map_link_html( $postId = null ) {
-		$link = sprintf(
-			'<a class="tribe-events-gmap" href="%s" title="%s" target="_blank">%s</a>',
-			esc_url( tribe_get_map_link( $postId ) ),
-			__( 'Click to view a Google Map', 'tribe-events-calendar' ),
-			__( '+ Google Map', 'tribe-events-calendar' )
-		);
+		$map_link = esc_url( tribe_get_map_link( $postId ) );
 
-		// @todo remove tribe_event_meta_gmap_link in 3.7
-		return apply_filters( 'tribe_get_map_link_html', apply_filters( 'tribe_event_meta_gmap_link', $link ) );
+		$link = '';
+
+		if ( ! empty( $map_link ) ) {
+			$link = sprintf(
+				'<a class="tribe-events-gmap" href="%s" title="%s" target="_blank">%s</a>',
+				$map_link,
+				esc_html__( 'Click to view a Google Map', 'the-events-calendar' ),
+				esc_html__( '+ Google Map', 'the-events-calendar' )
+			);
+		}
+
+		return apply_filters( 'tribe_get_map_link_html', $link );
 	}
 
 	/**
@@ -63,7 +96,7 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	 * @param int    $height
 	 * @param bool   $force_load If true, then load the map even if an address is not provided.
 	 *
-	 * @return string An iframe pulling http://maps.google.com/ for this event
+	 * @return string An iframe pulling https://maps.google.com/ for this event
 	 */
 	function tribe_get_embedded_map( $post_id = null, $width = null, $height = null, $force_load = false ) {
 		return Tribe__Events__Embedded_Maps::instance()->get_map( $post_id, $width, $height, $force_load );
@@ -88,9 +121,9 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 
 		if ( tribe_get_option( 'embedGoogleMaps', true ) ) {
 			if ( $post_type == Tribe__Events__Main::POSTTYPE ) {
-				$output = get_post_meta( $postId, '_EventShowMap', 1 ) == 1;
+				$output = tribe_is_truthy( get_post_meta( $postId, '_EventShowMap', 1 ) );
 			} elseif ( $post_type == Tribe__Events__Main::VENUE_POST_TYPE ) {
-				$output = get_post_meta( $postId, '_VenueShowMap', 1 ) !== 'false' ? 1 : 0;
+				$output = tribe_is_truthy( get_post_meta( $postId, '_VenueShowMap', 1 ) );
 			}
 		}
 
@@ -115,11 +148,53 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 		$post_type = get_post_type( $postId );
 
 		if ( $post_type == Tribe__Events__Main::POSTTYPE ) {
-			$output = get_post_meta( $postId, '_EventShowMapLink', 1 ) == 1;
+			$output = tribe_is_truthy( get_post_meta( $postId, '_EventShowMapLink', 1 ) );
 		} elseif ( $post_type == Tribe__Events__Main::VENUE_POST_TYPE ) {
-			$output = get_post_meta( $postId, '_VenueShowMapLink', 1 ) !== 'false' ? 1 : 0;
+			$output = tribe_is_truthy( get_post_meta( $postId, '_VenueShowMapLink', 1 ) );
 		}
 
 		return apply_filters( 'tribe_show_google_map_link', $output );
 	}
+
+	/**
+	 * Gets a full URL for a basic Google Maps embed.
+	 * See https://developers.google.com/maps/documentation/embed/guide for more info.
+	 *
+	 * @since 4.6.24
+	 *
+	 * @param string $address_string The full address for the marker to be shown on the map (e.g. an event venue).
+	 */
+	function tribe_get_basic_gmap_embed_url( $address_string ) {
+
+		$api_key = tribe_get_option( Tribe__Events__Google__Maps_API_Key::$api_key_option_name, Tribe__Events__Google__Maps_API_Key::$default_api_key );
+
+		$embed_url_args = array(
+			'key' => $api_key,
+			'q'   => urlencode( $address_string ),
+		);
+
+		$embed_url = add_query_arg(
+			/**
+			 * Allows filtering the URL parameters passed to the basic Google Maps embed URL via add_query_arg().
+			 * See https://developers.google.com/maps/documentation/embed/guide for all available URL parameters.
+			 *
+			 * @since 4.6.24
+			 *
+			 * @param array $embed_url_args The URL parameters being passed to the Google Maps embed URL
+			 */
+			apply_filters( 'tribe_get_basic_gmap_embed_url_args', $embed_url_args ),
+			/**
+			 * Allows filtering the root Google Maps URL used for the basic map embeds; determines what Map Mode is used.
+			 * See https://developers.google.com/maps/documentation/embed/guide for available map modes.
+			 *
+			 * @since 4.6.24
+			 *
+			 * @param string $gmaps_embed_url The root Google Maps embed URL.
+			 */
+			apply_filters( 'tribe_get_basic_gmap_embed_url', 'https://www.google.com/maps/embed/v1/place' )
+		);
+
+		return $embed_url;
+	}
+
 }

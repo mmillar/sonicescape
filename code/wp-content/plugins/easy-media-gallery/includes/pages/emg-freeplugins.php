@@ -5,6 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 function emg_free_plugin_page() {
 	
+	add_thickbox(); // @since 1.3.73
 
 	include( ABSPATH . "wp-admin/includes/plugin-install.php" );
 	global $tabs, $tab, $paged, $type, $term;
@@ -20,8 +21,17 @@ function emg_free_plugin_page() {
 		"locale" => get_locale(),
 	);
 	$args = apply_filters( "install_plugins_table_api_args_$tab", $args );
-	$api = plugins_api( "query_plugins", $args );
-	$item = $api->plugins;
+	
+	
+	$cache_key = 'ghozylab_plugins_' . md5( 'free_plugins' );
+	
+	if ( false === ( $item = get_transient( $cache_key ) ) ) {
+
+		$api = plugins_api( "query_plugins", $args );
+		$item = $api->plugins;
+		set_transient( $cache_key, $item, 60*60*24 );
+		
+	}
 	
 	$plugins_allowedtags = array(
 		'a' => array( 'href' => array(), 'title' => array(), 'target' => array() ),
@@ -32,9 +42,9 @@ function emg_free_plugin_page() {
 		'h1' => array(), 'h2' => array(), 'h3' => array(), 'h4' => array(), 'h5' => array(), 'h6' => array(),
 		'img' => array( 'src' => array(), 'class' => array(), 'alt' => array() )
 		);
-
+	
 	?>
-	<form id="plugin-filter">
+ 	<form id="plugin-filter">
     
 <div class="wrap">
 	<style>
@@ -80,20 +90,78 @@ color: #FFF !important;
 .emg-button-update:hover {
     color: #FFF !important;
 	background: none repeat scroll 0% 0% #DA3232 !important;
-}	
+}
 
+.most_popular {top: -5px;position: absolute;width: 115px;height: 85px;background: transparent url("<?php echo EASYMEDG_PLUGIN_URL;?>includes/images/most_popular.png") no-repeat scroll left top;right: -5px;}
 
+.drop-shadow {
+    position:relative;
+    background:#fff;
+	margin-bottom:40px;
+}
+
+.drop-shadow:before,
+.drop-shadow:after {
+    content:"";
+    position:absolute; 
+    z-index:-2;
+}
+
+/* Lifted corners */
+
+.lifted {
+    -moz-border-radius:4px; 
+         border-radius:4px;
+}
+
+.lifted:before,
+.lifted:after { 
+    bottom:15px;
+    left:10px;
+    width:50%;
+    height:20%;
+    max-width:300px;
+    -webkit-box-shadow:0 15px 10px rgba(0, 0, 0, 0.7);   
+       -moz-box-shadow:0 15px 10px rgba(0, 0, 0, 0.7);
+            box-shadow:0 15px 10px rgba(0, 0, 0, 0.7);
+    -webkit-transform:rotate(-3deg);    
+       -moz-transform:rotate(-3deg);   
+        -ms-transform:rotate(-3deg);   
+         -o-transform:rotate(-3deg);
+            transform:rotate(-3deg);
+}
+
+.lifted:after {
+    right:10px !important; 
+    left:auto !important;
+    -webkit-transform:rotate(3deg);   
+       -moz-transform:rotate(3deg);  
+        -ms-transform:rotate(3deg);  
+         -o-transform:rotate(3deg);
+            transform:rotate(3deg);
+}
+
+.emg-container-cnt .plugin-card {
+    border: 1px solid #d7d7d7 !important;
+}
+
+.emg-container-cnt .plugin-card-bottom {
+    border-top: 1px solid #c2c2c2 !important;
+	background-color: #efefef !important;
+}
+
+.emgwpage a.thickbox img {
+	border: none !important;
+}
 		
         </style>
 <div style="margin-top:30px;" class="wp-list-table widefat plugin-install">
-	<div id="the-list">
-    
-		<?php
+<div id="the-list">
+    <?php
 		foreach ( (array) $item as $plugin ) {
 			if ( is_object( $plugin ) ) {
 				$plugin = (array) $plugin;
 			}
-
 			
 			$title = wp_kses( $plugin['name'], $plugins_allowedtags );
 			// Remove any HTML from the description.
@@ -135,7 +203,7 @@ color: #FFF !important;
 			}
 
 			$details_link   = self_admin_url( 'plugin-install.php?tab=plugin-information&amp;plugin=' . $plugin['slug'] .
-								'&amp;TB_iframe=true&amp;width=600&amp;height=550' );
+								'&amp;TB_iframe=true&amp;width=750&amp;height=550' );
 
 			/* translators: 1: Plugin name and version. */
 			$action_links[] = '<a href="' . esc_url( $details_link ) . '" class="thickbox" aria-label="' . esc_attr( sprintf( __( 'More information about %s' ), $name ) ) . '" data-title="' . esc_attr( $name ) . '">' . __( 'More Details' ) . '</a>';
@@ -160,9 +228,10 @@ color: #FFF !important;
 			 */
 			$action_links = apply_filters( 'plugin_install_action_links', $action_links, $plugin );
 		?>
-		<div class="plugin-card">
+		<div id="<?php echo $plugin["slug"]; ?>" class="plugin-card drop-shadow lifted">
 			<div class="plugin-card-top" style="min-height: 160px !important;">
-				<a href="<?php echo esc_url( $details_link ); ?>" class="thickbox plugin-icon"><img src="<?php echo esc_attr( $plugin_icon_url ) ?>" /></a>
+            <?php if ( isset( $plugin["slug"] ) && $plugin["slug"] == 'image-slider-widget' ) {echo '<div class="most_popular"></div>';} ?>
+				<a href="<?php echo esc_url( $details_link ); ?>" class="thickbox plugin-icon"><img width="128" height="128" src="<?php echo esc_attr( $plugin_icon_url ) ?>" /></a>
 				<div class="name column-name" style="margin-right: 20px !important;">
 					<h4><a href="<?php echo esc_url( $details_link ); ?>" class="thickbox"><?php echo $title; ?></a></h4>
 				</div>
@@ -179,19 +248,23 @@ color: #FFF !important;
 							
 							switch( $plugin["slug"] ){
 								case "easy-media-gallery" :
-								echo '<li><a class="button" aria-label="PRO VERSION DEMO" href="http://ghozylab.com/plugins/easy-media-gallery-pro/demo/" target="_blank">PRO VERSION DEMO</a></li>';
+								echo '<li><a class="button" aria-label="PRO VERSION DEMO" href="https://ghozy.link/l48ax" target="_blank">PRO VERSION DEMO</a></li>';
 								break;
 								
 								case "image-slider-widget" :
-								echo '<li><a class="button" aria-label="PRO VERSION DEMO" href="http://demo.ghozylab.com/plugins/easy-image-slider-plugin/image-slider-with-thumbnails-at-the-bottom/" target="_blank">PRO VERSION DEMO</a></li>';
+								echo '<li><a class="button" aria-label="PRO VERSION DEMO" href="https://ghozy.link/9vlg3" target="_blank">PRO VERSION DEMO</a></li>';
 								break;
 								
 								case "easy-notify-lite" :
-								echo '<li><a class="button" aria-label="PRO VERSION DEMO" href="http://ghozylab.com/plugins/easy-notify-pro/demo/" target="_blank">PRO VERSION DEMO</a></li>';
+								echo '<li><a class="button" aria-label="PRO VERSION DEMO" href="https://ghozy.link/nz32r" target="_blank">PRO VERSION DEMO</a></li>';
 								break;
 								
 								case "contact-form-lite" :
-								echo '<li><a class="button" aria-label="PRO VERSION DEMO" href="http://demo.ghozylab.com/plugins/easy-contact-form-plugin/contact-form-recaptcha/" target="_blank">PRO VERSION DEMO</a></li>';
+								echo '<li><a class="button" aria-label="PRO VERSION DEMO" href="https://ghozy.link/wtsnb" target="_blank">PRO VERSION DEMO</a></li>';
+								break;
+								
+								case "feed-instagram-lite" :
+								echo '<li><a class="button" aria-label="PRO VERSION DEMO" href="http://demo.ghozylab.com/plugins/instagram-feed-plugin/" target="_blank">PRO VERSION DEMO</a></li>';
 								break;
 								
 								default:
@@ -204,10 +277,6 @@ color: #FFF !important;
 					?>
 				</div>
 			<div class="plugin-card-bottom">
-				<div class="vers column-rating">
-					<?php wp_star_rating( array( 'rating' => $plugin['rating'], 'type' => 'percent', 'number' => $plugin['num_ratings'] ) ); ?>
-					<span class="num-ratings">(<?php echo number_format_i18n( $plugin['num_ratings'] ); ?>)</span>
-				</div>
 				<div class="column-updated">
 					<strong><?php _e( 'Last Updated:' ); ?></strong> <span title="<?php echo esc_attr( $plugin['last_updated'] ); ?>">
 						<?php printf( __( '%s ago' ), human_time_diff( strtotime( $plugin['last_updated'] ) ) ); ?>
@@ -237,7 +306,36 @@ color: #FFF !important;
 	</div>       
 </div>    
 	</form>   
-    
+
+<script type="text/javascript">   
+
+(function($) {
+
+$.fn.emgReOrder = function(array) {
+  return this.each(function() {
+
+    if (array) {    
+      for(var i=0; i < array.length; i++) 
+        array[i] = $('div[id="' + array[i] + '"]');
+
+      $(this).empty();  
+
+      for(var i=0; i < array.length; i++)
+        $(this).append(array[i]);      
+    }
+  });    
+}
+})(jQuery);
+
+
+jQuery(document).ready(function($) {
+	
+	var emgListPl = ['contact-form-lite', 'feed-instagram-lite', 'image-slider-widget', 'image-carousel','icon', 'easy-notify-lite', 'gallery-lightbox-slider', 'easy-media-gallery'];
+	
+	$('#the-list').emgReOrder(emgListPl);
+	
+});
+</script>    
 
 <?php 
 }

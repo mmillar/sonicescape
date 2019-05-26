@@ -18,12 +18,25 @@ if ( ! class_exists( 'Tribe__Events__Template__List' ) ) {
 	class Tribe__Events__Template__List extends Tribe__Events__Template_Factory {
 
 		protected $body_class = 'events-list';
-		protected $asset_packages = array( 'ajax-list' );
+		protected $asset_packages = array();
 
 		const AJAX_HOOK = 'tribe_list';
 
+		/**
+		 * The path to the template file used for the view.
+		 * This value is used in Shortcodes/Tribe_Events.php to
+		 * locate the correct template file for each shortcode
+		 * view.
+		 *
+		 * @var string
+		 */
+		public $view_path = 'list/content';
+
 		protected function hooks() {
 			parent::hooks();
+
+			tribe_asset_enqueue( 'tribe-events-list' );
+
 			if ( tribe_is_showing_all() ) {
 				add_filter( 'tribe_get_template_part_path_modules/bar.php', '__return_false' );
 			}
@@ -51,14 +64,13 @@ if ( ! class_exists( 'Tribe__Events__Template__List' ) ) {
 		/**
 		 * List view ajax handler
 		 *
-		 * @return void
 		 */
 		public function ajax_response() {
 
 			Tribe__Events__Query::init();
 
-			$tribe_paged = ( ! empty( $_POST['tribe_paged'] ) ) ? intval( $_POST['tribe_paged'] ) : 1;
-			$post_status = array( 'publish' );
+			$tribe_paged = absint( tribe_get_request_var( 'tribe_paged', 1 ) );
+			$post_status = [ 'publish' ];
 			if ( is_user_logged_in() ) {
 				$post_status[] = 'private';
 			}
@@ -68,13 +80,15 @@ if ( ! class_exists( 'Tribe__Events__Template__List' ) ) {
 				'post_type'    => Tribe__Events__Main::POSTTYPE,
 				'post_status'  => $post_status,
 				'paged'        => $tribe_paged,
+				'featured'     => tribe( 'tec.featured_events' )->featured_events_requested(),
 			);
 
 			// check & set display
 			if ( isset( $_POST['tribe_event_display'] ) ) {
-				if ( $_POST['tribe_event_display'] == 'past' ) {
+				if ( 'past' === $_POST['tribe_event_display'] ) {
 					$args['eventDisplay'] = 'past';
-				} elseif ( 'all' == $_POST['tribe_event_display'] ) {
+					$args['order'] = 'DESC';
+				} elseif ( 'all' === $_POST['tribe_event_display'] ) {
 					$args['eventDisplay'] = 'all';
 				}
 			}
@@ -95,12 +109,13 @@ if ( ! class_exists( 'Tribe__Events__Template__List' ) ) {
 			$hash['paged']      = null;
 			$hash['start_date'] = null;
 			$hash['end_date']   = null;
+			$hash['search_orderby_title'] = null;
 			$hash_str           = md5( maybe_serialize( $hash ) );
 
 			if ( ! empty( $_POST['hash'] ) && $hash_str !== $_POST['hash'] ) {
 				$tribe_paged   = 1;
 				$args['paged'] = 1;
-				$query         = Tribe__Events__Query::getEvents( $args, true );
+				$query         = tribe_get_events( $args, true );
 			}
 
 
@@ -114,17 +129,21 @@ if ( ! class_exists( 'Tribe__Events__Template__List' ) ) {
 				'view'        => 'list',
 			);
 
-			global $wp_query, $post, $paged;
+			global $post;
+			global $paged;
+			global $wp_query;
+
 			$wp_query = $query;
+
 			if ( ! empty( $query->posts ) ) {
 				$post = $query->posts[0];
 			}
 
-			$paged = $tribe_paged;
+			$paged = absint( $tribe_paged );
 
 			Tribe__Events__Main::instance()->displaying = apply_filters( 'tribe_events_listview_ajax_event_display', 'list', $args );
 
-			if ( ! empty( $_POST['tribe_event_display'] ) && $_POST['tribe_event_display'] == 'past' ){
+			if ( ! empty( $_POST['tribe_event_display'] ) && 'past' === $_POST['tribe_event_display'] ) {
 				$response['view'] = 'past';
 			}
 

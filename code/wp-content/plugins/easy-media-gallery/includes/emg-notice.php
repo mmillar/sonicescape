@@ -13,7 +13,7 @@ function emg_aff_admin_notice() {
         	/* Check that the user hasn't already clicked to ignore the message */
    	 		if ( ! get_user_meta($user_id, 'emg_ignore_notice') ) {
        	 		echo '<div class="updated"><p>'; 
-        		printf(__('Earn <span style="color: red;">EXTRA MONEY</span> and get 30&#37; affiliate share from every sale you make!&nbsp;&nbsp;<a href="http://goo.gl/AZMFid" target="_blank">JOIN GHOZYLAB AFFILIATE PROGRAM NOW!</a><span style="float: right;"><a href="%1$s">Hide Notice</a><span>'), '?emg_nag_ignore=0');
+        		printf(__('Earn <span style="color: red;">EXTRA MONEY</span> and get 30&#37; affiliate share from every sale you make!&nbsp;&nbsp;<a href="http://goo.gl/AZMFid" target="_blank">JOIN AFFILIATE NOW!</a><span style="float: right;"><a href="%1$s">Hide Notice</a><span>'), '?emg_nag_ignore=0');
         		echo "</p></div>";
     			}
 			}

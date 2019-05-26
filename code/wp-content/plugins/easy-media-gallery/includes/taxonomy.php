@@ -9,7 +9,7 @@ function easmedia_register_emg_tax() {
 	$labels = array(
 		'name' 					=> _x( 'Easy Media Gallery', 'taxonomy general name' ),
 		'singular_name' 		=> _x( 'Easy Media Gallery', 'taxonomy singular name' ),
-		'add_new' 				=> _x( 'Add New Category', 'easmedia'),
+		'add_new' 				=> _x( 'Add New Category', 'easy-media-gallery'),
 		'add_new_item' 			=> __( 'Add New Category' ),
 		'edit_item' 			=> __( 'Edit Category' ),
 		'new_item' 				=> __( 'New Category' ),
@@ -24,7 +24,7 @@ function easmedia_register_emg_tax() {
 				
 	$args = array(
 		'labels' 			=> $labels,
-		'singular_label' 	=> __( 'Emediagallery', 'easmedia' ),
+		'singular_label' 	=> __( 'Emediagallery', 'easy-media-gallery' ),
 		'public' 			=> true,
 		'show_ui' 			=> true,
 		'query_var'			=> true,

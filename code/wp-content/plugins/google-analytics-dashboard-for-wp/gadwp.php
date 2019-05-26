@@ -1,16 +1,28 @@
 <?php
 /**
- * Plugin Name: Google Analytics Dashboard for WP
- * Plugin URI: https://deconf.com
+ * Plugin Name: Google Analytics Dashboard for WP (GADWP)
+ * Plugin URI: https://exactmetrics.com
  * Description: Displays Google Analytics Reports and Real-Time Statistics in your Dashboard. Automatically inserts the tracking code in every page of your website.
- * Author: Alin Marcu
- * Version: 4.8.1.2
- * Author URI: https://deconf.com
+ * Author: ExactMetrics
+ * Version: 5.3.7
+ * Author URI: https://exactmetrics.com
+ * Text Domain: google-analytics-dashboard-for-wp
+ * Domain Path: /languages
  */
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) )
 	exit();
+
+// Plugin Version
+if ( ! defined( 'GADWP_CURRENT_VERSION' ) ) {
+	define( 'GADWP_CURRENT_VERSION', '5.3.7' );
+}
+
+if ( ! defined( 'GADWP_ENDPOINT_URL' ) ) {
+	define( 'GADWP_ENDPOINT_URL', 'https://gadwp.exactmetrics.com/' );
+}
+
 
 if ( ! class_exists( 'GADWP_Manager' ) ) {
 
@@ -21,6 +33,8 @@ if ( ! class_exists( 'GADWP_Manager' ) ) {
 		public $config = null;
 
 		public $frontend_actions = null;
+
+		public $common_actions = null;
 
 		public $backend_actions = null;
 
@@ -38,12 +52,14 @@ if ( ! class_exists( 'GADWP_Manager' ) ) {
 
 		public $gapi_controller = null;
 
+		public $usage_tracking = null;
+
 		/**
 		 * Construct forbidden
 		 */
 		private function __construct() {
 			if ( null !== self::$instance ) {
-				_doing_it_wrong( __FUNCTION__, __( "This is not allowed, read the documentation!", 'ga-dash' ), '4.6' );
+				_doing_it_wrong( __FUNCTION__, __( "This is not allowed, read the documentation!", 'google-analytics-dashboard-for-wp' ), '4.6' );
 			}
 		}
 
@@ -51,14 +67,14 @@ if ( ! class_exists( 'GADWP_Manager' ) ) {
 		 * Clone warning
 		 */
 		private function __clone() {
-			_doing_it_wrong( __FUNCTION__, __( "This is not allowed, read the documentation!", 'ga-dash' ), '4.6' );
+			_doing_it_wrong( __FUNCTION__, __( "This is not allowed, read the documentation!", 'google-analytics-dashboard-for-wp' ), '4.6' );
 		}
 
 		/**
 		 * Wakeup warning
 		 */
 		private function __wakeup() {
-			_doing_it_wrong( __FUNCTION__, __( "This is not allowed, read the documentation!", 'ga-dash' ), '4.6' );
+			_doing_it_wrong( __FUNCTION__, __( "This is not allowed, read the documentation!", 'google-analytics-dashboard-for-wp' ), '4.6' );
 		}
 
 		/**
@@ -71,6 +87,9 @@ if ( ! class_exists( 'GADWP_Manager' ) ) {
 				self::$instance = new self();
 				self::$instance->setup();
 				self::$instance->config = new GADWP_Config();
+				if ( is_admin() && class_exists( 'AM_Notification' ) && defined( 'GADWP_CURRENT_VERSION' ) ) {
+					new AM_Notification( 'exact-metrics', GADWP_CURRENT_VERSION );
+				}
 			}
 			return self::$instance;
 		}
@@ -79,11 +98,6 @@ if ( ! class_exists( 'GADWP_Manager' ) ) {
 		 * Defines constants and loads required resources
 		 */
 		private function setup() {
-
-			// Plugin Version
-			if ( ! defined( 'GADWP_CURRENT_VERSION' ) ) {
-				define( 'GADWP_CURRENT_VERSION', '4.8.1.2' );
-			}
 
 			// Plugin Path
 			if ( ! defined( 'GADWP_DIR' ) ) {
@@ -98,6 +112,13 @@ if ( ! class_exists( 'GADWP_Manager' ) ) {
 			// Plugin main File
 			if ( ! defined( 'GADWP_FILE' ) ) {
 				define( 'GADWP_FILE', __FILE__ );
+			}
+
+			/*
+			 * Load notifications class
+			 */
+			if ( is_admin() ) {
+				include_once ( GADWP_DIR . 'admin/class-am-notification.php' );
 			}
 
 			/*
@@ -154,7 +175,7 @@ if ( ! class_exists( 'GADWP_Manager' ) ) {
 		 * Load i18n
 		 */
 		public function load_i18n() {
-			load_plugin_textdomain( 'ga-dash', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+			load_plugin_textdomain( 'google-analytics-dashboard-for-wp', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 		}
 
 		/**
@@ -170,14 +191,12 @@ if ( ! class_exists( 'GADWP_Manager' ) ) {
 		public function load() {
 			if ( is_admin() ) {
 				if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-					if ( GADWP_Tools::check_roles( self::$instance->config->options['ga_dash_access_back'] ) ) {
+					if ( GADWP_Tools::check_roles( self::$instance->config->options['access_back'] ) ) {
 						/*
 						 * Load Backend ajax actions
 						 */
 						include_once ( GADWP_DIR . 'admin/ajax-actions.php' );
-						include_once ( GADWP_DIR . 'admin/ajax-actions-ui.php' );
 						self::$instance->backend_actions = new GADWP_Backend_Ajax();
-						new GADWP_UI_Ajax();
 					}
 
 					/*
@@ -185,32 +204,49 @@ if ( ! class_exists( 'GADWP_Manager' ) ) {
 					 */
 					include_once ( GADWP_DIR . 'front/ajax-actions.php' );
 					self::$instance->frontend_actions = new GADWP_Frontend_Ajax();
-				} else
-					if ( GADWP_Tools::check_roles( self::$instance->config->options['ga_dash_access_back'] ) ) {
+
+					/*
+					 * Load Common ajax actions
+					 */
+					include_once ( GADWP_DIR . 'common/ajax-actions.php' );
+					self::$instance->common_actions = new GADWP_Common_Ajax();
+
+					if ( self::$instance->config->options['backend_item_reports'] ) {
 						/*
-						 * Load Backend Setup
+						 * Load Backend Item Reports for Quick Edit
 						 */
-						include_once ( GADWP_DIR . 'admin/setup.php' );
-						self::$instance->backend_setup = new GADWP_Backend_Setup();
-
-						if ( self::$instance->config->options['dashboard_widget'] ) {
-							/*
-							 * Load Backend Widget
-							 */
-							include_once ( GADWP_DIR . 'admin/widgets.php' );
-							self::$instance->backend_widgets = new GADWP_Backend_Widgets();
-						}
-
-						if ( self::$instance->config->options['backend_item_reports'] ) {
-							/*
-							 * Load Backend Item Reports
-							 */
-							include_once ( GADWP_DIR . 'admin/item-reports.php' );
-							self::$instance->backend_item_reports = new GADWP_Backend_Item_Reports();
-						}
+						include_once ( GADWP_DIR . 'admin/item-reports.php' );
+						self::$instance->backend_item_reports = new GADWP_Backend_Item_Reports();
 					}
+				} else if ( GADWP_Tools::check_roles( self::$instance->config->options['access_back'] ) ) {
+
+					/*
+					 * Load Backend Setup
+					 */
+					include_once ( GADWP_DIR . 'admin/setup.php' );
+					self::$instance->backend_setup = new GADWP_Backend_Setup();
+
+					if ( self::$instance->config->options['dashboard_widget'] ) {
+						/*
+						 * Load Backend Widget
+						 */
+						include_once ( GADWP_DIR . 'admin/widgets.php' );
+						self::$instance->backend_widgets = new GADWP_Backend_Widgets();
+					}
+
+					if ( self::$instance->config->options['backend_item_reports'] ) {
+						/*
+						 * Load Backend Item Reports
+						 */
+						include_once ( GADWP_DIR . 'admin/item-reports.php' );
+						self::$instance->backend_item_reports = new GADWP_Backend_Item_Reports();
+					}
+
+					include_once ( GADWP_DIR . 'admin/tracking.php' );
+					self::$instance->usage_tracking = new ExactMetrics_Tracking();
+				}
 			} else {
-				if ( GADWP_Tools::check_roles( self::$instance->config->options['ga_dash_access_front'] ) ) {
+				if ( GADWP_Tools::check_roles( self::$instance->config->options['access_front'] ) ) {
 					/*
 					 * Load Frontend Setup
 					 */
@@ -226,7 +262,7 @@ if ( ! class_exists( 'GADWP_Manager' ) ) {
 					}
 				}
 
-				if ( ! GADWP_Tools::check_roles( self::$instance->config->options['ga_track_exclude'], true ) && self::$instance->config->options['ga_dash_tracking'] ) {
+				if ( ! GADWP_Tools::check_roles( self::$instance->config->options['track_exclude'], true ) && 'disabled' != self::$instance->config->options['tracking_type'] ) {
 					/*
 					 * Load tracking class
 					 */

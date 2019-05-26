@@ -12,7 +12,7 @@ function emg_customposttype_image_box() {
 	/* if ( easy_get_option( 'easymedia_disen_admnotify' ) == '1' ) { */
 	
 			add_meta_box( 'emgdemodiv', __( 'AMAZING Pro Version DEMO' ), 'emg_prodemo_metabox', 'easymediagallery', 'side', 'default' );
-			add_meta_box( 'emgbuydiv', __( 'Upgrade to Pro Version' ), 'emg_upgrade_metabox', 'easymediagallery', 'side', 'default' );
+			add_meta_box( 'emgbuydiv', __( 'Premium Plugin' ), 'emg_upgrade_metabox', 'easymediagallery', 'side', 'default' );
 			//add_meta_box( 'emgnewdiv', __( 'New Plugin' ), 'emg_new_info_metabox', 'easymediagallery', 'side', 'default' );
 		/* } */
 		
@@ -55,7 +55,7 @@ if ( strstr( $_SERVER['REQUEST_URI'], 'wp-admin/post-new.php' ) || strstr( $_SER
 					wp_enqueue_script( 'jquery-messi-js' );	
 					wp_enqueue_script( 'emg-bootstrap-js' );
 					wp_enqueue_script( 'easymedia-metascript', plugins_url( 'functions/metabox/metabox.js' , __FILE__ ) );
-					
+
 					// @since 1.3.10 >
 					if( easy_get_option( 'easymedia_disen_autoupdt' ) != '1' && is_admin() ) {
 						add_action( 'admin_notices', 'easmedia_update_notify' );
@@ -204,10 +204,25 @@ if ( strstr( $_SERVER['REQUEST_URI'], 'wp-admin/post-new.php' ) || strstr( $_SER
 			</div>
     
             <style type="text/css" media="screen">
+			a:focus {box-shadow: none !important; }
 			#minor-publishing {display: none !important }
+			.media-toolbar-secondary .spinner { float: left; margin-right: 5px; }
 		   @media only screen and (min-width: 1150px) {
 			   #side-sortables.fixed { position: fixed; top: 55px; right: 20px; width: 280px; }
-			   }	
+			   }
+			   
+			.emghvrbutton {
+				cursor:pointer;
+				margin-top: 7px;
+				-webkit-filter: grayscale(0%);
+				}
+				
+				.emghvrbutton:hover {
+					filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale"); /* Firefox 3.5+ */
+					filter: gray; /* IE6-9 */
+					-webkit-filter: grayscale(100%); /* Chrome 19+ & Safari 6+ */
+}
+			   
 				</style>   
     
         <script type="text/javascript">
@@ -259,21 +274,13 @@ jQuery(document).ready(function($) {
 	
 // MESSI POPUP	
 		jQuery('#videofrmt').on('click', function() {
-          new Messi('<p> - <strong>Youtube 1 :</strong> http://www.youtube.com/watch?v=JaNH56Vpg-A</p><p> - <strong>Youtube 2 :</strong> http://www.youtube.com/embed/JaNH56Vpg-A</p><p> - <strong>Youtube 3 :</strong> http://youtu.be/BWmWAPb_z90</p><p> - <strong>Youtube Playlist :</strong> http://www.youtube.com/watch?v=S_Az2Zg5OLc&list=PLFrmfElpm4lwVff3JvmtSJzxYFFb2093q</p><p> - <strong>Vimeo :</strong> http://vimeo.com/798022</p><p> - <strong>DailyMotion :</strong> http://www.dailymotion.com/video/xzefrs_steven-spielberg-s-obama_shortfilms#.UX8g_O8kZM4</p><p> - <strong>MetaCafe :</strong> http://www.metacafe.com/watch/2185365/spot_electrabel_gdf_suez_happy_new_year_2009/</p><p> - <strong>Facebook :</strong> https://www.facebook.com/video/embed?video_id=557900707562656</p><p> - <strong>Veoh :</strong> http://www.veoh.com/watch/v20943320Dz9Z45Qj</p><p> - <strong>Flickr video :</strong> http://www.flickr.com/photos/bhl1/2402027765/in/pool-video</p><p> - <strong>Google video :</strong> http://video.google.com/videoplay?docid=-8111235669135653751</p><p> - <strong>Quietube + Youtube :</strong> http://quietube.com/v.php/http://www.youtube.com/watch?v=b5Ff2X_3P_4</p><p> - <strong>Quietube + Vimeo :</strong> http://quietube.com/v.php/http://vimeo.com/2295261</p><p> - <strong>Tudou :</strong> http://www.tudou.com/programs/view/KG2UG_U4DMY/</p><p> - <strong>YouKu :</strong> http://v.youku.com/v_show/id_XNDI1MDkyMDQ</p>', {title: 'Sample video format', modal: true});
-		  });	
-		  		  
-		jQuery('#medvidtut').on('click', function() {
-          new Messi('<iframe width="853" height="480" src="http://www.youtube.com/embed/htxwZw_aPF0" frameborder="0" allowfullscreen></iframe>', {title: 'Video Tutorial', modal: true});
-		  });			  
-	  	
-		jQuery('#medsingimgtut').on('click', function() {
-          new Messi('<iframe width="853" height="480" src="http://www.youtube.com/embed/dXFBNY5t6E8" frameborder="0" allowfullscreen></iframe>', {title: 'Video Tutorial', modal: true});
-		  });	
-		  		  
-		jQuery('#medaudiotut').on('click', function() {
-          new Messi('<iframe width="853" height="480" src="http://www.youtube.com/embed/Bsn-CB5Hpbw" frameborder="0" allowfullscreen></iframe>', {title: 'Video Tutorial', modal: true});
-		  });			  
-	
+          new Messi('<p> - <strong>Youtube 1 :</strong> http://www.youtube.com/watch?v=JaNH56Vpg-A</p><p> - <strong>Youtube 2 :</strong> http://www.youtube.com/embed/JaNH56Vpg-A</p><p> - <strong>Youtube 3 :</strong> http://youtu.be/BWmWAPb_z90</p><p> - <strong>Youtube Playlist :</strong> http://www.youtube.com/watch?v=S_Az2Zg5OLc&list=PLFrmfElpm4lwVff3JvmtSJzxYFFb2093q</p><p> - <strong>Vimeo :</strong> http://vimeo.com/798022</p><p> - <strong>DailyMotion :</strong> http://www.dailymotion.com/video/xzefrs_steven-spielberg-s-obama_shortfilms#.UX8g_O8kZM4</p><p> - <strong>MetaCafe :</strong> http://www.metacafe.com/watch/2185365/spot_electrabel_gdf_suez_happy_new_year_2009/</p><p> - <strong>Facebook 1 :</strong> https://www.facebook.com/video/embed?video_id=557900707562656</p><p> - <strong>Facebook 2 :</strong> https://www.facebook.com/gopro/videos/10153893757506919/</p><p> - <strong>Veoh :</strong> http://www.veoh.com/watch/v20943320Dz9Z45Qj</p><p> - <strong>Flickr video :</strong> http://www.flickr.com/photos/bhl1/2402027765/in/pool-video</p><p> - <strong>Google video :</strong> http://video.google.com/videoplay?docid=-8111235669135653751</p><p> - <strong>Quietube + Youtube :</strong> http://quietube.com/v.php/http://www.youtube.com/watch?v=b5Ff2X_3P_4</p><p> - <strong>Quietube + Vimeo :</strong> http://quietube.com/v.php/http://vimeo.com/2295261</p><p> - <strong>Tudou :</strong> http://www.tudou.com/programs/view/KG2UG_U4DMY/</p><p> - <strong>YouKu :</strong> http://v.youku.com/v_show/id_XNDI1MDkyMDQ==.html</p>', {title: 'Sample video format', modal: true});
+		  });
+
+		jQuery('.messivideo').bind('click', function() {
+          new Messi('<iframe width="853" height="480" src="'+jQuery(this).data("yvid")+'" frameborder="0" allowfullscreen></iframe>', {title: 'Video Tutorial', modal: true});
+		  });
+		  	
 // -------- DELETE MEDIA IMAGE (AJAX)
 			function easmedia_img_media_remv(type) {
 				var data = {
@@ -382,8 +389,7 @@ function IsValidAuUrl1(aurl1) {
         src: url,
         fail: function() {
 			jQuery("#notifynovalidimg").show("slow");
-			jQuery('#notifynovalidimg').html("Unable to load image from url above. Please make sure it's the <strong>full</strong> URL and a valid one at that.");
-			   // jQuery('#imgthumbnailprv').attr('src','http://placehold.it/300x190');
+			jQuery('#notifynovalidimg').html("Unable to load image from url above. Please make sure to input <strong>full</strong> URL.");
 				jQuery("#imgpreviewbox").hide("slow");
 				jQuery(".deleteimage").hide("slow");
 
@@ -405,8 +411,6 @@ function IsValidAuUrl1(aurl1) {
 				jQuery("#imgpreviewbox").fadeIn(500);
 				jQuery("#notifynovalidimg").hide("slow");
 				jQuery('#imgthumbnailprv').attr('src',sprdata[0]);
-				
-				
 				jQuery("#imgpreviewbox").show("slow");
 				jQuery(".deleteimage").show("fast"); 
 					
@@ -431,9 +435,17 @@ function IsValidAuUrl1(aurl1) {
 function easmedia_add_meta_box( $meta_box )
 {
     if ( !is_array( $meta_box ) ) return false;
-    
+	
     // Create a callback function
-    $callback = create_function( '$post,$meta_box', 'easmedia_create_meta_box( $post, $meta_box["args"] );' );
+	if ( EMG_PHP7 ) {
+    	$callback = function( $post, $meta_box ) {
+			return easmedia_create_meta_box( $post, $meta_box["args"] );
+		};
+	} else {
+		$callback = create_function( '$post, $meta_box', 'easmedia_create_meta_box( $post, $meta_box["args"] );' );
+	}
+	
+	
     add_meta_box( $meta_box['id'], $meta_box['title'], $callback, $meta_box['page'], $meta_box['context'], $meta_box['priority'], $meta_box );
 }
 
@@ -479,7 +491,7 @@ function easmedia_create_meta_box( $post, $meta_box )
 				
 			case 'video':
 				echo '				<div id="videofrmt" style="text-decoration:underline;font-weight:bold;cursor:Pointer; color:#1A91F2 !important; margin-bottom:8px;">Sample video format</div>
-				<div id="medvidtut" style="text-decoration:underline;font-weight:bold;cursor:Pointer; color:#1A91F2 !important; margin-bottom:8px;">Video Tutorial</div><td>				
+				<div class="messivideo" data-yvid="https://www.youtube.com/embed/htxwZw_aPF0?rel=0&amp;showinfo=0" style="margin-bottom:8px;">Video Tutorial</div><td>				
 				
 				<input type="text" name="easmedia_meta['. $field['id'] .']" id="'. $field['id'] .'" value="'. ($meta ? $meta : $field['std']) .'" size="30" />
 <div style="color:red; display:none;" id="emgvideopreview"></div>				
@@ -506,7 +518,7 @@ $curimgpth = explode(",", $curimgpth);
 	 $curimgpth[2] = '';
 	}	
 
-echo '<div id="medsingimgtut" style="text-decoration:underline;font-weight:bold;cursor:Pointer; color:#1A91F2 !important; margin-bottom:8px;">Video Tutorial</div><td id="imgupld"><input id="upload_image" type="text" name="easmedia_meta['. $field['id'] .']" value="'. ($meta ? $meta : $field['std']) .'" style="margin-bottom:5px;"/><div style="color:red;" id="notifynovalidimg"></div>
+echo '<div class="messivideo" data-yvid="https://www.youtube.com/embed/dXFBNY5t6E8?rel=0&amp;showinfo=0" style="margin-bottom:8px;">Video Tutorial</div><td id="imgupld"><input id="upload_image" type="text" name="easmedia_meta['. $field['id'] .']" value="'. ($meta ? $meta : $field['std']) .'" style="margin-bottom:5px;"/><div style="color:red;" id="notifynovalidimg"></div>
 <div class="addmed"><a rel="image-'.$emgepver.'" class="' . $uploaderclass . '" title="Add Media" '.$isdatacnt.' href="'.$emghref.'"><span class="emg-media-buttons-icon"></span>Add Media</a>
 <a onClick="return false;" style="'. $dsplynone .';" class="deleteimage button" title="Delete Image" href="#"><span class="emg-media-buttons-icon-del"></span>Delete Image</a></div><div style="'. $dsplynone .' width:'.$curimgpth[1].'px; height:'.$curimgpth[2].'px" id="imgpreviewbox" class="imgpreviewboxc">
 <img id="imgthumbnailprv" src="' . $curimgpth[0] . '"/></div>
@@ -528,7 +540,7 @@ if ( $curaudiopth != '' ) { echo '
     </script>	
 '; }
 
-echo '<div id="medaudiotut" style="text-decoration:underline;font-weight:bold;cursor:Pointer; color:#1A91F2 !important; margin-bottom:8px;">Video Tutorial</div><td id="audioupld"><input id="upload_audio" type="text" name="easmedia_meta['. $field['id'] .']" value="'. ($meta ? $meta : $field['std']) .'" style="margin-bottom:5px;"/><div style="color:red;" id="notifynovalidaudio"></div><div class="addmed"><a rel="audio-'.$emgepver.'" class="' . $uploaderclass . '" title="Add Media" '.$isdatacnt.' href="'.$emghref.'"><span class="emg-media-buttons-icon"></span>Add Media</a>
+echo '<div class="messivideo" data-yvid="https://www.youtube.com/embed/Bsn-CB5Hpbw?rel=0&amp;showinfo=0" style="margin-bottom:8px;">Video Tutorial</div><td id="audioupld"><input id="upload_audio" type="text" name="easmedia_meta['. $field['id'] .']" value="'. ($meta ? $meta : $field['std']) .'" style="margin-bottom:5px;"/><div style="color:red;" id="notifynovalidaudio"></div><div class="addmed"><a rel="audio-'.$emgepver.'" class="' . $uploaderclass . '" title="Add Media" '.$isdatacnt.' href="'.$emghref.'"><span class="emg-media-buttons-icon"></span>Add Media</a>
 <a onClick="return false;" style="'. $adsplynone .';" class="deleteaudio button" title="Delete Audio" href="#"><span class="emg-media-buttons-icon-del"></span>Delete Audio</a></div>
 
 <div style="'. $adsplynone .';" id="audioprev" class="vidpreviewboxc">
@@ -567,6 +579,8 @@ echo '<div id="medaudiotut" style="text-decoration:underline;font-weight:bold;cu
 			    break;				
 	
 			case 'select':
+			
+				echo '<div class="emginfobox"><span class="emg_blink">Upgrade to PRO</span> and you can select <a href="https://ghozy.link/q3mh8" target="_blank">Photo Albums</a>, <a href="https://ghozy.link/fxgb0" target="_blank">Grid Gallery</a>, <a href="https://ghozy.link/dm0qt" target="_blank">Filterable Media</a>, HTML5 Video/Audio, Google Maps/Street View, embed from Soundcloud or Reverbnation and also Link to specific URL. You can learn more and see version comparison <a href="edit.php?post_type=easymediagallery&page=comparison">here</a> or go to Pro Version DEMO <a href="https://ghozy.link/5xduf" target="_blank">here</a></div>';
 				echo'<td><select style="width:200px;" name="easmedia_meta['. $field['id'] .']" id="'. $field['id'] .'">';
 				foreach ( $field['options'] as $key => $option ){
 					echo '<option value="' . $option . '"';
@@ -713,7 +727,7 @@ echo '<div id="medaudiotut" style="text-decoration:underline;font-weight:bold;cu
 							
 						</li>';			
 						}
-				} else {echo '<p class="noimgs">No images selected... </p>';}
+				} else {echo '<p class="noimgs">No images... </p>';}
 
 				echo '</ul></div></td>';
 				
@@ -760,16 +774,16 @@ add_action( 'add_meta_boxes', 'easmedia_metabox_work' );
 function easmedia_metabox_work(){
 	    $meta_box = array(
 		'id' => 'easmedia_metaboxmediatypeselect',
-		'title' =>  __( 'Media Options', 'easmedia' ),
-		'description' => __( ''.( easy_get_option( 'easymedia_disen_admnotify' ) == '1' ? '<div class="emginfobox"><span class="emg_blink">Upgrade to PRO</span> and you can select <a href="http://goo.gl/PLlJwS" target="_blank">Photo Albums</a>, <a href="http://goo.gl/bZ53YR" target="_blank">Grid Gallery</a>, <a href="http://goo.gl/JAvlsq" target="_blank">Filterable Media</a>, HTML5 Video/Audio, Google Maps/Street View, embed from Soundcloud or Reverbnation and also Link to specific URL. You can learn more and see version comparison <a href="edit.php?post_type=easymediagallery&page=comparison">here</a> or go to Pro Version DEMO <a href="http://goo.gl/qG29Me" target="_blank">here</a></div>': '').'<br>Select videos, images, gallery or audio files.', 'easmedia' ),
+		'title' =>  __( 'Media Options', 'easy-media-gallery' ),
+		'description' => '',
 		'page' => 'easymediagallery',
 		'context' => 'normal',
 		'priority' => 'default',
 		'fields' => array(
 			array(
 		
-					'name' => __( 'Media Type', 'easmedia' ),
-					'desc' => __( 'Choose the item type.', 'easmedia' ),
+					'name' => __( 'Media Type', 'easy-media-gallery' ),
+					'desc' => __( 'Choose the item type.', 'easy-media-gallery' ),
 					'id' => 'easmedia_metabox_media_type',
 					'type' => 'select',
 					'defflimit' => '0',
@@ -784,8 +798,8 @@ function easmedia_metabox_work(){
 	// VIDEO METABOX
 	    $meta_box = array(
 		'id' => 'easmedia_metaboxmediavideo',
-		'title' =>  __( 'Video Options', 'easmedia' ),
-		'description' => __( 'Paste video URL to field below.', 'easmedia' ),
+		'title' =>  __( 'Video Options', 'easy-media-gallery' ),
+		'description' => __( 'Paste video URL to field below.', 'easy-media-gallery' ),
 		'page' => 'easymediagallery',
 		'context' => 'normal',
 		'priority' => 'default',
@@ -793,8 +807,8 @@ function easmedia_metabox_work(){
 		
 			array(
 		
-					'name' => __( 'Video URL', 'easmedia' ),
-					'desc' => __( '', 'easmedia' ),
+					'name' => __( 'Video URL', 'easy-media-gallery' ),
+					'desc' => '',
 					'id' => 'easmedia_metabox_media_video',
 					'type' => 'video',
 					'defflimit' => '0',
@@ -803,8 +817,8 @@ function easmedia_metabox_work(){
 				 ),
 							
 			array(
-					'name' => __( 'Video Size', 'easmedia' ),
-					'desc' => __( 'If ON, video size will use the default settings on the control panel.', 'easmedia' ),
+					'name' => __( 'Video Size', 'easy-media-gallery' ),
+					'desc' => __( 'If ON, video size will use the default settings on the control panel.', 'easy-media-gallery' ),
 					'id' => 'easmedia_metabox_media_video_size',
 					'type' => 'checkboxopt',
 					'defflimit' => '0',
@@ -821,8 +835,8 @@ function easmedia_metabox_work(){
 	// GALLERY METABOX
 	    $meta_box = array(
 		'id' => 'easmedia_metaboxmediagallery',
-		'title' =>  __( 'Select Multiple Images', 'easmedia' ),
-		'description' => __( 'Click Add Images button to select image from your Wordpress Media Library.', 'easmedia' ),
+		'title' =>  __( 'Select Multiple Images', 'easy-media-gallery' ),
+		'description' => __( 'Click Add Images button to select image from your Wordpress Media Library.', 'easy-media-gallery' ),
 		'page' => 'easymediagallery',
 		'context' => 'normal',
 		'priority' => 'default',
@@ -830,9 +844,9 @@ function easmedia_metabox_work(){
 		
 			array(
 		
-					'name' => __( '<span class="gtips">Tips:</span>', 'easmedia' ),
-					'desc' => __( '<ul class="gtipslist"><li>Use <b>Ctrl + Click</b> on each image to select multiple images at once.</li><li>You also can drag and drop images to re-order.</li><li>Click on image to edit title/subtitle ( <i>Pro Version only</i> )</li><li><a href="https://www.youtube.com/watch?v=H1Z3fidyEbE" target="_blank">Tutorial How to Create Gallery</a></li>
-<li><a href="https://www.youtube.com/watch?v=pjHvRoV2Bn8" target="_blank">Tutorial How to Create Album</a></li></ul>', 'easmedia' ),
+					'name' => __( '<span class="gtips">Tips:</span>', 'easy-media-gallery' ),
+					'desc' => __( '<ul class="gtipslist"><li class="messivideo" data-yvid="https://www.youtube.com/embed/H1Z3fidyEbE?rel=0&amp;showinfo=0">Tutorial How to Create Gallery</li>
+<li class="messivideo" data-yvid="https://www.youtube.com/embed/pjHvRoV2Bn8?rel=0&amp;showinfo=0">Tutorial How to Create Album</li><li>Use <b>Ctrl + Click</b> on each image to select multiple images at once.</li><li>You also can drag and drop images to re-order.</li><li>Click on image to edit title/subtitle ( <i>Pro Version only</i> )</li></ul>', 'easy-media-gallery' ),
 					'id' => 'easmedia_metabox_media_gallery',
 					'gallid' => 'easmedia_metabox_media_gallery_id',
 					'type' => 'gallery',
@@ -842,8 +856,8 @@ function easmedia_metabox_work(){
 				 ),
 				 
 			array(
-					'name' => __( 'Full-size image control', 'easmedia' ),
-					'desc' => __( 'If ON, image which exceeds the specified size limit will be automatically resized. You can change image size limit through plugin control panel.', 'easmedia' ),
+					'name' => __( 'Full-size image control', 'easy-media-gallery' ),
+					'desc' => __( 'If ON, image which exceeds the specified size limit will be automatically resized. You can change image size limit through plugin control panel.', 'easy-media-gallery' ),
 					'id' => 'easmedia_metabox_media_gallery_opt1',
 					'type' => 'checkboxoptdef',
 					'defflimit' => '1',
@@ -851,8 +865,8 @@ function easmedia_metabox_work(){
 					),
 				 
 			array(
-					'name' => __( 'Use information of each image', 'easmedia' ),
-					'desc' => __( 'If ON, each image will use individual title based on Wordpress Media informations. If OFF, this gallery will use title, sub title and description from Media Information below.', 'easmedia' ),
+					'name' => __( 'Use information of each image', 'easy-media-gallery' ),
+					'desc' => __( 'If ON, each image will use individual title based on Wordpress Media informations. If OFF, this gallery will use title, sub title and description from Media Information below.', 'easy-media-gallery' ),
 					'id' => 'easmedia_metabox_media_gallery_opt2',
 					'type' => 'checkboxoptdef',
 					'defflimit' => '0',
@@ -867,8 +881,8 @@ function easmedia_metabox_work(){
 	// AUDIO METABOX		
 	    $meta_box = array(
 		'id' => 'easmedia_metaboxmediaaudio',
-		'title' =>  __( 'Audio Options', 'easmedia' ),
-		'description' => __( 'Upload audio or paste audio URL on field below. Is it possible to use audio external source.', 'easmedia' ),
+		'title' =>  __( 'Audio Options', 'easy-media-gallery' ),
+		'description' => __( 'Upload audio or paste audio URL on field below. Is it possible to use audio external source.', 'easy-media-gallery' ),
 		'page' => 'easymediagallery',
 		'context' => 'normal',
 		'priority' => 'default',
@@ -876,8 +890,8 @@ function easmedia_metabox_work(){
 		
 			array(
 		
-					'name' => __( 'Audio Path', 'easmedia' ),
-					'desc' => __( '', 'easmedia' ),
+					'name' => __( 'Audio Path', 'easy-media-gallery' ),
+					'desc' => '',
 					'id' => 'easmedia_metabox_media_audio',
 					'type' => 'audio',
 					'defflimit' => '0',
@@ -892,15 +906,15 @@ function easmedia_metabox_work(){
 	// SINGLE IMAGE (FOR ALL MEDIA) 
 	    $meta_box = array(
 		'id' => 'emediaimagediv',
-		'title' =>  __( 'Select Image', 'easmedia' ),
-		'description' => __( 'You can upload image with supported file types: jpg, jpeg, gif, png.', 'easmedia' ),
+		'title' =>  __( 'Select Image', 'easy-media-gallery' ),
+		'description' => __( 'You can upload image with supported file types: jpg, jpeg, gif, png.', 'easy-media-gallery' ),
 		'page' => 'easymediagallery',
 		'context' => 'normal',
 		'priority' => 'default',
 		'fields' => array(
 			array(
-					'name' => __( 'Image URL', 'easmedia' ),
-					'desc' => __( 'Select or upload your image.', 'easmedia' ),
+					'name' => __( 'Image URL', 'easy-media-gallery' ),
+					'desc' => __( 'Select or upload your image.', 'easy-media-gallery' ),
 					'id' => 'easmedia_metabox_img',
 					'type' => 'images',
 					'defflimit' => '0',
@@ -908,8 +922,8 @@ function easmedia_metabox_work(){
 				 ),
 							
 			array(
-					'name' => __( 'Full-size image control', 'easmedia' ),
-					'desc' => __( 'If ON, image which exceeds the specified size limit will be automatically resized. You can change image size limit through plugin control panel.', 'easmedia' ),
+					'name' => __( 'Full-size image control', 'easy-media-gallery' ),
+					'desc' => __( 'If ON, image which exceeds the specified size limit will be automatically resized. You can change image size limit through plugin control panel.', 'easy-media-gallery' ),
 					'id' => 'easmedia_metabox_media_image_opt1',
 					'type' => 'checkboxoptdef',
 					'defflimit' => '1',
@@ -924,15 +938,15 @@ function easmedia_metabox_work(){
 	// MEDIA DESC METABOX
     $meta_box = array(
 		'id' => 'easmedia_metabox_media_desc',
-		'title' =>  __( 'Media Information', 'easmedia' ),
-		'description' => __( 'Input basic info for this media.', 'easmedia' ),
+		'title' =>  __( 'Media Information', 'easy-media-gallery' ),
+		'description' => __( 'Input basic info for this media.', 'easy-media-gallery' ),
 		'page' => 'easymediagallery',
 		'context' => 'normal',
 		'priority' => 'low',
 		'fields' => array(
 			array(
-					'name' => __( 'Media Title', 'easmedia' ),
-					'desc' => __( 'Enter a media title.', 'easmedia' ),
+					'name' => __( 'Media Title', 'easy-media-gallery' ),
+					'desc' => __( 'Enter a media title.', 'easy-media-gallery' ),
 					'id' => 'easmedia_metabox_title',
 					'type' => 'text',
 					'defflimit' => '0',
@@ -940,8 +954,8 @@ function easmedia_metabox_work(){
 				),
 				
 			array(
-					'name' => __( 'Media Subtitle', 'easmedia' ),
-					'desc' => __( 'You can use this field for (ex: author, title track, etc.)', 'easmedia' ),
+					'name' => __( 'Media Subtitle', 'easy-media-gallery' ),
+					'desc' => __( 'You can use this field for (ex: author, title track, etc.)', 'easy-media-gallery' ),
 					'id' => 'easmedia_metabox_sub_title',
 					'type' => 'text',
 					'defflimit' => '0',

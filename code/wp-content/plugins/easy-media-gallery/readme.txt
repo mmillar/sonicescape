@@ -1,56 +1,83 @@
-=== Gallery - Photo Albums - Portfolio ===
+=== Gallery – Photo Albums Plugin ===
 Contributors: GhozyLab
-Donate link: http://ghozylab.com/donate
-Tags: gallery, plugin, post, posts, admin, image gallery, foto, shortcode, sidebar, youtube, seo, wordpress, widget, widgets, gallery image, photo, portfolio, widget gallery, lightbox gallery, photoswipe, foobox, facebook, google, twitter, prettyphoto, photobox, fancybox, colorbox, lightbox, website gallery, gallery lightbox, image, images, galleries, wordpress gallery, picture gallery, photo gallery, galeria, gallery, best gallery, media library, easy gallery, gallery plugin, plugin gallery, wordpress photo gallery plugin, add gallery, add image, wordpress seo, add picture, add photo, galery, gallery wordpress, wp gallery, gallery slider, galleria, simple gallery, wordpress gallery plugin, free gallery, video gallery, youtube gallery, vimeo gallery, photo albums, grid gallery, images gallery, filterable gallery, grid, photogallery, photoset, shortcode gallery, fullscreen gallery, fullscreen image, gallery shortcode, free photo gallery, best gallery plugin, photo album, image rotator, free slider, album, galeri, galerie, image album, wp gallery plugins, image gallery plugin, image slider, slideshow, slide, lightbox slider, slideshow gallery, watermarking, fotogalerie, responsive wordpress photo gallery, responsive gallery, art gallery, multiple pictures, fotoalbum, responsive galleries, photoalbum, jquery gallery, justified gallery, pictures, picture, photos, responsive
-Requires at least: 3.3
-Tested up to: 4.2.3
-Stable tag: 1.3.35
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Donate link: https://ghozy.link/rs3bq
+Tags: gallery, photo gallery, image gallery, responsive gallery, wordpress gallery plugin, slider, photo album, free gallery, slider, photo gallery, images, photo slider, best gallery
+Requires at least: 3.4
+Tested up to: 5.1
+Stable tag: 1.3.139
+License: GPLv3 or later
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Gallery and Photo Albums plugin allows you to create image gallery, photo albums, image slider and portfolio just in minutes.
+Gallery – Photo Albums Plugin is the easiest tool to create image gallery, photo albums, portfolio and also photo slider.
 
 == Description ==
-**Gallery** - **Photo Albums** - **Portfolio** plugin satisfy all your needs to create different types of media such as portfolio, image gallery, photo albums and also from a simple picture to an image slider, image carousel a video and audio (html5) gallery. [Gallery](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-grid-galleries-plugin/ "gallery") - [Photo Album](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-and-photo-albums-demo/ "photo album") - [Portfolio](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-portfolio-plugin/ "portfolio") plugin represents a perfect solution for any type of media. Each item can be:
+[Homepage](https://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-and-photo-albums-demo/) | [Documentation](https://www.youtube.com/watch?v=pjHvRoV2Bn8) | [Support](https://ghozylab.com/plugins/submit-support-request/#tab-1399384216-2-4) | [Demo](https://ghozylab.com/plugins/easy-media-gallery-pro/demo/) | [Premium Version](https://ghozylab.com/plugins/)
 
-* Photo Gallery / Image Gallery
-* Photo Albums for Pro(<em>[demo](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-and-photo-albums-demo/ "photo albums wordPress plugin")</em>)
-* Photo Albums for Lite (<em>[demo](http://goo.gl/xtCU1c "Photo Album Lite")</em>)
-* Gallery with filter/category(<em>[Pro Version](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-grid-galleries-plugin/ "grid gallery plugin")</em>)
-* Gallery with pagination (<em>[Pro Version](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-plugin-gallery-using-pagination/ "gallery with pagination")</em>)
-* Portfolio (<em>[Pro Version](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-portfolio-plugin/ "portfolio plugin")</em>)
-* Image Slider (<em>[Pro Version](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-image-slider-plugin-fotorama/ "image slider plugin")</em>)
-* A video, Auto-retrieve YouTube and Vimeo Thumbnail (<em>Pro Version [learn more here](http://www.youtube.com/watch?v=uAGWUcs5ofE "video gallery")</em>)
-* An mp3 player (<em>HTML5 player for Pro version and Flash player for Lite version</em>)
-* Embed from Reverbnation or Soundcloud (<em>[Pro Version](http://goo.gl/ckecFP "audio gallery plugin")</em>)
-* Google Maps / Google Street View (<em>[Pro Version](http://goo.gl/ckecFP "google maps gallery plugin")</em>)
-* 10+ Lightboxes (<em>[Pro Version](http://goo.gl/3vZHHb "best image lightbox plugin")</em>)
+Gallery Image – Photo Albums Plugin will help you to create gallery, filterable image gallery, photo album, portfolio and also simple picture to an image slider, image carousel, youtube and vimeo video gallery and audio playlist. This free gallery plugin represents a perfect solution for your website.
 
-**Gallery** - **Photo Albums** - **Portfolio** is a very customizable **plugin** that allow you to set display whatever you want like adjust colors, positions, grid, media sizes, hover effect and much more with one easy control panel. That easy control panel for experts it would save your time, and for you who do not have more knowledge about web programming or styling, of course this plugin will allow you to manage your gallery and portfolio much more easily.
+This gallery plugin also very customizable that allow you to adjust colors, positions, grid, media sizes, hover effect and much more with one easy control panel. That easy control panel for experts it would save your time, and for you who do not have more knowledge about web programming, of course this Image Gallery plugin will allow you to manage all of your media much more easily.
 
-> #### **Live Demos**
-> * [Photo Albums](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-and-photo-albums-demo/ "photo album plugin")
-> * [Gallery / Grid Gallery](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-grid-galleries-plugin/ "gallery plugin - grid gallery")
-> * [Image Slider](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-image-slider-plugin/ "image slider")
-> * [Image Slider Fotorama](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-image-slider-plugin-fotorama/ "fotorama image slider")
-> * [Carousel](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-carousel-image-plugin/ "image carousel")
-> * [Gallery with Pagination](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-plugin-gallery-using-pagination/ "gallery pagination")
-> * [Portfolio](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-portfolio-plugin/ "portfolio plugin")
-> * [Video Gallery](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-video-gallery-plugin/ "video gallery")
-> * [Audio Gallery](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-wordpress-video-gallery-plugin/ "audio gallery")
-> * [Gallery with EMG Lightbox ( Light, dark transparent skins )](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-lightboxes/emg-lightbox-default/ "gallery with EMG Lightbox")
-> * [Gallery with FancyBox 2](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-lightboxes/fancybox-2/ "gallery with FancyBox 2")
-> * [Gallery with ColorBox](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-lightboxes/colorbox/ "gallery with ColorBox")
-> * [Gallery with LightBox 2](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-lightboxes/lightbox-2/ "gallery with LightBox 2")
-> * [Gallery with PrettyPhoto](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-lightboxes/prettyphoto/ "gallery with PrettyPhoto")
-> * [Gallery with FooBox](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-lightboxes/foobox/ "gallery with FooBox")
-> * [Gallery with PhotoSwipe](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-lightboxes/photoswipe/ "gallery with PhotoSwipe")
-> * [Gallery with Photobox](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-lightboxes/photobox/ "gallery with Photobox")
+### Gallery and Photo Albums Demo
+
+> #### **Demo for Lite and Pro Version**
+
+> * [Image Gallery](https://ghozylab.com/plugins/ "gallery WordPress plugin")
+> * [Photo Albums](https://ghozy.link/l48ax "photo album plugin")
+> * [Gallery / Grid Gallery / Photo Gallery](https://ghozy.link/jncs1 "gallery plugin - grid gallery")
+> * [Photo Albums Lite](https://ghozy.link/5r3oh "photo album lite")
+> * [Gallery / Grid Gallery / Photo Gallery Lite](https://ghozy.link/q4yxj "gallery plugin - grid gallery lite")
+> * [Image Slider](https://ghozy.link/63pmy "image slider")
+> * [Image Slider Fotorama](https://ghozy.link/6cys9 "fotorama image slider")
+> * [Image Carousel](https://ghozy.link/fjra9 "image carousel")
+> * [Gallery with Pagination](https://ghozy.link/zv1it "gallery pagination")
+> * [Portfolio](https://ghozy.link/jnomy "portfolio plugin")
+> * [Video Gallery](https://ghozy.link/myl5f "video gallery plugin")
+> * [Google Maps / Google Street View](https://ghozy.link/jnomy "google maps plugin")
+> * [Embed from Reverbnation or Soundcloud](https://ghozy.link/myl5f "audio plugin")
+> * [Gallery with Default Lightbox ( Light, dark transparent skins )](https://ghozy.link/yq579 "gallery with EMG Lightbox")
+> * [Gallery with Photobox](https://ghozy.link/9jiqm "gallery with Photobox")
+> * [Gallery with FooBox](https://ghozy.link/iswtz "gallery with FooBox")
+> * [Gallery with FancyBox 2](https://ghozy.link/iw87u "gallery with FancyBox 2")
+> * [Gallery with ColorBox](https://ghozy.link/usnmz "gallery with ColorBox")
+> * [Gallery with LightBox 2](https://ghozy.link/l4zs0 "gallery with LightBox 2")
+> * [Gallery with PrettyPhoto](https://ghozy.link/ubrpj "gallery with PrettyPhoto")
+> * [Gallery with PhotoSwipe](https://ghozy.link/fh49u "gallery with PhotoSwipe")
+> * [Demo Video Gallery](https://ghozy.link/myl5f "video gallery")
+> * [Demo Audio Gallery](https://ghozy.link/ugj68 "audio gallery")
+
+### Gallery / Image Gallery
+
+Just create gallery using Multiple Image ( Slider ) media type , select/uploads an images and save the media, after that put the gallery using Easy Media Shortcode Generator. DONE! Your gallery will ready just in minutes. **NO NEED to RE-UPLOAD** all your images, **NO NEED to SET ANY FOLDER PERMISSION**. You can choose and insert an images that already uploaded in Wordpress media library. When you upgrade to pro version you will be able to create gallery with pagination, gallery with filter / category and gallery with more than 10 lightbox styles. [Learn more here](https://ghozylab.com/plugins/easy-media-gallery-pro/demo/ "Demo Plugin")
+
+### Photo Albums
+
+With Lite Version you can create up to 3 **photo album** or **gallery** ( <em>max 15 images per album</em> ). You can upgrade to Pro Version to be able to create unlimited galleries and photo albums.
+
+### Image Slider / Photo Slider
+
+With Pro version you can create **image slider** easily. We also already provide another plugin to create image slider. Please try [Image Slider Plugin](https://wordpress.org/plugins/image-slider-widget/ "Best Image Slider Plugin").
+
+### Image Carousel
+
+In Pro version you will easily built Image Carousel. Same as the slider features, we also provide separated plugin named [Image Carousel](https://wordpress.org/plugins/image-carousel/ "Image Carousel Plugin") plugin. Enjoy it!
+
+### Video
+
+This plugin allows you to embed and displaying videos using lightbox overlay. You can embed Youtube, Vimeo and MP4 video. Pro version of this media gallery plugin will provide a good video interface created with HTML5.
+
+### Audio
+
+Not only Video, Easy Media Gallery also allows you to embed audio. You can embed mp3 audio format with ease. We also added another feature that enabled you to embed audio from Soundcloud and Reverbnation in Pro Version.
+
+### Google Maps
+
+The Importance of Getting Your Business Listed in Google Maps. With PRO Version you can embed Google maps, Google street view and Google business view easily.
 
 = Video and Audio Features =
-Gallery - Photo Albums - Portfolio supports a wide range of media formats. Simply link to any image, video, hosted video or Youtube/Vimeo, mp3 audio, Google Map, Google Street View or Google Business View and the media will be automatically loaded into the overlay. Gallery - Photo Albums - Portfolio can be used to embed videos from :
 
-* YouTube / YouTube Playlist
+Easy Media Gallery supports a wide range of video and audio. Simply link to hosted video or Youtube/Vimeo and also mp3 audio. You can embed video from the following sites :
+
+* YouTube
 * Vimeo
 * Veoh
 * DailyMotion
@@ -58,11 +85,13 @@ Gallery - Photo Albums - Portfolio supports a wide range of media formats. Simpl
 * Google Video
 * Livestream
 * Facebook
-* Showecho
-* YouKu
+* Revver
+* Rutube
 * Flickr
 * Ustream
-* Rutube
+* Youku
+* Tudou
+* Viddler
 * MP4 (<em>MP4 HTML5 player for Pro version and Flash player for Lite version</em>), MOV, SWF, M4V, M4A, FLV
 
 And also can be used to embed audio from :
@@ -72,39 +101,9 @@ And also can be used to embed audio from :
 * 4shared
 * Self hosted MP3
 
-= EXPLANATIONS OF THE VARIOUS FEATURES IN THIS GALLERY PLUGIN =
+= UPGRADE TO PRO VERSION =
 
-= Gallery = 
-
-Just create Multiple Image ( Slider ) , insert an images and save your media, after that just put the gallery using Easy Media Shortcode Generator and your gallery will ready just in minutes. **NO NEED to RE-UPLOAD** all your images, **NO NEED to SET ANY FOLDER PERMISSION** because you can choose and insert an images that already uploaded in Wordpress media library. Upgrade to pro version to be able to create gallery with pagination, gallery with filter and gallery with more than 6 lightbox styles.
-
-= Image Albums /  Photo Albums = 
-
-You can create up to 3 albums with Lite Version ( <em>max 15 images per album</em> ). You have to upgrade to Pro Version if you want to create unlimited albums and images. Another feature is can create album with filter, album with ajax mode, album with more than 6 lightbox styles.
-
-= Image Slider /  Photo Slider = 
-
-In Pro version you can create **image slider** easily. We already create another plugin for image slider. You can try [Image Slider Plugin](https://wordpress.org/plugins/image-slider-widget/ "Best Image Slider Plugin").
-
-= Image Carousel = 
-
-In Pro version you can create Image Carousel easily. We will add this feature in lite version for the next release. Please be patient or you can use [Best Image Slider](https://wordpress.org/plugins/image-slider-widget/ "Image Slider Wordpress Plugin") Plugin for this.
-
-= Video Gallery =
-
-Gallery - Photo Albums - Portfolio Lite/Pro plugin allows you to embed videos on a page using lightbox overlay display. You can embed video from Youtube, Vimeo and MP4. We provide HTML5 player in Pro Version and Flash player for lite version. 
-
-= Audio Gallery =
-
-Gallery - Photo Albums - Portfolio Lite/Pro plugin also allows you to embed audio on a page using lightbox overlay display. You can embed mp3 audio format easily. In Pro Version you can also embed audi from Soundcloud and Reverbnation.
-
-= Google Maps =
-
-With PRO Version you can embed Google maps, Google street view and Google business view easily.
-
-
-= Upgrade to Pro Version = 
-Take your gallery to the next level with [Gallery Pro Version](http://ghozylab.com/plugins/easy-media-gallery-pro/pricing/ "Best Gallery and Photo Album Plugin"), which gives you additional features such as:
+Take your gallery to the next level with [Gallery Pro Version](https://ghozylab.com/plugins/pricing/ "Best Gallery and Photo Album Plugin"), which gives you additional features such as:
 
 * Super Easy to use for Beginners
 * Create unlimited number of gallery or album
@@ -116,50 +115,62 @@ Take your gallery to the next level with [Gallery Pro Version](http://ghozylab.c
 * Fully CSS3 compliant with text shadowing, box shadowing, gradients, etc
 * Color picker for unlimited color combinations
 * Display your media gallery on different theme
-* 3 Skins for main Lightbox [See Example](http://ghozylab.com/plugins/easy-media-gallery-pro/demo/best-gallery-lightboxes/emg-lightbox-default/ "Lightbox Plugin")
-* More than 10 lightboxes for your gallery or photo albums
+* 3 Skins for main Lightbox [See Example](https://ghozy.link/yq579 "Lightbox Plugin")
+* More than 10 lightboxes for your gallery or photo albums  [See Example](https://ghozy.link/nela9 "Lightbox Gallery")
 * Backup & Restore Settings
 * Powerfull control panel and Shortcode Manager make getting started super easy
 * Responsive & Mobile Optimized
 * Extensive Documentation & Tutorial Videos 
 * 24/7 Technical Support
 
-= GALLERY PRO VERSION VIDEO =
-[youtube https://www.youtube.com/watch?v=oH39zc8zMOg]
+= GALLERY PRO FEATURES AND DEMO =
 
-= GALLERY LITE VERSION VIDEO =
-[youtube https://www.youtube.com/watch?v=H1Z3fidyEbE]
-
-* You can learn more by watching the video from [YouTube Channel](http://www.youtube.com/GhozyLab "GhozyLab YouTube Channel").
-* You can see all awesome features here [Best Gallery and Portfolio plugin features](http://ghozylab.com/plugins/easy-media-gallery-pro/plugin-features/ "Image Gallery Plugin Features").
+* You can see all awesome features here [Best Gallery and Portfolio plugin features](https://ghozy.link/dj6r3 "Image Gallery Plugin Features").
+* You can learn more by watching the video from [YouTube Channel](https://ghozy.link/of57q "GhozyLab YouTube Channel").
 
 = Recommended Plugins =
+
 The following are other recommended plugins by the author:
 
-* [Best Contact Form](https://wordpress.org/plugins/contact-form-lite/ "Best Contact Form Plugin") - The Best Contact Form Plugin to create awesome Contact Form in minutes.
-* [Best Image Slider Plugin](https://wordpress.org/plugins/image-slider-widget/ "Best Image Slider Plugin") - Easy Image Slider Widget - Displaying your image as slider in widget/sidebar area with very easy. Allows you to customize it to looking exactly what you want.
-* [Easy Popup Plugin](https://wordpress.org/plugins/easy-notify-lite/ "Best Email Subscribe and Optin Plugin") - The Best Notify and Subscription Form Plugin to display notify popup, announcement and subscribe form with very ease, fancy and elegant.
+* [Contact Form Plugin](https://wordpress.org/plugins/contact-form-lite/ "Best Contact Form Plugin") - The Best Contact Form Plugin to create awesome Contact Form just in minutes.
+* [Slider Plugin](https://wordpress.org/plugins/image-slider-widget/ "Best Image Slider Plugin") - Easy Image Slider Widget - Displaying your image as slider in widget/sidebar area with very easy. Allows you to customize it to looking exactly what you want.
+* [Instagram Feed Plugin](https://wordpress.org/plugins/feed-instagram-lite/ "Instagram") - Display your Instagram media as masonry gallery in WordPress site with very easily.
+* [Icon Fonts Plugin](https://wordpress.org/plugins/icon/ "Icon Fonts Plugin") - Select and insert icon into your post or page just in one click. More than 2.5k icons available.
+* [Gallery Lightbox](https://wordpress.org/plugins/gallery-lightbox-slider/ "Gallery Lightbox") - Gallery Lightbox - Displays all gallery images into the lightbox slider in just a few seconds.
+* [Image Carousel](https://wordpress.org/plugins/image-carousel/ "image carousel") - Touch enabled WordPress plugin that lets you create a beautiful responsive image carousel.
+* [Popup Builder Plugin](https://wordpress.org/plugins/easy-notify-lite/ "Best Email Subscribe and Optin Plugin") - The Best Popup and Subscription Form Plugin to display notify popup, announcement and subscribe form with very ease, fancy and elegant.
 
 = Translation =
 
 * Italiano / Italia
 * Deutsch / Deutschland
 * Espanol / Espana
-* Francais / France
+* French
+* French (Belgium)
 * Bahasa Indonesia
 * Nederlands / Nederland
 * Polski / Polska
 * Brasil
+* Hebrew
 * Romana / Romania
-* Tagalog / Philippines
-* Japan
+* Hungarian
+* Russian
+* Russian - Ukraine
+* Malay / Malaysia
+* Turkish
+* Slovak
+* Swedish
+* Chinese - Singapore
+* Bulgarian
+* Portuguese
+* Spanish (Chile)
 
 > #### **NOTE**
-> If you would like to create your own language pack or update the existing one, you can send <a href="http://codex.wordpress.org/Translating_WordPress" title="Translating WordPress" target="_blank">the text of PO and MO files</a> for <a href="http://ghozylab.com" title="GhozyLab" target="_blank">GhozyLab</a> and we'll add it to the plugin. You can download the latest version of the program for work with PO and MO files  <a href="http://www.poedit.net/download.php" title="Download Poedit" target="_blank">Poedit</a>.
+> If you would like to create your own language pack or update the existing one, you can send <a href="https://make.wordpress.org/polyglots/handbook/" title="Translating WordPress" target="_blank">the text of PO and MO files</a> for <a href="https://ghozy.link/bctnd" title="GhozyLab" target="_blank">GhozyLab</a> and we'll add it to the plugin. You can download the latest version of the program for work with PO and MO files  <a href="https://poedit.net/download" title="Download Poedit" target="_blank">Poedit</a>.
 
 = Technical Support =
 
-If any problem occurs or if you think, that you found a bug please contact us at [info@ghozylab.com](mailto:info@ghozylab.com).
+If any problem occurs or if you think, that you found a bug please contact us at [here](http://redirect.ghozylab.com/mailto.php "Contact Us").
 
 == Installation ==
 
@@ -184,6 +195,13 @@ The simplest way to install is to click on 'Plugins' then 'Add' and type 'Galler
 1. Login to your website and go to the Plugins section of your admin panel.
 1. Look for "Easy Media Gallery" and click Activate.
 
+**For Mac Users**  
+> * Go to your Downloads folder and locate the folder with the plugin. 
+> * Right-click on the folder and select Compress. 
+> * Now you have a newly created .zip file which can be installed as described here.*  
+> * Click "Install Now" button.  
+> * Click "Activate Plugin" button for activating the plugin.
+
 
 == Frequently Asked Questions ==
 
@@ -191,64 +209,54 @@ The simplest way to install is to click on 'Plugins' then 'Add' and type 'Galler
 
 Just go to Easy Media > Settings > Miscellaneous > and TURN OFF <strong>Upgrade Notification</strong> option
 
+### How to Create Gallery?
+
+[youtube https://www.youtube.com/watch?v=H1Z3fidyEbE]
+
+### How to Create Photo Album?
+
+[youtube https://www.youtube.com/watch?v=pjHvRoV2Bn8]
+
+### How to Create Portfolio?
+
+[youtube https://www.youtube.com/watch?v=OEoNB2LpnSE]
+
+### How to Create Video Gallery?
+
+[youtube https://www.youtube.com/watch?v=htxwZw_aPF0]
+
+### How to Create Audio Gallery?
+
+[youtube https://www.youtube.com/watch?v=Bsn-CB5Hpbw]
+
+You can learn more by watching the video from [YouTube Channel](https://ghozy.link/of57q "GhozyLab YouTube Channel").
+
 = Is there any documentation with detail for this plugin? =
 
 To make the plugin easy for everyone, the documentation comes with detailed videos explaining each step necessary to setup and use Gallery - Photo Albums - Portfolio:
 
 * [How to Create Simple Photo Albums](https://www.youtube.com/watch?v=pjHvRoV2Bn8 "How to Create Photo Album")
 * [How to Create Simple Gallery](https://www.youtube.com/watch?v=H1Z3fidyEbE "How to Create Gallery")
-* [How to Create Google Maps Media Types](http://www.youtube.com/watch?v=PEgfleRf6hg "How to Create Google Maps Gallery")
-* [How to Create Audio (mp3) Media Types](http://www.youtube.com/watch?v=Bsn-CB5Hpbw "How to Audio Gallery")
-* [How to Create Video (Youtube) Media Types](http://www.youtube.com/watch?v=htxwZw_aPF0 "How to Embed Youtube")
-* [How to Insert Image into Media Description](http://www.youtube.com/watch?v=9cuYyBMKx2k "How change Gallery Title")
-* [How to Change Media Columns](http://www.youtube.com/watch?v=56f_C7OXiAE "How to Change Gallery Columns")
-* [How to Change Media Border Size and Color](http://www.youtube.com/watch?v=2T73wvt_wOA "How to Change Gallery Border")
-* [How to Publish Gallery - Photo Albums - Portfolio ( Standard Method )](http://www.youtube.com/watch?v=Z2qwXz7GIRw "Publish Gallery 1")
-* [How to Publish Gallery - Photo Albums - Portfolio ( Advanced Method )](http://www.youtube.com/watch?v=LMBg0Zv8048 "Publish Gallery 2")
+* [How to Change Media Columns](https://www.youtube.com/watch?v=56f_C7OXiAE "How to Change Gallery Columns")
+* [How to Create Google Maps Media Types](https://www.youtube.com/watch?v=PEgfleRf6hg "How to Create Google Maps Gallery")
+* [How to Create Audio (mp3) Media Types](https://www.youtube.com/watch?v=Bsn-CB5Hpbw "How to Audio Gallery")
+* [How to Create Video (Youtube) Media Types](https://www.youtube.com/watch?v=htxwZw_aPF0 "How to Embed Youtube")
+* [How to Insert Image into Media Description](https://www.youtube.com/watch?v=9cuYyBMKx2k "How change Gallery Title")
+* [How to Change Media Border Size and Color](https://www.youtube.com/watch?v=2T73wvt_wOA "How to Change Gallery Border")
+* [How to Publish Gallery - Photo Albums - Portfolio ( Standard Method )](https://www.youtube.com/watch?v=Z2qwXz7GIRw "Publish Gallery 1")
+* [How to Publish Gallery - Photo Albums - Portfolio ( Advanced Method )](https://www.youtube.com/watch?v=LMBg0Zv8048 "Publish Gallery 2")
 
-= Images not showing up =
+= Images not showing up or Show a spinning icon and never finish loading =
 
-Sometimes you may face problem that your images are not displaying in the site. Here are some ways that you can try:
+Sometimes you may face problem that your images only show a spinning icon and never finish loading, the issue is clearly that there are javascript conflict with your theme and/or some other plugins or there is the possibility of the use an outdated version of jQuery ( below version 1.8.3 ). Let's find out what causes of this issue:
 
-1. Firstly try to re-upload your image to the media library, this issue usually occurs when you do import data from localhost (temporarily site) to the main site. If this still does not work please try the second option. 
-1. Click the add media button and choose the image you want, then look at the bottom right option (Attachment Display Settings), make sure to select Media File from Link to dropdown and select Full Size from Size dropdown. Please see this [SCREENSHOT](http://ghozylab.com/images/sshot.jpg)
-1. If this still does not work please open thread from support forum [here](http://wordpress.org/support/plugin/easy-media-gallery "Gallery Forum") or you can contact us [here](http://ghozylab.com/contactus).
-
-> #### **NOTE**
-> Make sure you are using the image with a size greater than the size of a thumbnail on Easy Media > Settings > Style Options > Thumbnail Size
-
-= Show a spinning icon and never finish loading =
-
-1. Firstly you should have FTP account, if you don't have, make one from cPanel.
-1. Now login to FTP and navigate to wordpress wp-content folder/directory in /wp-content/
-1. Look for a file named. htaccess, is there a line of code like the example below :
-
-`<Files *.php>
-
-deny from all
-
-</Files>`
-
-1. If exist, you have to remove it and try again to open your media. If still error please try the next step.
-1. You can open the following URL in your browser, make sure to change <strong>XXX</strong> with your own domain name and see what you get there? If you get Error message it means there is a php error caused by one of your plugin or theme. You can contact us [here](http://ghozylab.com/submit-support-request/) and provide your site URL, we will help you to solve it.
-
-<strong>Lite Version ( only for old version )</strong>
-`http://YOUR-DOMAIN-NAME/wp-content/plugins/easy-media-gallery/includes/dynamic-style.php`
-
-<strong>PRO Version ( only for old version )</strong>
-`http://YOUR-DOMAIN-NAME/wp-content/plugins/easy-media-gallery-pro/includes/dynamic-style.php`
-
-= How to show media in sidebar widget =
-
-1. Create new Post/Page. Click Easy Media Shortcode button and create a shortcode, after that copy the shortcode.
-1. Go to Appearance > Widgets > and drag the Text widget from the left side to the sidebar area that you want it in on the right side.
-1. Paste the shortcode code and click save. Done!
+1. Please try to deactivating all plugins except Easy Media Gallery for a while to see if this resolves the problem. If this works, re-activate the plugins one by one until you find the problematic plugin(s). If this still does not work please try the second options.
+1. Please switch to default Wordpress theme such as **Twenty Twelve** or **Twenty Eleven** for a while and try again.
+1. If this still does not work please open thread from support forum [here](https://wordpress.org/support/plugin/easy-media-gallery "Gallery Forum") or you can contact us [here](https://ghozy.link/mtflo).
 
 = How do I use the shortcode to my post/page template? =
 
-There are 2 ways to use the shortcode, once you've created your media, you can use them in your website simply using the Gallery - Photo Albums - Portfolio shortcode wizard on top of each page or post editor.
-
-`[easy-media med="231,233"]`
+There are 2 ways to use the shortcode, once you've created your media, you can use them in your website simply using the Gallery / Photo Albums shortcode wizard on top of each page or post editor.
 
 or you can display it where you want and as you want outside your post/page using wordpress <strong>do_shortcode</strong>. See example below:
 
@@ -257,13 +265,18 @@ or you can display it where you want and as you want outside your post/page usin
 <strong>Keep in mind:</strong>
 You also can put the media wherever you like with ease using shortcode manager. Please learn more at:
 
-* [Basic Tutorials](http://ghozylab.com/plugins/frequently-asked-questions/ "Gallery Tutorials")
-* [Youtube Channel](http://www.youtube.com/GhozyLab "GhozyLab Youtube Channel")
+* [Basic Tutorials](https://ghozy.link/3l71x "Gallery Tutorials")
+* [Youtube Channel](https://ghozy.link/of57q "GhozyLab Youtube Channel")
 
+= How to show media in sidebar widget =
+
+1. Create new Post/Page. Click Easy Media Shortcode button and create a shortcode, after that copy the shortcode.
+1. Go to Appearance > Widgets > and drag the Text widget from the left side to the sidebar area that you want it in on the right side.
+1. Paste the shortcode code and click save. Done!
 
 = How can I get support? =
 
-* We are not able to provide anything other than community based support for Lite Version. Please consider upgrading to [Professional Version](http://ghozylab.com/ "Upgrade to Gallery Pro") for support.
+* We are not able to provide anything other than community based support for Lite Version. Please consider upgrading to [Professional Version](https://ghozylab.com/plugins/ "Upgrade to Best Gallery Plugin") for support.
 
 
 = How can I say thanks? =
@@ -272,9 +285,8 @@ You also can put the media wherever you like with ease using shortcode manager. 
 * If you really love Gallery - Photo Albums - Portfolio, any donation would be appreciated! It helps to continue the development and support of the plugin.
 But seriously, I just want to drink coffee for free, so help a developer out. You can use this link [Donate GhozyLab][easymedia donate].
 
-[easymedia donate]: http://ghozylab.com/plugins/donate
+[easymedia donate]: https://ghozy.link/rs3bq
             "Donate GhozyLab"
-
 
 == Screenshots ==
 
@@ -288,7 +300,257 @@ But seriously, I just want to drink coffee for free, so help a developer out. Yo
 8. HTML5 video player
 9. Google Maps and Google Street View
 
+== Upgrade Notice ==
+
+= 1.3.139 =
+
+IMPORTANT! SECURITY BUGS FIX, PLEASE UPDATE NOW!
+
 == Changelog ==
+
+= 1.3.139 =
+* Fixed : Update several broken links
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.137 =
+* Fixed : Welcome Page content alignment issue
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.135 =
+* Fixed : Wrong Image ID in Single Image Media Type
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.133 =
+* Fixed : Youtube video hide info
+* Fixed : Many other PHP and CSS clean and optimization
+* Update : WordPress 4.8 compatibility
+
+= 1.3.131 =
+* Fixed : PHP Undefined Index on Settings Page
+* Fixed : PHP Undefined Index when Widget empty
+* Update : WordPress 4.7.3 compatibility
+
+= 1.3.130 =
+* Fixed : Image border issue on plugin list thumbnails
+* Update : WordPress 4.7 compatibility
+
+= 1.3.129 =
+* Tweak : Image color on badge change to blue
+* Fixed : Add width and height properties for image in free plugin page
+
+= 1.3.127 =
+* Tweak : Shortcode Manager Interface
+* Fixed : Many other PHP and CSS clean and optimization
+* Update : WordPress 4.6.1 compatibility
+
+= 1.3.125 =
+* Update : WordPress 4.6 compatibility
+* Fixed : Max width for P ( Paragraphs ) element issue on Wordpress 4.6 in Custom page 
+
+= 1.3.123 =
+* Tweak : Adding Null parameter on Image resizer function to prevent zero image size on some case
+* Update : Plugin Icon on Dashboard, navbar and shortcode manager ( see on previous commit )
+* Update : Several image assets
+
+= 1.3.121 =
+* Tweak : Facebook Video URL format. See on Media Editor > Video > Sample video format
+
+= 1.3.119 =
+* Update : Shortcode editor title and menu title
+* Update : Several Languages
+
+= 1.3.117 =
+* Fixed : Undefined Index when unset Date column
+
+= 1.3.115 =
+* Update : POT and Several Languages
+* Tweak : Admin menu link
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.111 =
+* Tweak : Added PHP CURL check
+
+= 1.3.110 =
+* Update : Wordpress 4.5.1 compatibility
+* New : Portuguese Language ( pt_PT )
+* New : Spanish ( Chile ) Language ( es_CL )
+* New : Slovak Language ( sk_SK )
+* New : French (Belgium) Language
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.109 =
+* New : Bulgarian Language ( bg_BG )
+* Update : Wordpress 4.5 compatibility
+* Update : French Language ( fr_FR )
+* Tweak : Getting Started Page
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.107 =
+* New : Chinese - Singapore ( zh_SG )
+* Update : All Languages
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.105 =
+* New : Swedish Language ( sv_SE )
+
+= 1.3.103 =
+* New : Malaysia Language ( ms_MY )
+
+= 1.3.101 =
+* Update : POT file and All Languages
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.100 =
+* Update : Polish Language ( pl_PL )
+
+= 1.3.99 =
+* Update : Social Share Icons
+* Fixed : Social Share Icons margin issue on demo page
+
+= 1.3.97 =
+* Fixed : Shortcode Generator conflict with Yoast SEO plugin on Post Editor
+
+= 1.3.95 =
+* Fixed : PHP error on AJAX Call when WP_DEBUG is ON
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.93 =
+* Updated : All external link using our shortener
+* Fixed : Facebook Share and Like counter issue
+* Fixed : Youtube player control not show on Firefox when using non HTTPS
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.91 =
+* Tweak : Plugin feature list on pricing page
+* Updated : All external link using our shortener domain
+* Updated : Several Languages
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.90 =
+* Updated : Wordpress 4.4.2 compatibility
+* Tweak : Free plugins page
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.89 =
+* Fixed : Remove blink notification on Admin menu
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.87 =
+* Tweak : Changelog on plugin list when update available
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.85 =
+* Added : New Language Russian - Ukraine (ru_UA)
+* Tweak : Add class to make Fixed position for Tabs when scolling the page
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.83 =
+* Tweak : Amin Menu Title Color
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.81 =
+* Tweak : Added New Menu Items
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.79 =
+* Update : Several Languages ( es_ES, fr_FR, id_ID, nl_NL, pl_PL, pt_BR, ru_RU )
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.77 =
+* Tweak : Added New Tab in Welcome Page
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.75 =
+* Fixed : Youku Video URL Parsing
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.73 =
+* Fixed : Thickbox issue on Free Plugins Page
+
+= 1.3.71 =
+* Fixed : Link style on Welcome Page
+* Updated : Language ( nl_NL )
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.70 =
+* Updated : Wordpress 4.4 compatibility
+* Update : Several Languages
+* Fixed : Youtube and Vimeo for support SSL sites
+* Fixed : Upload notes on Media Library
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.69 =
+* Fixed : Notify box on settings page
+
+= 1.3.67 =
+* New  : he_IL ( Hebrew ) Language
+* Update : Several Languages
+
+= 1.3.65 =
+* Fixed : http to https
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.63 =
+* Fixed : Post general and singular name
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.61 =
+* Fixed : ChangeLogs list on Welcome Page
+
+= 1.3.59 =
+* New  : hu_HU Language
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.57 =
+* Update  : es_ES Language
+* Update  : Welcome Page
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.55 =
+* Fixed  : Media options metabox ( media editor )
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.53 =
+* Tweak  : Language Packs to compatible with translate.wordpress.org translation system
+* Update  : de_DE Language
+* Update  : fr_FR Language
+* Update  : it_IT Language
+* Update  : ru_RU Language
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.51 =
+* Tweak  : Gallery Logo
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.50 =
+* Fixed  : stripslashes issue on media title
+
+= 1.3.49 =
+* Added  : Facebook Share and Like Button
+* Fixed  : Youtube URL on Media Editor
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.47 =
+* Fixed  : Youtube Fullscreen issue in DEMO page
+
+= 1.3.45 =
+* Fixed  : Youtube Fullscreen issue in HTML5 mode
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.43 =
+* Fixed  : Free Plugins page
+
+= 1.3.41 =
+* Fixed  : Remove function to disable wp toggle
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.39 =
+* Fixed  : Widget issue for version 4.2.4 and ready for 4.3
+* Fixed : Undefined variable ( PHP ) on shortcode
+* Fixed : Many other PHP and CSS clean and optimization
+
+= 1.3.37 =
+* Added  : Note inside media manager to let users know that they can easily insert multiple images at once
 
 = 1.3.35 =
 * Fixed  : Remove version after title on welcome page
@@ -675,33 +937,3 @@ But seriously, I just want to drink coffee for free, so help a developer out. Yo
 
 = 1.0.0 =
 * This is the launch version. No changes yet.
-
-==Gallery - Photo Albums - Portfolio step by step guide==
-
-There are no complicated instructions for using this gallery plugin because this plugin designed to make all easy. Please watch the following video and we believe that you will easily to understand it just in minutes :
-
-
-### Create Gallery
-
-[youtube https://www.youtube.com/watch?v=H1Z3fidyEbE]
-
-### Create Photo Album
-
-[youtube https://www.youtube.com/watch?v=pjHvRoV2Bn8]
-
-### Create Portfolio
-
-[youtube https://www.youtube.com/watch?v=OEoNB2LpnSE]
-
-### Create Video Gallery
-
-[youtube https://www.youtube.com/watch?v=htxwZw_aPF0]
-
-### Create Audio Gallery
-
-[youtube https://www.youtube.com/watch?v=Bsn-CB5Hpbw]
-
-== Upgrade Notice ==
-
-= 1.3.35 =
-IMPORTANT! SECURITY BUGS FIX, PLEASE UPDATE NOW!

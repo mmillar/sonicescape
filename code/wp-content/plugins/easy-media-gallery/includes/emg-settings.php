@@ -36,8 +36,8 @@ die;
  
  	add_submenu_page(
 		'edit.php?post_type=easymediagallery',
-		__('Easy Media Gallery Settings', 'easmedia' ),
-		__( 'Settings', 'easmedia' ),
+		__('Easy Media Gallery Settings', 'easy-media-gallery' ),
+		__( 'Settings', 'easy-media-gallery' ),
 		'manage_options',
 		'emg_settings',
 		'spg_admin'
@@ -78,6 +78,7 @@ if ( is_admin() && ( isset( $_GET['page'] ) == 'emg_settings' ) && $_GET['page']
 
 	function easymedia_admin_head_script() { ?>
 
+<style>a:focus {box-shadow: none !important; }</style>
 
 <script type="text/javascript">
 /*<![CDATA[*/
@@ -298,6 +299,7 @@ END REGISTER & ENQUEUE SCRIPTS/STYLES
 function spg_admin() {
 	global $emgplugname, $theshort, $theopt;
 	$i=0;
+	$saveresmsg = '';
 	$msgicon = plugins_url( 'images/confirm-check.png' , __FILE__ );
 if ( isset( $_REQUEST['saved'] ) ) { echo '<script type="text/javascript">
     jQuery(function () {
@@ -311,7 +313,7 @@ if ( isset( $_REQUEST['reset'] ) ) { echo '<script type="text/javascript">
     jQuery(".infoboxsaveorreset").show("slow");
     });
     </script>';
-	$saveresmsg = 'Settings reset...'; }
+	$saveresmsg = 'Settings reset successfully...'; }
  
 ?>
 <div id="spg_container">
@@ -325,7 +327,7 @@ if ( isset( $_REQUEST['reset'] ) ) { echo '<script type="text/javascript">
     </div>
 
 <div id="main">
-<div class="infoboxdemo"><a target='_blank' href='http://demo.ghozylab.com/content/pro.html'>See Amazing Pro Version Features Here</a></div>
+<div style="width: auto;" class="infoboxdemo"><a target='_blank' href='https://ghozy.link/jk73o'>Click Here to See Amazing Pro Version DEMO</a></div>
 <div class="infoboxsaveorreset"><?php echo $saveresmsg; ?></div>
 <form method="post">
 <div class="sps_wrap">
@@ -510,7 +512,7 @@ $i++;
 ?>
  
 <input type="hidden" name="action" value="save" />
-<p><a target="_blank" href="http://ghozylab.com/plugins/ordernow.php?order=proplus&utm_source=lite&utm_medium=settingspage&utm_campaign=orderfromcp" class="tsc_buttons2 red">Upgrade to Pro Version  &nbsp;for only $<?php echo EASYMEDIA_PRICE; ?></a> <span style="color:#666666;margin-left:2px; font-size:11px;">&nbsp; Need More Features? Upgrade to Pro Version!</span></p>
+<p><a target="_blank" href="https://ghozylab.com/plugins/ordernow.php?order=proplus&utm_source=lite&utm_medium=settingspage&utm_campaign=orderfromcp" class="tsc_buttons2 red">Upgrade to Pro Version  &nbsp;for only $<?php echo EASYMEDIA_PRICE; ?></a> <span style="color:#666666;margin-left:2px; font-size:11px;">&nbsp; Need More Features? Upgrade to Pro Version!</span></p>
  </div> </div>
  </form>
  </div>
@@ -524,7 +526,6 @@ $i++;
 
 <?php
 }
-//add_action('admin_init', 'add_cp_stylesheet');
 add_action('admin_menu', 'spg_add_admin');
 
 
